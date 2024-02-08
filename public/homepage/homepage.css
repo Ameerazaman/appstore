@@ -587,7 +587,7 @@ legend{
     border-radius: 4px;
     padding: 2px 12px;
     margin: 8px;
-    font-size: 12px;
+    font-size: 10px;
 }
 .product-card .product-card-img{
     max-height: 260px;
@@ -610,7 +610,7 @@ legend{
     overflow: hidden;
 }
 .product-card .product-card-body .product-name{
-    font-size: 20px;
+    font-size: 2px;
     font-weight: 600;
     color: #000;
     white-space: nowrap;

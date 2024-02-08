@@ -108,6 +108,11 @@
       width: 100%;
     }
 
+    label {
+      padding: auto;
+      font-size: larger;
+    }
+
     .formbold-file-input input {
       opacity: 0;
       position: absolute;
@@ -198,12 +203,21 @@
       border-radius: 8px;
     }
 
+    img {
+      width: 100px;
+      height: 100px;
+      padding: 20px;
+    }
+
     @media (min-width: 540px) {
       .sm\:w-half {
         width: 50%;
       }
     }
   </style>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+  {{!-- multiple image preview --}}
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
 </head>
 
 <body>
@@ -212,8 +226,8 @@
     <!-- Author: FormBold Team -->
     <!-- Learn More: https://formbold.com -->
     <div class="formbold-form-wrapper">
-      <form method="POST" action="/admin/add-product" enctype="multipart/form-data" id="add-product-form">
 
+      <form action="/admin/add-product" method="POST" enctype="multipart/form-data" id="add-product-form">
         <h4 style="text-align: center;">Add new Products</h4>
         <div class="formbold-mb-5">
           <label style="color: #262728;">Name of Product</label>
@@ -221,9 +235,14 @@
           <input type="text" name="product" id="product" placeholder="Enter your Product" class="formbold-form-input" />
 
           <label style="color: #262728;">Category</label>
+          <br>
           <span class="text-danger" id="category-name-error"></span>
-          <input type="text" name="category" id="category" placeholder="Catogary of product"
-            class="formbold-form-input" />
+          <select name="category" id="category">
+            {{#each categorydata}}
+            <option value="{{this.category}}">{{this.category}}</option>
+            {{/each}}
+          </select>
+          <br>
           <label style="color: #262728;">Description</label>
           <span class="text-danger" id="description-name-error"></span>
           <input type="text" name="description" id="description" placeholder="description of product"
@@ -231,29 +250,40 @@
           <label style="color: #262728;">Price</label>
           <span class="text-danger" id="price-name-error"></span>
           <input type="number" name="price" id="price" placeholder="Price of Product" class="formbold-form-input" />
+
+
+          <label style="color: #262728;">Quantity</label>
+          <span class="text-danger" id="quantity-name-error"></span>
+          <input type="number" name="quantity" id="quantity" placeholder="Price of Product"
+            class="formbold-form-input" />
+          <label style="color: #262728;">Status</label>
+          <select name="status" id="status">
+            <option value="">choose....</option>
+            <option value="Out of stock">Out of stock</option>
+            <option value="Low stock">Low stock</option>
+            <option value="published">Published</option>
+          </select><br>
           <label style="color: #262728;">Discount</label>
           <span class="text-danger" id="discount-name-error"></span>
           <input type="number" name="discount" id="discount" placeholder="Discount of product"
             class="formbold-form-input" />
-        </div>
-        <div class="mb-6 pt-4">
-          <label style="color: #262728;">Upload Image</label>
-          <div class="formbold-mb-5 formbold-file-input">
-            <input type="file" name="image" id="file" value="upload">
-            <label for="file">
-              <div>
-                <span style="color: grey;" class="formbold-drop-file"> Drop files here </span>
+          <label for="">Multipple Images</label><br>
 
-              </div>
-            </label>
-          </div>
-
-        </div>
+          <input name="image" type="file" multiple class="form-control-file" onchange="loadFile(event)">
+          <div id="cont"></div>
+          <button type="submit">submit</button>
+      </form>
 
     </div>
   </div>
-  <button type="submit" class="btn btn-secondary">Submit</button>
-  </form>
+  </div>
+
+  </div>
+
+
+  </div>
+  </div>
+
 
 </body>
 
@@ -270,7 +300,7 @@
       document.getElementById("product-name-error").innerHTML = 'This field is required'
       e.preventDefault()
     }
-   
+
 
     var category = document.getElementById("category").value
     document.getElementById("category-name-error").innerHTML;
@@ -306,12 +336,54 @@
       e.preventDefault()
     }
 
-    else if (discount> price) {
-      document.getElementById("price-name-error").innerHTML = "Discount greaterthan price "
+    else if (discount >= price) {
+      document.getElementById("discount-name-error").innerHTML = "Discount greaterthan price "
+      e.preventDefault()
+    }
+
+    var quantity = document.getElementById("quantity").value
+    document.getElementById("quantity").innerHTML;
+    if (quantity === '') {
+      document.getElementById("quantity-name-error").innerHTML = "This field is required"
+      e.preventDefault()
+    }
+
+    else if (quantity < 0) {
+      document.getElementById("quantity-name-error").innerHTML = "quantity lessthan zero "
       e.preventDefault()
     }
 
 
+    var status = document.getElementById("status").value
+    document.getElementById("status-name-error").innerHTML;
+    if (status === '') {
+      document.getElementById("status-name-error").innerHTML = "This field is required"
+      e.preventDefault()
+    }
+
 
   })
+
+
+
+  var loadFile = function (event) {
+    var imgCont = document.getElementById("cont");
+    for (let i = 0; i < event.target.files.length; i++) {
+      var divElm = document.createElement('div');
+      divElm.id = "rowdiv" + i;
+      var spanElm = document.createElement('span');
+      var image = document.createElement('img');
+      image.src = URL.createObjectURL(event.target.files[i]);
+      image.id = "output" + i;
+      image.width = "200";
+      spanElm.appendChild(image);
+      var deleteImg = document.createElement('p');
+      deleteImg.innerHTML = "x";
+      deleteImg.onclick = function () { this.parentNode.remove() };
+      divElm.appendChild(spanElm);
+      divElm.appendChild(deleteImg);
+      imgCont.appendChild(divElm);
+    }
+  };
+
 </script>

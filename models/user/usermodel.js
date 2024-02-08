@@ -9,9 +9,15 @@ const userschema=mongoose.Schema({
         type: String,
         
       },
+      mobile:{
+        type:String
+      },
       password: {
         type: String,
        
+      },
+      confirmPassword:{
+        type:String
       },
       isBlocked:{
         type:Boolean,

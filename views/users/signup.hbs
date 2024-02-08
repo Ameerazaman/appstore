@@ -29,10 +29,20 @@
                             <i class="fas fa-user icon"></i>
                             <input type="email" placeholder="email" id="email" name="email">
                         </div>
+                         <span style="color: red;" id="mobile-error"></span>
+                        <div class="form-control">
+                            <i class="fas fa-user icon"></i>
+                            <input type="number" placeholder="Phone Number" id="mobile-number" name="mobile">
+                        </div>
                         <span style="color: red;" id="password-error"></span>
                         <div class="form-control">
                             <i class="fas fa-lock icon"></i>
                             <input type="password" placeholder="Password" id="password" name="password">
+                        </div>
+                        <span style="color: red;" id="confirm-password-error"></span>
+                        <div class="form-control">
+                            <i class="fas fa-lock icon"></i>
+                            <input type="password" placeholder="Confirm Password" id="confirm-password" name="confirm">
                         </div>
                         <div class="remember-me">
                             <input type="checkbox" id="rememberMe" class="checkbox-input">
@@ -91,7 +101,34 @@
             document.getElementById('password-error').innerText = 'Password cannot contain spaces';
             e.preventDefault()
         }
+        
 
+        var mobile = document.getElementById("mobile-number").value
+        document.getElementById("mobile-error").innerHTML;
+        if (mobile === '') {
+            document.getElementById("mobile-error").innerHTML = "This field is required"
+            e.preventDefault()
+        }
+        else if (/\s/.test(mobile)) {
+            document.getElementById('mobile-error').innerText = 'Mobile number cannot contain spaces';
+            e.preventDefault()
+        }
+        
+         else if (mobile.length !== 10) {
+            document.getElementById('mobile-error').innerText = 'Mobile number contain 10 digits';
+            e.preventDefault()
+        }
+        
 
+        var confirm = document.getElementById("confirm-password").value
+        document.getElementById("confirm-password-error").innerHTML;
+        if (confirm === '') {
+            document.getElementById("confirm-password-error").innerHTML = "This field is required"
+            e.preventDefault()
+        }
+        else if (password != confirm) {
+            document.getElementById('confirm-password-error').innerText = 'Password is not match';
+            e.preventDefault()
+        } 
     })
 </script>

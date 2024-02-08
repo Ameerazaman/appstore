@@ -1,8 +1,9 @@
 const express=require('express')
 const mongoose = require('mongoose')
 const path=require('path')
-var user=require('./routes/user')
+var user=require('./routes/users/user')
 var admin=require('./routes/admin')
+var cart=require("./routes/users/cart")
 const bodyParser = require('body-parser');
 var hbs=require('express-handlebars').engine
 const nodemailer = require('nodemailer');
@@ -22,7 +23,7 @@ app.use(express.json())
 app.use(bodyParser.urlencoded({ extended:false}))
 app.use(bodyParser.json())
 const cookieParser = require("cookie-parser");
-const sessions = require('express-session');
+const session = require('express-session');
 const products = require('./models/admin/productModel')
 app.use(cookieParser());
 app.set('views', path.join(__dirname, 'views'));
@@ -41,20 +42,22 @@ app.use(
   }),
 );
 const oneDay = 1000 * 60 * 60 * 24;
-app.use(sessions({
+
+app.use(session({
   secret: "thisismysecrctekeyfhrgfgrfrty84fwir767",
+  resave: false,
   saveUninitialized: true,
-  cookie: { maxAge: oneDay },
-  resave: false
+  cookie: { maxAge: oneDay }, // Adjust this according to your environment
 }));
 
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.get('/',async(req,res)=>{
-  const check=await products.find().limit(6).lean()
+  const check=await products.find().lean()
   res.render('users/landing-page',{check})
 })
 app.use('/user',user)
 app.use('/admin',admin)
+app.use('/cart',cart)
 
 app.listen(3000,console.log("server started"))

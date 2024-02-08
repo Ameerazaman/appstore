@@ -1,7 +1,9 @@
 const multer = require('multer')
 const {check,validationResult,body}=require('express-validator')
+
+
 const verifyAdmin = (req, res, next) => {
-    if (req.session.loggedin) {
+    if (session.userid) {
         console.log("session exist")
         next()
         
@@ -13,7 +15,7 @@ const verifyAdmin = (req, res, next) => {
 
 
 const verifyUser = (req, res, next) => {
-    if (req.session.loggedin) {
+    if (req.session.username) {
         next()
     }
     else {
@@ -195,7 +197,44 @@ const EditCategoryRes=(req,res,next)=>{
         next()
     }
 }
+
+
+
+//pagination
+
+
+function paginatedResults(model) {
+    // middleware function
+    return (req, res, next) => {
+      const page = parseInt(req.query.page);
+      const limit = parseInt(req.query.limit);
+   
+      // calculating the starting and ending index
+      const startIndex = (page - 1) * limit;
+      const endIndex = page * limit;
+   
+      const results = {};
+      if (endIndex < model.length) {
+        results.next = {
+          page: page + 1,
+          limit: limit
+        };
+      }
+   
+      if (startIndex > 0) {
+        results.previous = {
+          page: page - 1,
+          limit: limit
+        };
+      }
+   
+      results.results = model.slice(startIndex, endIndex);
+   
+      res.paginatedResults = results;
+      next();
+    };
+  }
 module.exports = {
      verifyAdmin, verifyUser, upload ,validationRules,
      validationRes,productRes,ProductRules,categoryRes,
-     categoryRules,EditCategoryRes,EditProductRes }
+     categoryRules,EditCategoryRes,EditProductRes,paginatedResults }

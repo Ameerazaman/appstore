@@ -108,6 +108,11 @@
       width: 100%;
     }
 
+    label {
+      padding: auto;
+      font-size: larger;
+    }
+
     .formbold-file-input input {
       opacity: 0;
       position: absolute;
@@ -198,12 +203,21 @@
       border-radius: 8px;
     }
 
+    img {
+      width: 100px;
+      height: 100px;
+      padding: 20px;
+    }
+
     @media (min-width: 540px) {
       .sm\:w-half {
         width: 50%;
       }
     }
   </style>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+  {{!-- multiple image preview --}}
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
 </head>
 
 <body>
@@ -213,47 +227,51 @@
     <!-- Learn More: https://formbold.com -->
     <div class="formbold-form-wrapper">
       <form action="/admin/edit-category/{{data._id}}" method="POST" id="edit-category-form">
-        <h4 style="text-align: center;color: blue;">Edit Category details</h4>
+        <h4 style="text-align: center;">Edit Catogary</h4>
         <div class="formbold-mb-5">
-          <label style="color: #262728;">Catagory</label>
-        <span class="text-danger" id="category-name-error" ></span>
-          <input type="text" name="category" id="category" placeholder="Category of product" class="formbold-form-input"
-            value="{{data.category}}" />
+
+          <label style="color: #262728;">Catogary Name</label>
+          <span class="text-danger" id="category-name-error">{{this.message}}</span>
+          <input value="{{data.category}}" type="text" name="category" id="category"
+            placeholder="Enter your Category NAme" class="formbold-form-input" />
           <label style="color: #262728;">Description</label>
           <span class="text-danger" id="description-name-error"></span>
-          <input type="text" name="description" id="description" placeholder="description of product"
-            class="formbold-form-input" value="{{data.description}}" />
+          <input value="{{data.description}}" type="text" name="description" id="description"
+            placeholder="description of category" class="formbold-form-input" />
+        </div>
         <button type="submit" class="btn btn-secondary">Submit</button>
       </form>
-
-
       <form action="/admin/edit-categoryimage/{{data._id}}" method="POST" enctype="multipart/form-data">
-        <h3 style="text-align: center; color: blue;">Edit Image</h3>
-        <div class="mb-6 pt-4">
-          <label style="color: #262728;">Upload Image</label>
-          <div class="formbold-mb-5 formbold-file-input">
-            <input type="file" name="image" id="file" value="{{data.image}}" />
-            <label for="file">
-              <div>
-                <span style="color: grey;" class="formbold-drop-file"> Drop files here </span>
+      <label for="">Edit Image</label><br>
 
-              </div>
-            </label>
-          </div>
+      <img src="/images/{{data.image}}" alt="">
+      <input type="file" id="gallery-photo-add" name="image">
 
-        </div>
+
+      <img id='imagepreview1'>
+      <input type="submit">
     </div>
-    </div>
-    <div style="align-items: center;">
-       <button type="submit" class="btn btn-secondary">Upload</button></div>
 
     </form>
-    
-  
+
+  </div>
+  </div>
+  </div>
+
+  </div>
+
+
+  </div>
+  </div>
+
+
 </body>
 
 </html>
-    <script>
+
+
+<script>
+
 
   document.getElementById("edit-category-form").addEventListener('submit', (e) => {
     var description = document.getElementById("description").value
@@ -263,7 +281,7 @@
       e.preventDefault()
     }
 
-   var category = document.getElementById("category").value
+    var category = document.getElementById("category").value
     document.getElementById("category-name-error").innerHTML;
     if (category === '') {
       document.getElementById("category-name-error").innerHTML = "This field is required"
@@ -272,4 +290,33 @@
   })
 
 
-    </script>
+
+
+
+
+
+
+  $(document).ready(function () {
+
+    function readURL(input) {
+      if (input.files && input.files[0]) {
+        var reader = new FileReader();
+        reader.onload = function (e) {
+          $('#imagepreview1').prop('src', e.target.result).show();
+        }
+        reader.readAsDataURL(input.files[0]);
+      }
+    }
+
+    $("#gallery-photo-add").change(function () {
+      readURL(this);
+      $('#imagepreview1').show();
+    });
+
+    $('#imagepreview1').click(function () {
+      $('#gallery-photo-add').replaceWith($('#gallery-photo-add').clone(true));
+      $('#imagepreview1').hide();
+    });
+
+  });
+</script>

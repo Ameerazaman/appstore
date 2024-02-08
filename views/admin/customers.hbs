@@ -9,6 +9,30 @@
     <title>GeeksForGeeks</title>
 
     <link rel="stylesheet" href="/dashboard.css">
+    <style>
+        
+    .pagination {
+        margin-top: 10px;
+    }
+
+    .pagination button {
+        margin-right: 5px;
+    }
+
+    .pagination button.active {
+        font-weight: bold;
+    }
+    button{
+        padding:8px;
+        border-radius: 10px;
+        background-color: rgb(58, 86, 249);
+        color: aliceblue;
+        
+    }
+    button:hover{
+        background-color: blue;
+    }
+    </style>
 </head>
 
 <body>
@@ -105,7 +129,9 @@
                     <div class="nav-option logout">
                         <img src="/images/logout.png" class="nav-img" alt="logout">
                         <a href="/admin/logout">
-                            <a href="/admin/logout"><h5>Logout</h5></a>
+                            <a href="/admin/logout">
+                                <h5>Logout</h5>
+                            </a>
                         </a>
                     </div>
 
@@ -165,13 +191,13 @@
 
             <div class="report-container">
                 <div class="report-header">
-                    <h1 class="recent-Articles">Product</h1>
-                    <a href="/admin/add-product"><button class="view">Product+</button></a>
+                    <h1 class="recent-Articles">Customers</h1>
+                    <a href="#"><button class="view">Filter</button></a>
                 </div>
 
 
                 <div class="container table-responsive py-5">
-                    <table class="table table-bordered table-hover">
+                    <table class="table table-bordered table-hover" z>
                         <thead class="thead-dark">
 
                             <tr>
@@ -186,7 +212,7 @@
 
                         </tr>
                         </thead>
-                        <tbody>
+                        <tbody id="customerBody">
 
                             {{#each data}}
 
@@ -197,10 +223,11 @@
                                 <td>{{this.password}}</td>
                                 <td>{{#if this.isBlocked}}
 
-                                    <a href="/admin/unblock/{{this._id}}"><button  type="submit"
-                                            class="btn btn-success unblockButton">Active</button></a>
+                                    <a href="/admin/unblock/{{this._id}}"><button type="submit"
+                                            class="btn btn-danger unblockButton">Block</button></a>
                                     {{else}}
-                                    <a href="/admin/block/{{this._id}}"><button type="submit" class="btn btn-danger blockButton">Block</button></a>
+                                    <a href="/admin/block/{{this._id}}"><button type="submit"
+                                            class="btn btn-success blockButton">Active</button></a>
                                     {{/if}}
                                 </td>
 
@@ -210,10 +237,14 @@
 
                         </tbody>
                     </table>
+                    <div id="pagination" class="pagination">
+                        <button style="margin-left: 45%;" id="prevButton">Prev</button>
+                        <button id="nextButton">Next</button>
+                    </div>
                 </div>
                 </section>
-            
-                  
+
+
 
             </div>
 
@@ -221,6 +252,45 @@
     </div>
     </div>
     <script src="/javascript.js"></script>
+    <script>
+        const productsPerPage = 5;
+        const tbody = document.getElementById('customerBody');
+        const rows = Array.from(tbody.querySelectorAll('tr'));
+        let currentPage = 1;
+
+        function displayPage(page) {
+            const startIndex = (page - 1) * productsPerPage;
+            const endIndex = startIndex + productsPerPage;
+
+            rows.forEach((row, index) => {
+                if (index >= startIndex && index < endIndex) {
+                    row.style.display = 'table-row';
+                } else {
+                    row.style.display = 'none';
+                }
+            });
+        }
+
+        function displayPagination() {
+            document.getElementById('prevButton').addEventListener('click', () => {
+                if (currentPage > 1) {
+                    currentPage--;
+                    displayPage(currentPage);
+                }
+            });
+
+            document.getElementById('nextButton').addEventListener('click', () => {
+                const totalPages = Math.ceil(rows.length / productsPerPage);
+                if (currentPage < totalPages) {
+                    currentPage++;
+                    displayPage(currentPage);
+                }
+            });
+        }
+
+        displayPage(currentPage);
+        displayPagination();
+    </script>
 </body>
 
 </html>

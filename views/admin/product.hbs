@@ -1,6 +1,3 @@
-
-
-
 <!DOCTYPE html>
 <html lang="en">
 
@@ -12,11 +9,38 @@
   <title>GeeksForGeeks</title>
 
   <link rel="stylesheet" href="/dashboard.css">
+  {{!-- pagination --}}
+  
+  <style>
+    .pagination {
+      margin-top: 10px;
+    }
+
+    .pagination button {
+      margin-right: 5px;
+    }
+
+    .pagination button.active {
+      font-weight: bold;
+    }
+
+    button {
+      padding: 8px;
+      border-radius: 10px;
+      background-color: rgb(58, 86, 249);
+      color: aliceblue;
+
+    }
+
+    button:hover {
+      background-color: blue;
+    }
+  </style>
 </head>
 
 <body>
 
- 
+
   <div class="main-container">
 
     <div class="navcontainer">
@@ -30,37 +54,51 @@
 
           <div class="option2 nav-option">
             <img src="/images/dashboard.png" class="nav-img" alt="dashboard">
-            <a href="/admin/dashboard"><h5> Dashboard</h5></a>
+            <a href="/admin/dashboard">
+              <h5> Dashboard</h5>
+            </a>
           </div>
 
           <div class="option2 nav-option">
             <img src="/images/products.png" class="nav-img" alt="articles">
-            <a href="/admin/product"><h5>Products</h5></a>
+            <a href="/admin/product">
+              <h5>Products</h5>
+            </a>
           </div>
 
           <div class="nav-option option3">
             <img src="/images/catogary.png" class="nav-img" alt="report">
-            <a href="/admin/category"><h5>Category</h5></a>
+            <a href="/admin/category">
+              <h5>Category</h5>
+            </a>
           </div>
 
           <div class="nav-option option4">
             <img src="/images/order.png" class="nav-img" alt="institution">
-            <a href="/admin/Orders"><h5>Orders</h5></a>
+            <a href="/admin/Orders">
+              <h5>Orders</h5>
+            </a>
           </div>
 
           <div class="nav-option option5">
             <img src="/images/new coupon.png" class="nav-img" alt="blog">
-            <a href="/admin/coupon"><h5>Coupon</h5></a>
+            <a href="/admin/coupon">
+              <h5>Coupon</h5>
+            </a>
           </div>
 
           <div class="nav-option option6">
             <img src="/images/coupon.png" class="nav-img" alt="settings">
-            <a href="/admin/banner"><h5> Banner</h5></a>
+            <a href="/admin/banner">
+              <h5> Banner</h5>
+            </a>
           </div>
 
           <div class="nav-option option6">
             <img src="/images/transaction.png" class="nav-img" alt="settings">
-            <a href="/admin/transaction"><h5>Transaction</h5></a>
+            <a href="/admin/transaction">
+              <h5>Transaction</h5>
+            </a>
           </div>
           <div style="background-color: rgb(47, 47, 189);" class="option1 nav-option">
             <img src="/images/user management.png" class="nav-img" alt="dashboard">
@@ -73,11 +111,15 @@
 
           <div class="nav-option option6">
             <img src="/images/customers.png" class="nav-img" alt="settings">
-            <a href="/admin/customers"><h5>Customers</h5></a>
+            <a href="/admin/customers">
+              <h5>Customers</h5>
+            </a>
           </div>
           <div style="background-color: rgb(47, 47, 189);" class="option1 nav-option">
             <img src="/images/others.jpeg" class="nav-img" alt="dashboard">
-            <a href="/admin/others"><h5 style="color:white ;">Others</h5></a>
+            <a href="/admin/others">
+              <h5 style="color:white ;">Others</h5>
+            </a>
           </div>
           <div class="nav-option logout">
             <img src="/images/settings.png" class="nav-img" alt="logout">
@@ -89,7 +131,9 @@
           </div>
           <div class="nav-option logout">
             <img src="/images/logout.png" class="nav-img" alt="logout">
-            <a href="/admin/logout"><h5>Logout</h5></a>
+            <a href="/admin/logout">
+              <h5>Logout</h5>
+            </a>
           </div>
 
         </div>
@@ -148,11 +192,11 @@
 
       <div class="report-container">
         <div class="report-header">
-          <h1 class="recent-Articles">Product</h1>
-          <a href="/admin/add-product"><button class="view">Product+</button></a>
-        </div>
+                    <h1 class="recent-Articles">Product</h1>
+                    <a href="/admin/add-product"><button class="view">Product+</button></a>
+                </div>
 
-
+      
         <div class="container table-responsive py-5">
           <table class="table table-bordered table-hover">
             <thead class="thead-dark">
@@ -161,6 +205,8 @@
                 <th scope="col">Product</th>
                 <th scope="col">Image</th>
                 <th scope="col">Catogary</th>
+                <th scope="col">Quantity</th>
+                <th scope="col">Status</th>
                 <th scope="col">Description</th>
                 <th scope="col">Price</th>
                 <th scope="col">Discount</th>
@@ -168,16 +214,17 @@
                 <th scope="col">Delete</th>
               </tr>
             </thead>
-            <tbody>
-
-
+            <tbody id="productBody">
               {{#each data}}
 
               <tr>
                 <th scope="row">{{@index}}</th>
                 <td>{{this.product}}</td>
-                <td><img style="height: 20px;width: 20px;" src="/images/{{this.image}}" alt=""></td>
+                <td><img style="height: 20px;width: 20px;" src="/images/{{this.image}}" alt="">
+                </td>
                 <td>{{this.category}}</td>
+                <td>{{this.quantity}}</td>
+                <td>{{this.status}}</td>
                 <td>{{this.description}}</td>
                 <td>{{this.price}}</td>
                 <td>{{this.discount}}</td>
@@ -188,16 +235,59 @@
                       src="data:image/png;base64,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"
                       alt=""></button></a></td>
               </tr>
-              </tr>
+
               {{/each}}
             </tbody>
           </table>
         </div>
-
+        <div id="pagination" class="pagination">
+          <button style="margin-left: 45%;" id="prevButton">Prev</button>
+          <button id="nextButton">Next</button>
+        </div>
       </div>
     </div>
+
   </div>
-  <script src="/javascript.js"></script>
+  
+  <script>
+    const productsPerPage =5;
+    const tbody = document.getElementById('productBody');
+    const rows = Array.from(tbody.querySelectorAll('tr'));
+    let currentPage = 1;
+
+    function displayPage(page) {
+      const startIndex = (page - 1) * productsPerPage;
+      const endIndex = startIndex + productsPerPage;
+
+      rows.forEach((row, index) => {
+        if (index >= startIndex && index < endIndex) {
+          row.style.display = 'table-row';
+        } else {
+          row.style.display = 'none';
+        }
+      });
+    }
+
+    function displayPagination() {
+      document.getElementById('prevButton').addEventListener('click', () => {
+        if (currentPage > 1) {
+          currentPage--;
+          displayPage(currentPage);
+        }
+      });
+
+      document.getElementById('nextButton').addEventListener('click', () => {
+        const totalPages = Math.ceil(rows.length / productsPerPage);
+        if (currentPage < totalPages) {
+          currentPage++;
+          displayPage(currentPage);
+        }
+      });
+    }
+
+    displayPage(currentPage);
+    displayPagination();
+    </script>
 </body>
 
-</html>v
+</html>

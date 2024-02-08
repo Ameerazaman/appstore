@@ -6,14 +6,12 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Document</title>
   <style>
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-    }
+    label {
+      font-size: large;
+      color: #262728;
+      padding-top: 20px;
+      padding-bottom: 5px;
 
-    body {
-      font-family: "Inter", sans-serif;
     }
 
     .formbold-mb-5 {
@@ -112,6 +110,7 @@
       opacity: 0;
       position: absolute;
       width: 100%;
+      padding: 20px;
       height: 100%;
     }
 
@@ -177,6 +176,7 @@
       font-size: 16px;
       color: #07074d;
       padding-right: 12px;
+      padding: 20px;
     }
 
     .formbold-progress-bar {
@@ -217,650 +217,142 @@
       --clr-light-blue: rgb(171, 202, 255);
     }
 
-    body {
-      margin: 0;
-      padding: 0;
-      background-color: var(--clr-light);
-      color: var(--clr-black);
-      font-family: 'Poppins', sans-serif;
-      font-size: 1.125rem;
-      min-height: 100vh;
-      display: flex;
-      justify-content: center;
-      align-items: center;
+      {
+        {
+        !-- body {
+          margin: 0;
+          padding: 0;
+          background-color: var(--clr-light);
+          color: var(--clr-black);
+          font-family: 'Poppins', sans-serif;
+          font-size: 1.125rem;
+          min-height: 100vh;
+          display: flex;
+          justify-content: center;
+          align-items: center;
+        }
+
+        --
+      }
     }
 
     /* End General Styles */
-
-    /* Upload Area */
-    .upload-area {
-      width: 100%;
-      max-width: 25rem;
-      background-color: var(--clr-white);
-      box-shadow: 0 10px 60px rgb(218, 229, 255);
-      border: 2px solid var(--clr-light-blue);
-      border-radius: 24px;
-      padding: 2rem 1.875rem 5rem 1.875rem;
-      margin: 0.625rem;
-      text-align: center;
-    }
-
-    .upload-area--open {
-      /* Slid Down Animation */
-      animation: slidDown 500ms ease-in-out;
-    }
-
-    @keyframes slidDown {
-      from {
-        height: 28.125rem;
-        /* 450px */
-      }
-
-      to {
-        height: 35rem;
-        /* 560px */
-      }
-    }
-
-    /* Header */
-    .upload-area__header {}
-
-    .upload-area__title {
-      font-size: 1.8rem;
-      font-weight: 500;
-      margin-bottom: 0.3125rem;
-    }
-
-    .upload-area__paragraph {
-      font-size: 0.9375rem;
-      color: var(--clr-light-gray);
-      margin-top: 0;
-    }
-
-    .upload-area__tooltip {
-      position: relative;
-      color: var(--clr-light-blue);
-      cursor: pointer;
-      transition: color 300ms ease-in-out;
-    }
-
-    .upload-area__tooltip:hover {
-      color: var(--clr-blue);
-    }
-
-    .upload-area__tooltip-data {
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -125%);
-      min-width: max-content;
-      background-color: var(--clr-white);
-      color: var(--clr-blue);
-      border: 1px solid var(--clr-light-blue);
-      padding: 0.625rem 1.25rem;
-      font-weight: 500;
-      opacity: 0;
-      visibility: hidden;
-      transition: none 300ms ease-in-out;
-      transition-property: opacity, visibility;
-    }
-
-    .upload-area__tooltip:hover .upload-area__tooltip-data {
-      opacity: 1;
-      visibility: visible;
-    }
-
-    /* Drop Zoon */
-    .upload-area__drop-zoon {
-      position: relative;
-      height: 11.25rem;
-      /* 180px */
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      flex-direction: column;
-      border: 2px dashed var(--clr-light-blue);
-      border-radius: 15px;
-      margin-top: 2.1875rem;
-      cursor: pointer;
-      transition: border-color 300ms ease-in-out;
-    }
-
-    .upload-area__drop-zoon:hover {
-      border-color: var(--clr-blue);
-    }
-
-    .drop-zoon__icon {
-      display: flex;
-      font-size: 3.75rem;
-      color: var(--clr-blue);
-      transition: opacity 300ms ease-in-out;
-    }
-
-    .drop-zoon__paragraph {
-      font-size: 0.9375rem;
-      color: var(--clr-light-gray);
-      margin: 0;
-      margin-top: 0.625rem;
-      transition: opacity 300ms ease-in-out;
-    }
-
-    .drop-zoon:hover .drop-zoon__icon,
-    .drop-zoon:hover .drop-zoon__paragraph {
-      opacity: 0.7;
-    }
-
-    .drop-zoon__loading-text {
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-      display: none;
-      color: var(--clr-light-blue);
-      z-index: 10;
-    }
-
-    .drop-zoon__preview-image {
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      object-fit: contain;
-      padding: 0.3125rem;
-      border-radius: 10px;
-      display: none;
-      z-index: 1000;
-      transition: opacity 300ms ease-in-out;
-    }
-
-    .drop-zoon:hover .drop-zoon__preview-image {
-      opacity: 0.8;
-    }
-
-    .drop-zoon__file-input {
-      display: none;
-    }
-
-    /* (drop-zoon--over) Modifier Class */
-    .drop-zoon--over {
-      border-color: var(--clr-blue);
-    }
-
-    .drop-zoon--over .drop-zoon__icon,
-    .drop-zoon--over .drop-zoon__paragraph {
-      opacity: 0.7;
-    }
-
-    /* (drop-zoon--over) Modifier Class */
-    .drop-zoon--Uploaded {}
-
-    .drop-zoon--Uploaded .drop-zoon__icon,
-    .drop-zoon--Uploaded .drop-zoon__paragraph {
-      display: none;
-    }
-
-    /* File Details Area */
-    .upload-area__file-details {
-      height: 0;
-      visibility: hidden;
-      opacity: 0;
-      text-align: left;
-      transition: none 500ms ease-in-out;
-      transition-property: opacity, visibility;
-      transition-delay: 500ms;
-    }
-
-    /* (duploaded-file--open) Modifier Class */
-    .file-details--open {
-      height: auto;
-      visibility: visible;
-      opacity: 1;
-    }
-
-    .file-details__title {
-      font-size: 1.125rem;
-      font-weight: 500;
-      color: var(--clr-light-gray);
-    }
-
-    /* Uploaded File */
-    .uploaded-file {
-      display: flex;
-      align-items: center;
-      padding: 0.625rem 0;
-      visibility: hidden;
-      opacity: 0;
-      transition: none 500ms ease-in-out;
-      transition-property: visibility, opacity;
-    }
-
-    /* (duploaded-file--open) Modifier Class */
-    .uploaded-file--open {
-      visibility: visible;
-      opacity: 1;
-    }
-
-    .uploaded-file__icon-container {
-      position: relative;
-      margin-right: 0.3125rem;
-    }
-
-    .uploaded-file__icon {
-      font-size: 3.4375rem;
-      color: var(--clr-blue);
-    }
-
-    .uploaded-file__icon-text {
-      position: absolute;
-      top: 1.5625rem;
-      left: 50%;
-      transform: translateX(-50%);
-      font-size: 0.9375rem;
-      font-weight: 500;
-      color: var(--clr-white);
-    }
-
-    .uploaded-file__info {
-      position: relative;
-      top: -0.3125rem;
-      width: 100%;
-      display: flex;
-      justify-content: space-between;
-    }
-
-    .uploaded-file__info::before,
-    .uploaded-file__info::after {
-      content: '';
-      position: absolute;
-      bottom: -0.9375rem;
-      width: 0;
-      height: 0.5rem;
-      background-color: #ebf2ff;
-      border-radius: 0.625rem;
-    }
-
-    .uploaded-file__info::before {
-      width: 100%;
-    }
-
-    .uploaded-file__info::after {
-      width: 100%;
-      background-color: var(--clr-blue);
-    }
-
-    /* Progress Animation */
-    .uploaded-file__info--active::after {
-      animation: progressMove 800ms ease-in-out;
-      animation-delay: 300ms;
-    }
-
-    @keyframes progressMove {
-      from {
-        width: 0%;
-        background-color: transparent;
-      }
-
-      to {
-        width: 100%;
-        background-color: var(--clr-blue);
-      }
-    }
-
-    .uploaded-file__name {
-      width: 100%;
-      max-width: 6.25rem;
-      /* 100px */
-      display: inline-block;
-      font-size: 1rem;
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
-    }
-
-    .uploaded-file__counter {
-      font-size: 1rem;
-      color: var(--clr-light-gray);
-    }
   </style>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+  {{!-- multiple image preview --}}
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
 </head>
 
 <body>
+  <div class="container">
+    <div style="margin-top: 60px;padding: 20px;" class="formbold-main-wrapper container">
+      <!-- Author: FormBold Team -->
+      <!-- Learn More: https://formbold.com -->
+      <div style="width:100%;" class="formbold-form-wrapper">
+        <form action="/admin/edit-product/{{data._id}}" method="POST" id="edit-product-form">
+          <h4 style="text-align: center;">Edit Products</h4>
+          <div style="padding: 30px;" class="formbold-mb-5">
+            <label style="color: #262728;">Name of Product</label>
+            <span class="text-danger" id="product-name-error"></span>
+            <input type="text" name="product" id="product" placeholder="Enter your Product" class="formbold-form-input"
+              value="{{data.product}}" />
 
-  <div style="margin-top: 60px;" class="formbold-main-wrapper">
-    <!-- Author: FormBold Team -->
-    <!-- Learn More: https://formbold.com -->
-    <div class="formbold-form-wrapper">
-      <form action="/admin/edit-product/{{data._id}}" method="POST" id="edit-product-form">
-        <h4 style="text-align: center;">Edit Product details</h4>
-        <div class="formbold-mb-5">
-          <label style="color: #262728;">Name of Product</label>
-          <span class="text-danger" id="product-name-error"></span>
-          <input type="text" name="product" id="product" placeholder="Enter your Product" class="formbold-form-input"
-            value="{{data.product}}" />
+            <label style="color: #262728;">Category</label>
+            <br>
+            <span class="text-danger" id="category-name-error"></span>
+            <select name="category" id="category">
+              {{#each categorydata}}
+              <option value="{{this.category}}">{{this.category}}</option>
+              {{/each}}
+            </select>
+            <br>
+            <label style="color: #262728;">Quantity</label>
+            <span class="text-danger" id="quantity-name-error"></span>
+            <input value="{{data.quantity}}" type="number" name="quantity" id="quantity" placeholder="Price of Product"
+              class="formbold-form-input" />
 
-          <label style="color: #262728;">Catagory</label>
-          <span class="text-danger" id="category-name-error"></span>
-          <input type="text" name="category" id="category" placeholder="Catogary of product" class="formbold-form-input"
-            value="{{data.category}}" />
-          <label style="color: #262728;">Description</label>
-          <span class="text-danger" id="description-name-error"></span>
-          <input type="text" name="description" id="description" placeholder="Description of product"
-            class="formbold-form-input" value="{{data.description}}" />
-          <label style="color: #262728;">Price</label>
-          <span class="text-danger" id="price-name-error"></span>
-          <input type="number" name="price" id="price" placeholder="Price of Product" class="formbold-form-input"
-            value="{{data.price}}" />
-          <label style="color: #262728;">Discount</label>
-          <span class="text-danger" id="discount-name-error"></span>
-          <input type="Discount" name="discount" id="discount" placeholder="Discount of product"
-            class="formbold-form-input" value="{{data.discount}}" />
-        </div>
-        <div>
-          <button style="margin-left: 40%;" type="submit" id="btn" class="btn btn-secondary">Submit</button>
-        </div>
+            <label style="color: #262728;">Status</label>
+            <span class="text-danger" id="status-name-error"></span>
+            <select name="status" id="status">
+              <option value="{{this.status}}">{{data.status}}</option>
+              <option value="out of stock">Out of stock</option>
+              <option value="low stock">Low stock</option>
+              <option value="published">Published</option>
+            </select>
+            <br>
+            <label style="color: #262728;">Description</label>
+            <span class="text-danger" id="description-name-error"></span>
+            <input value="{{data.description}}" type="text" name="description" id="description"
+              placeholder="description of product" class="formbold-form-input" />
+            <label style="color: #262728;">Price</label>
+            <span class="text-danger" id="price-name-error"></span>
+            <input value="{{data.price}}" type="number" name="price" id="price" placeholder="Price of Product"
+              class="formbold-form-input" />
+            <label style="color: #262728;">Discount</label>
+            <span class="text-danger" id="discount-name-error"></span>
+            <input value="{{data.discount}}" type="number" name="discount" id="discount"
+              placeholder="Discount of product" class="formbold-form-input" />
+            <button style="height: auto;width: auto;" type="submit" class="btn btn-secondary">Submit</button><br>
+
+
+
+
+        </form>
+        <form action="/admin/edit-proimage/{{data._id}}" method="POST" enctype="multipart/form-data" id="edit">
+          <label for="">Edit Image</label><br>
+
+          <img style="height: 50px;width: 50px;" src="/images/{{data.image}}" alt=""><br>
+          <input type="file" id="gallery-photo-add" name="image">
+
+
+          <img style="height: 50px;width: 50px;" id='imagepreview1'>
+          <input type="submit">
+        </form>
+        <label for="">Edit Multipple Images</label>
         <br>
-        <br>
+        {{#each data.subImage}}
 
-      </form>
-</div>
+        <a href="/admin/deleteMultImg/{{../data._id}}/{{this}}">
+          <img src="/images/{{this}}" alt="" style="width: 50px;height: 50px;">
+        </a>
+        {{/each}}
+        <form action="/admin/Multi-image/{{data._id}}" method="POST" enctype="multipart/form-data">
+          <br><label for="">Multipple Images</label><br>
 
-      {{!-- *************************************Edit Image********************************** --}}
+          <input name="image" type="file" multiple class="form-control-file" onchange="loadFile(event)">
+          <div style="height: 50px;width: 50px;" id="cont"></div>
+          <button type="submit">submit</button>
+        </form>
+      </div>
+    </div>
+  </div>
+  {{!-- ******************************************Multiple images*********************************** --}}
+  {{!-- <div class="container">
+    <form action="/admin/Multi-image/{{data._id}}" method="POST" enctype="multipart/form-data">
+      <h3 style="color: blue;text-align: center;">Upload Multiple Image </h3>
+      <div class="container">
+        <div class="row mx-0 justify-content-center">
+          <div class="col-md-7 col-lg-5 px-lg-2 col-xl-4 px-xl-0 px-xxl-3">
 
-      <form action="/admin/edit-proimage/{{data._id}}" method="POST" enctype="multipart/form-data" id="edit">
-        <!-- Upload Area -->
-        <h3 style="color: blue; text-align: center;">Edit Image</h3>
-        <div style="margin-left: 60px;border-radius: 2px;" id="uploadArea" class="upload-area">
-          <!-- Header -->
-          <div class="upload-area__header">
-            <h1 class="upload-area__title">Upload your file</h1>
-            <p class="upload-area__paragraph">
-              File should be an image
-              <strong class="upload-area__tooltip">
-                Like
-                <span class="upload-area__tooltip-data"></span> <!-- Data Will be Comes From Js -->
-              </strong>
-            </p>
-          </div>
-          <!-- End Header -->
+            <label class="d-block mb-4">
+              <span class="form-label d-block">Your photo</span>
+              <input name="image" multiple type="file" class="form-control" />
+            </label>
 
-          <!-- Drop Zoon -->
-          <div id="dropZoon" class="upload-area__drop-zoon drop-zoon">
-            <span class="drop-zoon__icon">
-              <i class='bx bxs-file-image'></i>
-            </span>
-            <p class="drop-zoon__paragraph">Drop your file here or Click to browse</p>
-            <span id="loadingText" class="drop-zoon__loading-text">Please Wait</span>
-            <img src="/images/{{data.image}}" alt="Preview Image" id="previewImage" class="drop-zoon__preview-image"
-              draggable="false">
-            <input type="file" name="image" id="fileInput" class="drop-zoon__file-input" accept="image/*">
-          </div>
-          <!-- End Drop Zoon -->
-
-          <!-- File Details -->
-          <div id="fileDetails" class="upload-area__file-details file-details">
-            <h3 class="file-details__title">Edit Image</h3>
-
-            <div id="uploadedFile" class="uploaded-file">
-              <div class="uploaded-file__icon-container">
-                <i class='bx bxs-file-blank uploaded-file__icon'></i>
-                <span class="uploaded-file__icon-text"></span> <!-- Data Will be Comes From Js -->
-              </div>
-
-              <div id="uploadedFileInfo" class="uploaded-file__info">
-                <span class="uploaded-file__name">Proejct 1</span>
-                <span class="uploaded-file__counter">0%</span>
-              </div>
+            <div class="mb-3">
+              <button type="submit" class="btn btn-primary px-3 rounded-3">
+                Upload
+              </button>
             </div>
-          </div>
-          <!-- End File Details -->
-        </div>
-        <button style="margin-left: 40%;" type="submit" class="btn btn-secondary">upload</button>
-        <br>
-        <br>
-        <br>
-        <!-- End Upload Area -->
-      </form>
 
 
-      {{!-- ******************************************Multiple images*********************************** --}}
-      <form action="/admin/Multi-image/{{data._id}}" method="POST" enctype="multipart/form-data">
-        <h3 style="color: blue;text-align: center;">Upload Multiple Image </h3>
-        <div class="container">
-          <div class="row mx-0 justify-content-center">
-            <div class="col-md-7 col-lg-5 px-lg-2 col-xl-4 px-xl-0 px-xxl-3">
-
-              <label class="d-block mb-4">
-                <span class="form-label d-block">Your photo</span>
-                <input name="image" multiple type="file" class="form-control" />
-              </label>
-
-              <div class="mb-3">
-                <button type="submit" class="btn btn-primary px-3 rounded-3">
-                  Upload
-                </button>
-              </div>
-
-
-            </div>
           </div>
         </div>
+      </div>
 
-      </form>
+    </form>
+  </div> --}}
 
-      <script>
-        // Design By
-        // - https://dribbble.com/shots/13992184-File-Uploader-Drag-Drop
-
-        // Select Upload-Area
-        const uploadArea = document.querySelector('#uploadArea')
-
-        // Select Drop-Zoon Area
-        const dropZoon = document.querySelector('#dropZoon');
-
-        // Loading Text
-        const loadingText = document.querySelector('#loadingText');
-
-        // Slect File Input 
-        const fileInput = document.querySelector('#fileInput');
-
-        // Select Preview Image
-        const previewImage = document.querySelector('#previewImage');
-
-        // File-Details Area
-        const fileDetails = document.querySelector('#fileDetails');
-
-        // Uploaded File
-        const uploadedFile = document.querySelector('#uploadedFile');
-
-        // Uploaded File Info
-        const uploadedFileInfo = document.querySelector('#uploadedFileInfo');
-
-        // Uploaded File  Name
-        const uploadedFileName = document.querySelector('.uploaded-file__name');
-
-        // Uploaded File Icon
-        const uploadedFileIconText = document.querySelector('.uploaded-file__icon-text');
-
-        // Uploaded File Counter
-        const uploadedFileCounter = document.querySelector('.uploaded-file__counter');
-
-        // ToolTip Data
-        const toolTipData = document.querySelector('.upload-area__tooltip-data');
-
-        // Images Types
-        const imagesTypes = [
-          "jpeg",
-          "png",
-          "svg",
-          "gif"
-        ];
-
-        // Append Images Types Array Inisde Tooltip Data
-        toolTipData.innerHTML = [...imagesTypes].join(', .');
-
-        // When (drop-zoon) has (dragover) Event 
-        dropZoon.addEventListener('dragover', function (event) {
-          // Prevent Default Behavior 
-          event.preventDefault();
-
-          // Add Class (drop-zoon--over) On (drop-zoon)
-          dropZoon.classList.add('drop-zoon--over');
-        });
-
-        // When (drop-zoon) has (dragleave) Event 
-        dropZoon.addEventListener('dragleave', function (event) {
-          // Remove Class (drop-zoon--over) from (drop-zoon)
-          dropZoon.classList.remove('drop-zoon--over');
-        });
-
-        // When (drop-zoon) has (drop) Event 
-        dropZoon.addEventListener('drop', function (event) {
-          // Prevent Default Behavior 
-          event.preventDefault();
-
-          // Remove Class (drop-zoon--over) from (drop-zoon)
-          dropZoon.classList.remove('drop-zoon--over');
-
-          // Select The Dropped File
-          const file = event.dataTransfer.files[0];
-
-          // Call Function uploadFile(), And Send To Her The Dropped File :)
-          uploadFile(file);
-        });
-
-        // When (drop-zoon) has (click) Event 
-        dropZoon.addEventListener('click', function (event) {
-          // Click The (fileInput)
-          fileInput.click();
-        });
-
-        // When (fileInput) has (change) Event 
-        fileInput.addEventListener('change', function (event) {
-          // Select The Chosen File
-          const file = event.target.files[0];
-
-          // Call Function uploadFile(), And Send To Her The Chosen File :)
-          uploadFile(file);
-        });
-
-        // Upload File Function
-        function uploadFile(file) {
-          // FileReader()
-          const fileReader = new FileReader();
-          // File Type 
-          const fileType = file.type;
-          // File Size 
-          const fileSize = file.size;
-
-          // If File Is Passed from the (File Validation) Function
-          if (fileValidate(fileType, fileSize)) {
-            // Add Class (drop-zoon--Uploaded) on (drop-zoon)
-            dropZoon.classList.add('drop-zoon--Uploaded');
-
-            // Show Loading-text
-            loadingText.style.display = "block";
-            // Hide Preview Image
-            previewImage.style.display = 'none';
-
-            // Remove Class (uploaded-file--open) From (uploadedFile)
-            uploadedFile.classList.remove('uploaded-file--open');
-            // Remove Class (uploaded-file__info--active) from (uploadedFileInfo)
-            uploadedFileInfo.classList.remove('uploaded-file__info--active');
-
-            // After File Reader Loaded 
-            fileReader.addEventListener('load', function () {
-              // After Half Second 
-              setTimeout(function () {
-                // Add Class (upload-area--open) On (uploadArea)
-                uploadArea.classList.add('upload-area--open');
-
-                // Hide Loading-text (please-wait) Element
-                loadingText.style.display = "none";
-                // Show Preview Image
-                previewImage.style.display = 'block';
-
-                // Add Class (file-details--open) On (fileDetails)
-                fileDetails.classList.add('file-details--open');
-                // Add Class (uploaded-file--open) On (uploadedFile)
-                uploadedFile.classList.add('uploaded-file--open');
-                // Add Class (uploaded-file__info--active) On (uploadedFileInfo)
-                uploadedFileInfo.classList.add('uploaded-file__info--active');
-              }, 500); // 0.5s
-
-              // Add The (fileReader) Result Inside (previewImage) Source
-              previewImage.setAttribute('src', fileReader.result);
-
-              // Add File Name Inside Uploaded File Name
-              uploadedFileName.innerHTML = file.name;
-
-              // Call Function progressMove();
-              progressMove();
-            });
-
-            // Read (file) As Data Url 
-            fileReader.readAsDataURL(file);
-          } else { // Else
-
-            this; // (this) Represent The fileValidate(fileType, fileSize) Function
-
-          };
-        };
-
-        // Progress Counter Increase Function
-        function progressMove() {
-          // Counter Start
-          let counter = 0;
-
-          // After 600ms 
-          setTimeout(() => {
-            // Every 100ms
-            let counterIncrease = setInterval(() => {
-              // If (counter) is equle 100 
-              if (counter === 100) {
-                // Stop (Counter Increase)
-                clearInterval(counterIncrease);
-              } else { // Else
-                // plus 10 on counter
-                counter = counter + 10;
-                // add (counter) vlaue inisde (uploadedFileCounter)
-                uploadedFileCounter.innerHTML = `${counter}%`
-              }
-            }, 100);
-          }, 600);
-        };
-
-
-        // Simple File Validate Function
-        function fileValidate(fileType, fileSize) {
-          // File Type Validation
-          let isImage = imagesTypes.filter((type) => fileType.indexOf(`image/${type}`) !== -1);
-
-          // If The Uploaded File Type Is 'jpeg'
-          if (isImage[0] === 'jpeg') {
-            // Add Inisde (uploadedFileIconText) The (jpg) Value
-            uploadedFileIconText.innerHTML = 'jpg';
-          } else { // else
-            // Add Inisde (uploadedFileIconText) The Uploaded File Type 
-            uploadedFileIconText.innerHTML = isImage[0];
-          };
-
-          // If The Uploaded File Is An Image
-          if (isImage.length !== 0) {
-            // Check, If File Size Is 2MB or Less
-            if (fileSize <= 2000000) { // 2MB :)
-              return true;
-            } else { // Else File Size
-              return alert('Please Your File Should be 2 Megabytes or Less');
-            };
-          } else { // Else File Type 
-            return alert('Please make sure to upload An Image File Type');
-          };
-        };
-
-        // :)
-
-      </script>
 
 </body>
 
@@ -868,15 +360,14 @@
 <script>
 
   document.getElementById("edit-product-form").addEventListener('submit', (e) => {
+
     var product = document.getElementById("product").value;
     document.getElementById("product-name-error").innerHTML;
-
     if (product === '') {
-      document.getElementById("product-name-error").innerHTML = 'This field is required' 
+      document.getElementById("product-name-error").innerHTML = 'This field is required'
       e.preventDefault()
+    }
 
-     }
-   
 
     var category = document.getElementById("category").value
     document.getElementById("category-name-error").innerHTML;
@@ -894,12 +385,14 @@
     }
 
 
-    var price = document.getElementById("price").value
+    var price = document.getElementById("price").value;
     document.getElementById("price-name-error").innerHTML;
     if (price === '') {
-      document.getElementById("price-name-error").innerHTML = "This field is required"
+      document.getElementById("price-name-error").innerHTML = 'This field is required'
       e.preventDefault()
     }
+
+
     else if (price <= 0) {
       document.getElementById("price-name-error").innerHTML = "price should not be negative"
       e.preventDefault()
@@ -907,17 +400,106 @@
 
     var discount = document.getElementById("discount").value
     document.getElementById("discount-name-error").innerHTML;
-    if (price === '') {
+    if (discount === '') {
       document.getElementById("discount-name-error").innerHTML = "This field is required"
       e.preventDefault()
     }
 
-    {{!-- else if (discount>price) {
+    else if (discount >= price) {
       document.getElementById("discount-name-error").innerHTML = "Discount greaterthan price "
       e.preventDefault()
-    } --}}
+    }
+
+    var quantity = document.getElementById("quantity").value
+    document.getElementById("quantity").innerHTML;
+    if (quantity === '') {
+      document.getElementById("quantity-name-error").innerHTML = "This field is required"
+      e.preventDefault()
+    }
+
+    else if (quantity < 0) {
+      document.getElementById("quantity-name-error").innerHTML = "quantity lessthan zero "
+      e.preventDefault()
+    }
+    var status = document.getElementById("status").value
+    document.getElementById("status-name-error").innerHTML;
+    if (status === '') {
+      document.getElementById("status-name-error").innerHTML = "This field is required"
+      e.preventDefault()
+    }
 
 
 
+    $(function () {
+      // Multiple images preview in browser
+      var imagesPreview = function (input, placeToInsertImagePreview) {
+
+        if (input.files) {
+          var filesAmount = input.files.length;
+
+          for (i = 0; i < filesAmount; i++) {
+            var reader = new FileReader();
+
+            reader.onload = function (event) {
+              $($.parseHTML('<img>')).attr('src', event.target.result).appendTo(placeToInsertImagePreview);
+            }
+
+            reader.readAsDataURL(input.files[i]);
+          }
+        }
+
+      };
+
+      $('#gallery-photo-add').on('change', function () {
+        imagesPreview(this, 'div.gallery');
+      });
+    });
   })
-</script> 
+
+
+
+  $(document).ready(function () {
+
+    function readURL(input) {
+      if (input.files && input.files[0]) {
+        var reader = new FileReader();
+        reader.onload = function (e) {
+          $('#imagepreview1').prop('src', e.target.result).show();
+        }
+        reader.readAsDataURL(input.files[0]);
+      }
+    }
+
+    $("#gallery-photo-add").change(function () {
+      readURL(this);
+      $('#imagepreview1').show();
+    });
+
+    $('#imagepreview1').click(function () {
+      $('#gallery-photo-add').replaceWith($('#gallery-photo-add').clone(true));
+      $('#imagepreview1').hide();
+    });
+
+  });
+
+  
+  var loadFile = function (event) {
+    var imgCont = document.getElementById("cont");
+    for (let i = 0; i < event.target.files.length; i++) {
+      var divElm = document.createElement('div');
+      divElm.id = "rowdiv" + i;
+      var spanElm = document.createElement('span');
+      var image = document.createElement('img');
+      image.src = URL.createObjectURL(event.target.files[i]);
+      image.id = "output" + i;
+      image.width = "200";
+      spanElm.appendChild(image);
+      var deleteImg = document.createElement('p');
+      deleteImg.innerHTML = "x";
+      deleteImg.onclick = function () { this.parentNode.remove() };
+      divElm.appendChild(spanElm);
+      divElm.appendChild(deleteImg);
+      imgCont.appendChild(divElm);
+    }
+  };
+</script>

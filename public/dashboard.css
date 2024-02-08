@@ -19,7 +19,7 @@
   --two-use-color: #5500cb; 
 } 
 body { 
-  background:black;; 
+  background:rgb(247, 247, 247);; 
   max-width: 100%; 
   overflow-x: hidden; 
 } 
@@ -496,3 +496,4 @@ a{
   text-decoration: none;
   color: black;
 }
+/* dashboard monthl */

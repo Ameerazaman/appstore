@@ -3,7 +3,7 @@ const mongoose = require('mongoose')
 const router = express.Router()
 const users = require('../models/user/usermodel')
 const products = require('../models/admin/productModel')
-const { getAddProduct, deleteProduct, getEditProduct, doAddProduct, postEditProduct, getEditImage, postEditImage, MultImage, getProduct } = require('../controllers/admin/productController')
+const { getAddProduct, deleteProduct, getEditProduct, doAddProduct, postEditProduct, getEditImage, postEditImage, MultImage, getProduct, DeleteMultiImg } = require('../controllers/admin/productController')
 const { verifyAdmin, upload, ProductRules, productRes, editProductRes, categoryRules, categoryRes, editCategoryRes, EditCategoryRes, EditProductRes, verifyUser } = require('../middlewares/middleware')
 const{doLogin, postLogin, adminLogout}=require('../controllers/admin/adminControllers')
 const fileUpload = require('express-fileupload')
@@ -51,16 +51,17 @@ router.get("/dashboard",verifyAdmin,getDashboard)
 
 
 /**********************************************Product****************** */
-router.get("/product",verifyUser,getProduct)
+router.get("/product",getProduct)
 
 //get add product
-router.get("/add-product",verifyAdmin, getAddProduct)
+router.get("/add-product", getAddProduct)
 //post add products//
 
 router.post('/add-product',verifyAdmin,
 // ProductRules,productRes,
 
-upload.single('image'),doAddProduct)
+//  upload.array('image',4)
+upload.array('image',4),doAddProduct)
 //Delete product
 router.get('/delete/:id',verifyAdmin, deleteProduct)
 //Get edit product
@@ -72,7 +73,10 @@ router.get("/edit-proimage/:id", verifyAdmin,getEditImage)
 //post Edit image//
 router.post('/edit-proimage/:id',verifyAdmin, upload.single('image'),postEditImage)
 //post multiple images
-router.post('/multi-image/:id',verifyAdmin, upload.array('image',6),MultImage)
+router.post('/multi-image/:id',verifyAdmin, upload.array('image',4),MultImage)
+
+// Delete multiple images in edit product page
+router.get("/deleteMultImg/:id/:imagefile",DeleteMultiImg)
 
 ///**********************************Catogary *********************************/
 

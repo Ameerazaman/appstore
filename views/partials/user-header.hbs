@@ -13,7 +13,7 @@
 
 <body>
 
-    <div class="main-navbar shadow-sm sticky-top">
+    <div style="position: sticky;" class="main-navbar shadow-sm">
         <div class="top-navbar">
             <div class="container-fluid">
                 <div class="row">
@@ -61,15 +61,17 @@
                                 </a>
                                 <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
                                     <li><a class="dropdown-item" href="#"><i class="fa fa-user"></i> Profile</a></li>
-
-                                    <li><a class="dropdown-item" href="#"><i class="fa fa-list"></i> My Orders</a></li>
-                                    <li><a class="dropdown-item" href="#"><i class="fa fa-heart"></i> My Wishlist</a>
-                                    </li>
                                     <li><a class="dropdown-item" href="#"><i class="fa fa-shopping-cart"></i> My
                                             Cart</a></li>
-                                    <li><a class="dropdown-item" href="/user/logout"><i class="fa fa-sign-out"></i>
-                                            Logout</a></li>
+                                    {{!-- <li><a class="dropdown-item" href="/user/logout"><i class="fa fa-sign-out"></i>
+                                            Logout</a></li> --}}
                                 </ul>
+                            </li>
+                            
+                             <li class="nav-item">
+                                <a class="nav-link" href="/user/logout">
+                                    Logout
+                                </a>
                             </li>
                             {{/if}}
                         </ul>

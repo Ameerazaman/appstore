@@ -27,6 +27,12 @@ const productSchema = new mongoose.Schema({
     type: Number,
    // required: true
   },
+  quantity:{
+    type:Number
+  },
+  status:{
+    type:String
+  },
   subImage:[{type:String}]
 
   // Add more fields as needed
