@@ -12,7 +12,7 @@ const getCategory = async (req, res) => {
 }
 //get addcatogary page
 const getAddcategory = async (req, res) => {
-    res.render('admin/add-category')
+    res.render('admin/add-category',{admin:true})
 }
 //post catogary page
 const doAddcategory = async (req, res) => {
@@ -21,7 +21,7 @@ const doAddcategory = async (req, res) => {
     let existcategory = await category.findOne({ category: req.body.category });
     if (existcategory) {
         let message = "Catogary is already exist"
-        res.render("admin/add-category", { message })
+        res.render("admin/add-category", { message ,admin:true})
     }
     else {
         const pro = await category.create(req.body)
@@ -48,7 +48,7 @@ const getEditcategory = async (req, res) => {
         var id = req.params.id
         const data = await category.findOne({ _id: id }).lean()
         console.log(data)
-        res.render('admin/edit-category', { data, id })
+        res.render('admin/edit-category', { data, id ,admin:true})
     }
     catch (e) {
         console.log("Edit category Error in Get")

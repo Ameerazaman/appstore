@@ -17,8 +17,7 @@
 <body>
   <section class="h-100 h-custom container">
     <div class="container py-5 h-100">
-      <div style="width: 100%;"
-        class="row d-flex justify-content-center align-items-center h-100">
+      <div style="width: 100%;" class="row d-flex justify-content-center align-items-center h-100">
         <div style="width: 100%;" class="col">
           <div class="card">
             <div class="card-body p-4">
@@ -26,7 +25,7 @@
               <div class="row">
 
                 <div class="col-lg-7">
-                  <h5 class="mb-3"><a href="#!" class="text-body"><i
+                  <h5 class="mb-3"><a href="/user/login" class="text-body"><i
                         class="fas fa-long-arrow-alt-left me-2"></i>Continue shopping</a></h5>
                   <hr>
 
@@ -46,11 +45,11 @@
                       <div class="d-flex justify-content-between">
                         <div class="d-flex flex-row align-items-center">
                           <div>
-                            <img src="/images/{{this.image}}" class="img-fluid rounded-3" alt="Shopping item"
+                            <img src="/images/{{this.product.image}}" class="img-fluid rounded-3" alt="Shopping item"
                               style="width: 65px;">
                           </div>
                           <div class="ms-3">
-                            <h5>{{this.product}}</h5>
+                            <h5>{{this.product.product}}</h5>
                             <p class="small mb-0">256GB, Navy Blue</p>
                           </div>
                         </div>
@@ -58,6 +57,8 @@
                           <div style="width: 80px;margin-left: 30px;">
                             <p class="mb-0">{{this.subtotal}}</p>
                           </div>
+                          <a style="text-decoration: none;" href="/cart/quantityincrement/{{this.proId}}"><button
+                              style="width:30px;height:30px;">+</button></a>
                           <div style="width: 50px;padding-top: 30px;">
 
 
@@ -66,21 +67,18 @@
 
 
                           </div>
+                          <a style="text-decoration: none;" href="/cart/quantitydecrement/{{this.proId}}"><button
+                              style="width:30px;height:30px;">-</button></a>
                           <div style="width: 80px;margin-left: 30px;">
                             <p class="mb-0">{{this.discountProduct}}</p>
                           </div>
-                          <a href="/cart/deletecart/{{this._id}}" style="color: #cecece;"><i class="fas fa-trash-alt"></i></a>
+                          <a href="/cart/deletecart/{{this._id}}" style="color: #cecece;"><i
+                              class="fas fa-trash-alt"></i></a>
                         </div>
                       </div>
                     </div>
                   </div>
-
                   {{/each}}
-
-
-
-
-
                 </div>
                 <div class="col-lg-5">
 
@@ -154,8 +152,8 @@
                       {{/each}}
                       <button type="button" class="btn btn-info btn-block btn-lg">
                         <div class="d-flex justify-content-between">
-                          <span>$4818.00</span>
-                          <span>Checkout <i class="fas fa-long-arrow-alt-right ms-2"></i></span>
+                          
+                          <a href="/checkout"><span>Place Order<i class="fas fa-long-arrow-alt-right ms-2"></i></span></a>
                         </div>
                       </button>
 

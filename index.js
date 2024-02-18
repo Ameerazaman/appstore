@@ -1,41 +1,46 @@
-const express=require('express')
+const express = require('express')
 const mongoose = require('mongoose')
-const path=require('path')
-var user=require('./routes/users/user')
-var admin=require('./routes/admin')
-var cart=require("./routes/users/cart")
+const path = require('path')
+
+// routes
+var user = require('./routes/users/user')
+var admin = require('./routes/admin')
+var cart = require("./routes/users/cart")
+var checkout = require("./routes/users/checkout")
+
+
 const bodyParser = require('body-parser');
-var hbs=require('express-handlebars').engine
+var hbs = require('express-handlebars').engine
 const nodemailer = require('nodemailer');
 const crypto = require('crypto');
-const app=express()
+const app = express()
 const nocache = require("nocache")
-var connect= require("./config/connection")
-var middleware=require('./middlewares/middleware')
+var connect = require("./config/connection")
+var middleware = require('./middlewares/middleware')
 const { Collection } = require('mongoose')
-const multer=require('multer')
+const multer = require('multer')
 connect()
 
 
 
 app.use(nocache())
 app.use(express.json())
-app.use(bodyParser.urlencoded({ extended:false}))
+app.use(bodyParser.urlencoded({ extended: false }))
 app.use(bodyParser.json())
 const cookieParser = require("cookie-parser");
 const session = require('express-session');
 const products = require('./models/admin/productModel')
 app.use(cookieParser());
 app.set('views', path.join(__dirname, 'views'));
-app.engine('hbs',hbs({extname:'hbs',defaultLayout:'layout',layoutsDir:__dirname+'/views/layout/',partialsDir:__dirname+'/views/partials/'}))
+app.engine('hbs', hbs({ extname: 'hbs', defaultLayout: 'layout', layoutsDir: __dirname + '/views/layout/', partialsDir: __dirname + '/views/partials/' }))
 app.set('view engine', 'hbs');
-   admin.use((req, res, next) => {
-    next();
-  });
-  user.use((req, res, next) => {
-    next();
-  });
-  app.use(bodyParser.json());
+admin.use((req, res, next) => {
+  next();
+});
+user.use((req, res, next) => {
+  next();
+});
+app.use(bodyParser.json());
 app.use(
   bodyParser.urlencoded({
     extended: false,
@@ -52,12 +57,13 @@ app.use(session({
 
 app.use(express.static(path.join(__dirname, 'public')));
 
-app.get('/',async(req,res)=>{
-  const check=await products.find().lean()
-  res.render('users/landing-page',{check})
+app.get('/', async (req, res) => {
+  const check = await products.find().lean()
+  res.render('users/landing-page', { check })
 })
-app.use('/user',user)
-app.use('/admin',admin)
-app.use('/cart',cart)
+app.use('/user', user)
+app.use('/admin', admin)
+app.use('/cart', cart)
+app.use('/checkout',checkout)
 
-app.listen(3000,console.log("server started"))
+app.listen(3000, console.log("server started"))

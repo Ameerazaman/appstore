@@ -99,14 +99,20 @@ const postEditImage = async (req, res) => {
 
 }
 const MultImage = async (req, res) => {
+    try{
+        const subImagesArray = req.files.map((file) => {
+            return file.filename
+        })
+        console.log("dfutfgoyhg",subImagesArray[0])
+    
+        const datas = await products.updateOne({ _id: req.params.id }, { $push: { subImage: { $each: subImagesArray } } })
+        res.redirect("/admin/product")
+    }
+    catch(error){
+        console.log("error in multiple image")
+    }
 
-    const subImagesArray = req.files.map((file) => {
-        return file.filename
-    })
-    console.log("dfutfgoyhg",subImagesArray[0])
-
-    const datas = await products.updateOne({ _id: req.params.id }, { $push: { subImage: { $each: subImagesArray } } })
-    res.redirect("/admin/product")
+   
 }
 const DeleteMultiImg=async (req,res)=>{
     const imgFile=req.params.imagefile

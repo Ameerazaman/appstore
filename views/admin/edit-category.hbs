@@ -222,7 +222,7 @@
 
 <body>
 
-  <div class="formbold-main-wrapper">
+  <div style="height: auto;padding-top: 150px;" class="formbold-main-wrapper ">
     <!-- Author: FormBold Team -->
     <!-- Learn More: https://formbold.com -->
     <div class="formbold-form-wrapper">
@@ -244,7 +244,7 @@
       <form action="/admin/edit-categoryimage/{{data._id}}" method="POST" enctype="multipart/form-data">
       <label for="">Edit Image</label><br>
 
-      <img src="/images/{{data.image}}" alt="">
+      <img style="height: 150px;width: 150px;" src="/images/{{data.image}}" alt=""><br>
       <input type="file" id="gallery-photo-add" name="image">
 
 

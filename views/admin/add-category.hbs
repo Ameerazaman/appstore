@@ -223,15 +223,15 @@
 
 <body>
 
-  <div class="formbold-main-wrapper">
+  <div style="height: auto;padding-top: 150px;" class="formbold-main-wrapper">
     <!-- Author: FormBold Team -->
     <!-- Learn More: https://formbold.com -->
     <div class="formbold-form-wrapper">
       <form method="POST" action="/admin/add-category" enctype="multipart/form-data" id="add-category-form">
-        <h4 style="text-align: center;">Add new Catogary</h4>
+        <h4 style="text-align: center;">Add new Category</h4>
         <div class="formbold-mb-5">
 
-          <label style="color: #262728;">Catogary Name</label>
+          <label style="color: #262728;">Category Name</label>
           <span class="text-danger" id="category-name-error">{{this.message}}</span>
           <input type="text" name="category" id="category" placeholder="Enter your Category NAme"
             class="formbold-form-input" />

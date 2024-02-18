@@ -4,60 +4,10 @@ const products = require("../../models/admin/productModel")
 const category = require('../../models/admin/categorymodel')
 const cart = require("../../models/user/add-to-cart-model")
 
-// add to cart product
-const addToCart = async (req, res) => {
-
-
-    try {
-
-        const productId = req.params.id;
-        console.log(productId)
-        req.session.productId = productId
-        const userId = req.session.user._id;
-        const user = await cart.findOne({ userId });
-
-        if (user) {
-            // Existing user, add/update product in cart
-            const existingCartItem = await cart.findOne({ userId, 'products.proId': productId });
-
-            if (existingCartItem) {
-                // Update existing product quantity
-                await cart.updateOne(
-                    { userId, 'products.proId': productId },
-                    { $inc: { 'products.$.quantity': 1 } }
-                );
-               
-                console.log("Existing cart item updated");
-                return res.redirect('/user/home');// Redirect to the cart page after updating the cart
-            } else {
-                const addQuantity = 1;
-                await cart.create({ userId: userId, products: [{ proId: productId, quantity: addQuantity }] });
-                console.log("Product saved in cart");
-
-                res.redirect("/user/home");
-            }
-        }
-        else {
-            const cartData = {
-                userId, products:
-                    [{ proId: productId, quantity: 1 }]
-            }
-            const newdata = await cart.create(cartData)
-            console.log("new cart created for new user")
-            res.redirect("/user/home")
-        }
-
-    } catch (error) {
-        console.log("Error in add to cart:", error);
-        res.status(500).send("Error in add to cart");
-    }
-};
-// get cart page
-const getCart = async (req, res) => {
-    
+// Check Out page 
+const checkoutPage=async(req,res)=>{
     try {
         const userId = req.session.user._id
-        
         const productId=req.session.productId
         const data = await cart.aggregate([
             { $match: { userId: userId } },
@@ -151,24 +101,18 @@ const getCart = async (req, res) => {
         ]);
         // Calculate total price of all products in the cart
         // Const totalPrice = data.reduce((total, product) => total + product.subtotal, 0);
-        // console.log(data)
-        res.render("users/cart",{admin:false,data,result})
+         console.log(data,result)
+        res.render("users/checkout",{admin:false,data,result})
     }
     catch (error) {
-        console.log("Error in cart page")
+        console.log("Error in checkOut page")
     }
-}
-// delete  cart data
 
-const deleteCart = async (req, res) => {
-    const data = await cart.findByIdAndDelete({ _id: req.params.id })
-    
-    res.redirect("/cart/cartpage")
 }
 
 // increment quantity
 
-const incrementQuantity = async (req, res) => {
+const incQuantity = async (req, res) => {
     try {
         console.log("increment", req.params)
         const productId = req.params.id;
@@ -178,7 +122,7 @@ const incrementQuantity = async (req, res) => {
             { $inc: { 'products.$.quantity': 1 } } // Use negative value to decrement
         );
         console.log("increment quantity");
-        res.redirect("/cart/cartpage");
+        res.redirect("/checkout");
     } catch (error) {
         console.log("increment the quantity error:", error);
     }
@@ -186,7 +130,7 @@ const incrementQuantity = async (req, res) => {
 
 // Decrement quantity
 
-const decrementQuantity = async (req, res) => {
+const decQuantity = async (req, res) => {
     try {
         const productId = req.params.id;
         const userId = req.session.user._id;
@@ -196,12 +140,12 @@ const decrementQuantity = async (req, res) => {
             { $inc: { 'products.$.quantity': -1 } } // Use negative value to decrement
         );
         console.log("increment quantity")
-        res.redirect("/cart/cartpage");
+        res.redirect("/checkout");
     } catch (error) {
         console.log("Error in decrementing quantity:", error);
         res.status(500).send("Error in decrementing quantity");
     }
 };
 
+module.exports={checkoutPage,incQuantity,decQuantity}
 
-module.exports = { addToCart, deleteCart, incrementQuantity, decrementQuantity ,getCart}

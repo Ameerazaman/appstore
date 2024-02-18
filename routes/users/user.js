@@ -4,14 +4,15 @@ const router = express.Router()
 const users = require('../../models/user/usermodel')
 const nodemailer = require('nodemailer')
 
-const { doSignup, getLogin, postLogin, getSignup, otpSubmit, postSignup, resendOtp, getProductDetail, userLogout, getcategory } = require('../../controllers/user/userControllers')
+const { doSignup, getLogin, postLogin, getSignup, otpSubmit, postSignup, resendOtp, getProductDetail, userLogout, getcategory, homePage, getForgot, getForgotOtp, forgotOtpVerify, changeForgotPassword } = require('../../controllers/user/userControllers')
 const products = require('../../models/admin/productModel')
 const category = require('../../models/admin/categorymodel')
-const { verifyUser, paginatedResults } = require('../../middlewares/middleware')
-const { addToCart } = require('../../controllers/user/cartController')
+const { verifyUser, } = require('../../middlewares/middleware')
+const { addToCart, deleteCart } = require('../../controllers/user/cartController')
 //////////
 //Otp generation//
-
+// get Home Page
+router.get("/home",homePage)
 //Get login page
 router.get('/',getLogin)
 
@@ -41,6 +42,14 @@ router.get("/logout",verifyUser,userLogout)
 
 //get category
 router.get("/category/:category",verifyUser,getcategory)
-
+// 8**********************************forgott password****************************
+// get forgot page
+router.get("/forgotpassword",getForgot)
+// post forgot email page
+router.post("/forgotpassword",getForgotOtp)
+// post forgot otp verify
+router.post("/forgototpverify",forgotOtpVerify)
+// change forgot password
+router.post("/change-forgot-password",changeForgotPassword)
 
 module.exports = router;
