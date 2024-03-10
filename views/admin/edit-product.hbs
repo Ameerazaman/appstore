@@ -6,7 +6,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Document</title>
   <style>
-     * {
+    * {
       margin: 0;
       padding: 0;
       box-sizing: border-box;
@@ -15,6 +15,7 @@
     body {
       font-family: "Inter", sans-serif;
     }
+
     label {
       font-size: large;
       color: #262728;
@@ -32,9 +33,9 @@
     }
 
     .formbold-main-wrapper {
-      display: flex;
-      align-items: center;
-      justify-content: center;
+
+
+
       padding: 48px;
     }
 
@@ -43,6 +44,7 @@
       max-width: 550px;
       width: 100%;
       background: white;
+      padding: 40px;
     }
 
     .formbold-form-label {
@@ -273,8 +275,8 @@
     }
 
     .btn {
-      background: white;
-      color: black;
+      background: rgb(44, 104, 208);
+      color: rgb(247, 248, 252);
       border: 1px solid black;
       padding: 0.5em 1em;
       text-decoration: none;
@@ -288,9 +290,12 @@
     }
 
     img {
-      max-width: 100%;
+      img {
+        width: 100px;
+        height: 100px;
+        padding: 20px;
+      }
     }
-   
   </style>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/5.0.0/normalize.min.css">
   <link rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/cropper/2.3.4/cropper.min.css'>
@@ -300,112 +305,119 @@
 </head>
 
 <body>
-  
-    <div style="padding-top: 150px;" class="formbold-main-wrapper">
-      <!-- Author: FormBold Team -->
-      <!-- Learn More: https://formbold.com -->
-      <div class="formbold-form-wrapper">
-        <form action="/admin/edit-product/{{data._id}}" method="POST" id="edit-product-form">
-          <h4 style="text-align: center;">Edit Products</h4>
-          <div class="formbold-mb-5">
-            <label style="color: #262728;">Name of Product</label>
-            <span class="text-danger" id="product-name-error"></span>
-            <input type="text" name="product" id="product" placeholder="Enter your Product" class="formbold-form-input"
-              value="{{data.product}}" />
 
-            <label style="color: #262728;">Category</label>
-            <br>
-            <span class="text-danger" id="category-name-error"></span>
-            <select name="category" id="category">
-              {{#each categorydata}}
-              <option value="{{this.category}}">{{this.category}}</option>
-              {{/each}}
-            </select>
-            <br>
-            <label style="color: #262728;">Quantity</label>
-            <span class="text-danger" id="quantity-name-error"></span>
-            <input value="{{data.quantity}}" type="number" name="quantity" id="quantity" placeholder="Price of Product"
-              class="formbold-form-input" />
+  <div style="padding-top: 150px;" class="formbold-main-wrapper">
+    <!-- Author: FormBold Team -->
+    <!-- Learn More: https://formbold.com -->
+    <div style="height: auto;" class="formbold-form-wrapper">
+      <form action="/admin/edit-product/{{data._id}}" method="POST" id="edit-product-form">
+        <h4 style="text-align: center;">Edit Products</h4>
+        <div class="formbold-mb-5">
+          <label style="color: #262728;">Name of Product</label>
 
-            <label style="color: #262728;">Status</label>
-            <span class="text-danger" id="status-name-error"></span>
-            <select name="status" id="status">
-              <option value="{{this.status}}">{{data.status}}</option>
-              <option value="out of stock">Out of stock</option>
-              <option value="low stock">Low stock</option>
-              <option value="published">Published</option>
-            </select>
-            <br>
-            <label style="color: #262728;">Description</label>
-            <span class="text-danger" id="description-name-error"></span>
-            <input value="{{data.description}}" type="text" name="description" id="description"
-              placeholder="description of product" class="formbold-form-input" />
-            <label style="color: #262728;">Price</label>
-            <span class="text-danger" id="price-name-error"></span>
-            <input value="{{data.price}}" type="number" name="price" id="price" placeholder="Price of Product"
-              class="formbold-form-input" />
-            <label style="color: #262728;">Discount</label>
-            <span class="text-danger" id="discount-name-error"></span>
-            <input value="{{data.discount}}" type="number" name="discount" id="discount"
-              placeholder="Discount of product" class="formbold-form-input" />
-            <button style="height: auto;width: auto;" type="submit" class="btn btn-secondary">Submit</button><br>
+          <input type="text" name="product" id="product" placeholder="Enter your Product" class="formbold-form-input"
+            value="{{data.product}}" />
+          <span class="text-danger" id="product-name-error"></span>
+          <label style="color: #262728;">Category</label>
+          <br>
+
+          <select name="category" id="category">
+            {{#each categorydata}}
+            <option value="{{this.category}}">{{this.category}}</option>
+            {{/each}}
+          </select>
+          <span class="text-danger" id="category-name-error"></span>
+          <br>
+          <label style="color: #262728;">Quantity</label>
+          <input value="{{data.quantity}}" type="number" name="quantity" id="quantity" placeholder="Price of Product"
+            class="formbold-form-input" />
+          <span class="text-danger" id="quantity-name-error"></span>
+<label style="color: #262728;">offer</label>
+          <input value="{{data.offer}}" type="number" name="offer" id="offer" placeholder="Offer of Product"
+            class="formbold-form-input" />
+          
+          <label style="color: #262728;">Status</label>
+          <span class="text-danger" id="status-name-error"></span>
+          <select name="status" id="status">
+            <option value="{{this.status}}">{{data.status}}</option>
+            <option value="out of stock">Out of stock</option>
+            <option value="low stock">Low stock</option>
+            <option value="published">Published</option>
+          </select>
+          <br>
+          <label style="color: #262728;">Description</label>
+          <input value="{{data.description}}" type="text" name="description" id="description"
+            placeholder="description of product" class="formbold-form-input" />
+          <span class="text-danger" id="description-name-error"></span>
+
+          <label style="color: #262728;">Price</label>
+
+          <input value="{{data.price}}" type="number" name="price" id="price" placeholder="Price of Product"
+            class="formbold-form-input" />
+          <span class="text-danger" id="price-name-error"></span>
+          <label style="color: #262728;">Discount</label>
+
+          <input value="{{data.discount}}" type="number" name="discount" id="discount" placeholder="Discount of product"
+            class="formbold-form-input" />
+          <span class="text-danger" id="discount-name-error"></span>
+          <button style="height: auto;width: auto;" type="submit" class="btn btn-secondary">Submit</button><br>
 
 
 
 
-        </form>
-        <form action="/admin/edit-proimage/{{data._id}}" method="POST" enctype="multipart/form-data" id="edit">
-          <label for="">Edit Image</label><br>
+      </form>
+      <form action="/admin/edit-proimage/{{data._id}}" method="POST" enctype="multipart/form-data" id="edit">
+        <label for="">Edit Image</label><br>
 
-          <img style="height: 50px;width: 50px;" src="/images/{{data.image}}" alt=""><br>
-          {{!-- <input type="file" id="gallery-photo-add" name="image"> --}}
-          <main class="page">
-            
-            <!-- input file -->
-            <div >
-              <input type="file" id="file-input" name="image">
+        <img style="height: 50px;width: 50px;" src="/images/{{data.image}}" alt=""><br>
+        {{!-- <input type="file" id="gallery-photo-add" name="image"> --}}
+        <main class="page">
+
+          <!-- input file -->
+          <div>
+            <input type="file" id="file-input" name="image">
+          </div>
+          <!-- leftbox -->
+          <div class="box-2">
+            <div class="result"></div>
+          </div>
+          <!--rightbox-->
+          <div class="box-2 img-result hide">
+            <!-- result of crop -->
+            <img class="cropped" src="" alt="">
+          </div>
+          <!-- input file -->
+          <div>
+            <div class="options hide">
+              {{!-- <label> Width</label>
+              <input type="number" class="img-w" value="300" min="100" max="1200" /> --}}
             </div>
-            <!-- leftbox -->
-            <div class="box-2">
-              <div class="result"></div>
-            </div>
-            <!--rightbox-->
-            <div class="box-2 img-result hide">
-              <!-- result of crop -->
-              <img class="cropped" src="" alt="">
-            </div>
-            <!-- input file -->
-            <div >
-              <div class="options hide">
-                {{!-- <label> Width</label>
-                <input type="number" class="img-w" value="300" min="100" max="1200" /> --}}
-              </div>
-              <!-- save btn -->
-              <button class="btn save hide">Save</button>
-              <!-- download btn -->
-            </div>
-          </main>
+            <!-- save btn -->
+            <button class="btn save hide">Save</button>
+            <!-- download btn -->
+          </div>
+        </main>
 
-          {{!-- <img style="height: 50px;width: 50px;" id='imagepreview1'> --}}
-          <input type="submit">
-        </form>
-        <label for="">Edit Multipple Images</label>
+        {{!-- <img style="height: 50px;width: 50px;" id='imagepreview1'> --}}
+        <button class="btn" type="submit">submit</button>
+      </form>
+      <label style="text-decoration:underline;" for="">Edit Multipple Images</label>
+      <br>
+      {{#each data.subImage}}
+
+      <a href="/admin/deleteMultImg/{{../data._id}}/{{this}}">
+        <img src="/images/{{this}}" alt="" style="width: 50px;height: 50px;">
+      </a>
+      {{/each}}
+      <form action="/admin/Multi-image/{{data._id}}" method="POST" enctype="multipart/form-data">
         <br>
-        {{#each data.subImage}}
-
-        <a href="/admin/deleteMultImg/{{../data._id}}/{{this}}">
-          <img src="/images/{{this}}" alt="" style="width: 50px;height: 50px;">
-        </a>
-        {{/each}}
-        <form action="/admin/Multi-image/{{data._id}}" method="POST" enctype="multipart/form-data">
-          <br><label for="">Multipple Images</label><br>
-
-          <input name="image" type="file" multiple class="form-control-file" onchange="loadFile(event)">
-          <div style="height: 50px;width: 50px;" id="cont"></div>
-          <button type="submit">submit</button>
-        </form>
-      </div>
+        <br><label style="text-decoration:underline;" for="">Multipple Images</label><br>
+        <input name="image" type="file" multiple class="form-control-file" onchange="loadFile(event)">
+        <div id="cont"></div>
+        <button class="btn" type="submit">submit</button>
+      </form>
     </div>
+  </div>
   </div>
   <script src='https://cdnjs.cloudflare.com/ajax/libs/cropperjs/0.8.1/cropper.min.js'></script>
 
@@ -514,29 +526,32 @@
 
 
 
-  {{!-- $(document).ready(function () {
+  {
+    {
+      !--$(document).ready(function () {
 
-    function readURL(input) {
-      if (input.files && input.files[0]) {
-        var reader = new FileReader();
-        reader.onload = function (e) {
-          $('#imagepreview1').prop('src', e.target.result).show();
+        function readURL(input) {
+          if (input.files && input.files[0]) {
+            var reader = new FileReader();
+            reader.onload = function (e) {
+              $('#imagepreview1').prop('src', e.target.result).show();
+            }
+            reader.readAsDataURL(input.files[0]);
+          }
         }
-        reader.readAsDataURL(input.files[0]);
-      }
-    }
 
-    $("#gallery-photo-add").change(function () {
-      readURL(this);
-      $('#imagepreview1').show();
-    });
+        $("#gallery-photo-add").change(function () {
+          readURL(this);
+          $('#imagepreview1').show();
+        });
 
-    $('#imagepreview1').click(function () {
-      $('#gallery-photo-add').replaceWith($('#gallery-photo-add').clone(true));
-      $('#imagepreview1').hide();
-    });
+        $('#imagepreview1').click(function () {
+          $('#gallery-photo-add').replaceWith($('#gallery-photo-add').clone(true));
+          $('#imagepreview1').hide();
+        });
 
-  }); --}}
+      }); --}
+  }
 
 
   var loadFile = function (event) {

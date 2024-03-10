@@ -33,6 +33,12 @@ const productSchema = new mongoose.Schema({
   status:{
     type:String
   },
+  stockLeft:{
+    type:Number
+  },
+  categoryOffer:{
+    type:Number
+  },
   subImage:[{type:String}]
 
   // Add more fields as needed

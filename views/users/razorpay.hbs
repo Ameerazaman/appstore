@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta content="This is a demo of Web integration of Razorpay in NodeJS" author="Mr. Twinkle Sharma" />
+    <title>Razorpay Web-Integration</title>
+</head>
+
+<body>
+
+    <div style="margin: 50px;" class="card mb-3">
+        <div class="card-body">
+            <div class="d-flex justify-content-between">
+                <div class="d-flex flex-row align-items-center">
+                    {{#each data}}
+                    <div>
+                        <img src="/images/{{this.product.image}}" class="img-fluid rounded-3" alt="Shopping item"
+                            style="width: 65px;">
+                    </div><br>
+                    <div class="ms-3">
+                        <h5>{{this.product.product}}</h5>
+                        <p class="small mb-0">256GB, Navy Blue</p>
+                    </div>
+                    
+                    
+                    
+                    {{/each}}
+                    <h5>Total Price is:{{this.totalPrice}}</h5>
+                </div><br>
+            </div>
+        </div>
+    </div>
+
+    <!-- HTML form -->
+    <form action="/checkout/razorpay/callback" method="post">
+        <input type="hidden" name="razorpay_order_id" value="{{ razorpayOrder.id }}">
+        <script src="https://checkout.razorpay.com/v1/checkout.js" data-key="{{ keyId }}"
+            data-amount="{{ razorpayOrder.amount }}" data-currency="INR" data-order_id="{{ razorpayOrder.id }}"
+            data-buttontext="Pay with Razorpay" data-name="{{DeliveryAd.fullname}}"
+            data-description="Purchase Description" data-image="your_logo_url"
+            data-prefill.name="{{DeliveryAd.fullname}}" data-prefill.email="{{DeliveryAd.email }}"
+            data-theme.color="#F37254">
+            </script>
+    </form>
+
+
+    </div>
+
+
+
+    {{!--
+    <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+    <script>
+        var options = {
+            "key": 'rzp_test_7iP2kgLTd9ic3Y',
+            "amount": "49900", // This is just a placeholder amount, replace it with the actual amount
+            "currency": "INR",
+            "name": "Dummy Academy",
+            "description": "Pay & Checkout this Course, Upgrade your DSA Skill",
+            "image": "https://media.geeksforgeeks.org/wp-content/uploads/20210806114908/dummy-200x200.png",
+            "handler": function (response) {
+                console.log(response);
+                alert("This step of Payment Succeeded");
+            },
+            "prefill": {
+                "contact": "9876543210",
+                "name": "Twinkle Sharma",
+                "email": "smtwinkle@gmail.com"
+            },
+            "notes": {
+                "description": "Best Course for SDE placements",
+                "language": "Available in 4 major Languages JAVA, C/ C++, Python, Javascript",
+                "access": "This course has Lifetime Access"
+            },
+            "theme": {
+                "color": "#2300a3"
+            }
+        };
+
+        document.getElementById('pay-button').onclick = async function (e) {
+            try {
+                // Fetch the order ID from the server
+                const response = await fetch('/create-order');
+                const orderData = await response.json();
+                options.order_id = orderData.id; // Set the order ID dynamically
+                var razorpayObject = new Razorpay(options);
+                razorpayObject.open();
+            } catch (error) {
+                console.error('Failed to fetch order ID:', error);
+                alert('Failed to initiate payment');
+            }
+            e.preventDefault();
+        };
+    </script> --}}
+</body>
+
+</html>

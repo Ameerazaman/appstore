@@ -60,18 +60,18 @@ const postEditCategory = async (req, res) => {
     try {
         const id=req.params.id
         let existcategory = await category.findOne({ category: req.body.category });
-        if (existcategory) {
-            let message = "Catogary is already exist"
-            res.render("admin/edit-category", { message,id })
-        }
-        else{
+        // if (existcategory) {
+        //     let message = "Catogary is already exist"
+        //     res.render("admin/edit-category", { message,id })
+        // }
+        
             console.log(req.params.id)
             await category.find({ _id:id }).lean()
-            console.log(id)
-            const output = await category.findByIdAndUpdate({ _id:id }, { category: req.body.category, description: req.body.description })
+            console.log("req.body",req.body)
+            const output = await category.findByIdAndUpdate({ _id:id }, {category: req.body.category,offer:req.body.offer, description: req.body.description})
     
             res.redirect("/admin/category")
-        }
+       
        
     }
     catch (e) {

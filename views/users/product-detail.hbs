@@ -595,7 +595,7 @@ $(document).ready(function () {
 {{!-- pagination --}}
 document.addEventListener("DOMContentLoaded", function () {
       const cards = document.querySelectorAll('.item');
-      const cardContainer = document.getElementById('recend_post');
+      const cardContainer = document.getElementById('recend_post'); // Typo: 'recend_post' should be 'recent_post'
       const prevButton = document.getElementById('prev');
       const nextButton = document.getElementById('next');
 
@@ -651,8 +651,7 @@ document.addEventListener("DOMContentLoaded", function () {
       // Initially show first page
       showPage(currentPage);
       updateButtons();
-    });
- 
+});
 </script>
 </body>
 </html>

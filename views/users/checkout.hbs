@@ -146,6 +146,12 @@
       max-width: 475px;
     }
 
+    .check-form {
+      display: flex;
+      flex-direction: column;
+      max-width: 475px;
+    }
+
     form>section:first-child {
       margin-bottom: 50px;
     }
@@ -279,8 +285,20 @@
         --one-em: 22px;
       }
     }
-    button{
+
+    button {
       background-color: rgb(26, 142, 245);
+    }
+
+    .div-button {
+      background-color: white;
+      color: #4aa6f2;
+      border-style: solid;
+      border-width: 1px;
+      border-color: #282929;
+      padding: 10px;
+      border-radius: 10px;
+      width: 200px;
     }
   </style>
 </head>
@@ -303,12 +321,12 @@
             </div>
             <div class="qty-selector">
               <a style="text-decoration: none;" href="/checkout/quantityinc/{{this.proId}}"><button
-                  style="width:30px;height:30px;">+</button></a>
+                  style="width:20px;height:20px;">+</button></a>
               <div style="width: 50px;padding-top: 30px;">
 
 
-                <input id="form1" min="0" name="quantity" value="{{this.quantity}}" type="number"
-                  class="form-control form-control-sm" />
+                <input id="form1" min="1" max="10" name="quantity" value="{{this.quantity}}"
+                  class="form-control form-control-sm" width="auto" />
 
 
               </div>
@@ -321,111 +339,150 @@
         <div class="shipping">
           <span>Shipping</span><span>free</span>
         </div>
-        {{#each result}}
+
         <div class="total">
-          <span>Total</span><span>{{this.totalPriceAfterDiscount}}</result></span>
+          <span>Total</span><span>{{this.totalPrice}}</result></span>
+          <span>Referal offer</span><span>{{this.offerdata}}</span>
+          <span>Total After deduct the offer</span>{{this.offer}}
         </div>
-        {{/each}}
+
       </div>
-      <form action="#" id="checkout-form">
+      <form class="check-form">
         <section>
           <h3>Contact information</h3>
           <div class="form-group">
             <label for="email">E-mail</label>
             <div>
 
-              <input type="email" id="email" placeholder="Enter your email..." />
+              <input type="email" id="email" placeholder="Enter your email..." value="{{userdata.email}}" />
             </div>
           </div>
           <div class="form-group">
             <label for="phone">Phone</label>
             <div>
 
-              <input type="number" id="phone" placeholder="Enter your phone..." />
+              <input type="number" id="phone" placeholder="Enter your phone..." value="{{userdata.mobile}}" />
             </div>
           </div>
         </section>
-        <h5>Delivery Address</h5>
-        <section style="border-style:solid;border-color: rgb(148, 147, 147);border-width: 1px;border-radius: 10px;">
-
-          <div style="margin: 20px;">
-            <p>
-            <h5>Ameera</h5><span>gyi</span><span>hvyhgb</span>
-            <span>uguih</span></p>
-
-          </div>
-        </section>
-        <button style="background-color: white;color: blue;" onclick="NewAddress()">+Add NewAddress</button>
-           <section id="Address" style="display: none;">
+      </form>
+      <div class="div-button" onclick="NewAddress()">+Add NewAddress</div><br>
+      <form action="/checkout/save-address" method="post" id="checkout-form">
+        <section id="Address" style="display: none;">
           <h3>Shipping address</h3>
           <div class="form-group">
             <label for="fullname">Full name</label>
             <div>
-
-              <input type="text" id="fullname" placeholder="Your full name..." />
+              <input type="text" id="fullname" name="fullname" placeholder="Your full name..." />
+              <span class="text-danger" id="fullname-error"></span>
             </div>
           </div>
           <div class="form-group">
             <label for="address">Address</label>
             <div>
-
-              <input type="text" id="address" placeholder="Your address..." />
+              <input type="text" id="address" placeholder="Your address..." name="address" />
+              <span class="text-danger" id="address-error"></span>
             </div>
           </div>
           <div class="form-group">
             <label for="city">City</label>
             <div>
-
-              <input type="text" id="city" placeholder="Your city..." />
+              <input type="text" id="city" name="city" placeholder="Your city..." />
+              <span class="text-danger" id="city-error"></span>
             </div>
           </div>
           <div class="form-groups">
             <div class="form-group">
               <label for="country">Country</label>
               <div>
-
-                <select>
-                  <option disabled selected>Your country...</option>
-                  <option>United States</option>
-                  <option>Germany</option>
-                  <option>Greece</option>
-                  <option>Spain</option>
-                  <option>Canada</option>
-                  <option>india</option>
+                <select name="state" id="state">
+                  <option disabled selected>Your state...</option>
+                  <option>Kerala</option>
+                  <option>karnadaka</option>
+                  <option>Thamilnadu</option>
+                  <option>Andra</option>
+                  <option>Delhi</option>
+                  <option>Punjab</option>
                 </select>
+                <span class="text-danger" id="state-error"></span>
               </div>
             </div>
             <div class="form-group">
               <label for="postal-code">Postal code</label>
               <div>
-
-                <input type="text" id="postal-code" placeholder="Your postal code..." />
+                <input type="text" id="postal-code" name="postalcode" placeholder="Your postal code..." />
+                <span class="text-danger" id="postalcode-error"></span>
               </div>
             </div>
           </div>
-          <div class="form-group checkbox">
-            <input type="checkbox" id="save-info" />
-            <label for="save-info">Save this information for next time</label>
-          </div>
+          <button type="submit">Save</button>
         </section>
-        <button style="background-color: white;color: blue;" onclick="paymentOption()">Payment Options</button>
-     
-        <section style="background-color: rgb(218, 242, 252);display: none;" id="payment">
-          <h3>Payment Options</h3>
-          <div style="margin: 10px;padding: 10px;display: flex;">
-            <input type="checkbox" >
-            <span> Cash on Delivery</span>
-            <input style="margin-left: 40px;" type="checkbox" >
-            <label for="vehicle2"> RazerPay</label>
-            <input style="margin-left: 40px;" type="checkbox">
-            <label for="vehicle3"> wallet</label>
-          </div>
-        </section>
-        <button>Continue</button>
       </form>
+
+      <h5>Delivery Address</h5>
+      <form action="/checkout/select-Address" method="post" class="check-form">
+        <section style="border-style:solid;border-color: rgb(148, 147, 147);border-width: 1px;border-radius: 10px;">
+          <div style="margin: 20px;">
+            {{#each resultadd}}
+            <input type="radio" id="address" name="selectedAddress" value="{{this.address}}">
+            <span>{{this.fullname}}</span><br>
+            <span>{{this.address}}</span>
+            <span>{{this.city}}</span>
+            <span>{{this.state}}</span>
+            <span>{{this.postalcode}}</span><br><br>
+            <div style="display: flex;">
+              <div style="height:30px;width:30px;"><a href="/checkout/edit/{{this._id}}"><img
+                    style="height: 20px;width: ;20px" class="img-icon"
+                    src="data:image/png;base64,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"
+                    alt=""></button></a></div>
+              <div style="height:30px;width:30px;"> <a href="/checkout/delete/{{this._id}}"><img
+                    style="height: 20px;width: ;20px" class="img-icon"
+                    src="data:image/png;base64,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"
+                    alt=""></button></a></div>
+            </div>
+            {{/each}}
+
+          </div>
+          <button type="submit">Save</button>
+        </section>
+      </form>
+      <form action="/checkout/referal-offer" class="check-form" method="post">
+        <div>
+          <label for="">Referal code</label><br>
+          <input type="text" name="offer">
+          <button type="submit">Submit</button><br>
+        </div><br>
+      </form>
+
+      <form action="/checkout/save-payment" method="post" class="check-form">
+        <div class="div-button" onclick="paymentOption()">Payment Options</div>
+
+        <section style="background-color: rgb(218, 242, 252);display: none;margin-top: 30px;" id="payment">
+          <h3 style="padding: 20px;">Payment Options</h3>
+          <div style="margin: 20px;padding: 30px;display: flex;">
+            <input type="radio" id="cash-on-delivery" name="paymentMethod" value="cash-on-delivery">
+              <label for="cash-on-delivery">Cash on Delivery</label>
+             
+            <input style="margin-left: 20px;" type="radio" id="razer-pay" name="paymentMethod" value="razer-pay">
+            <label for="razer-pay">Online payment</label>
+             
+            <input style="margin-left: 20px;" type="radio" id="wallet" name="paymentMethod" value="wallet">
+            <label for="wallet">Wallet</label>
+          </div>
+          <button type="submit">save</button>
+        </section>
+
+      </form>
+      <form action="/checkout/create-order">
+
+        <button style="margin-left: 20px
+        ;" type="submit">Continue</button>
+        <span class="text-danger">{{this.message}}</span>
+      </form>
+
     </main>
     <footer class="principal">
-      <p>created by <a href="#">username</a> - devChallenges.io
+      <p>created by <a href="#">username</a>
     </footer>
   </div>
 </body>
@@ -442,6 +499,7 @@
     }
   }
 
+
   function paymentOption() {
     var x = document.getElementById("payment");
     if (x.style.display === "none") {
@@ -450,4 +508,45 @@
       x.style.display = "none";
     }
   }
+
+
+
+
+  document.getElementById("checkout-form").addEventListener('submit', (e) => {
+    var fullname = document.getElementById("fullname").value;
+    document.getElementById("fullname-error").innerHTML;
+    if (fullname === '') {
+      document.getElementById("fullname-error").innerHTML = 'This field is required';
+      e.preventDefault()
+    }
+
+    var address = document.getElementById("address").value;
+    document.getElementById("address-error").innerHTML;
+    if (address === '') {
+      document.getElementById("address-error").innerHTML = 'This field is required'
+      e.preventDefault()
+    }
+
+    var city = document.getElementById("city").value;
+    document.getElementById("city-error").innerHTML;
+    if (city === '') {
+      document.getElementById("city-error").innerHTML = 'This field is required'
+      e.preventDefault()
+    }
+
+    var state = document.getElementById("state").value;
+    document.getElementById("state-error").innerHTML;
+    if (state === '') {
+      document.getElementById("state-error").innerHTML = 'This field is required'
+      e.preventDefault()
+    }
+
+    var postalcode = document.getElementById("postal-code").value;
+    document.getElementById("postalcode-error").innerHTML;
+    if (postalcode === '') {
+      document.getElementById("postalcode-error").innerHTML = 'This field is required'
+      e.preventDefault()
+    }
+  })
+
 </script>

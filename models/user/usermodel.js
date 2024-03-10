@@ -22,6 +22,9 @@ const userschema=mongoose.Schema({
       isBlocked:{
         type:Boolean,
         default:false
+      },
+      referalcode:{
+        type:String
       }
         
 })

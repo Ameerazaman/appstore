@@ -1,0 +1,463 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <link href="https://fonts.googleapis.com/css?family=Roboto&display=swap" rel="stylesheet">
+    <style>
+        html {
+            height: 200vh;
+        }
+
+        body {
+            margin: 0px;
+            font-family: 'Roboto', sans-serif;
+        }
+
+        /*SIDEBAR SECTION */
+
+        #s1 {
+            position: fixed;
+            left: 0;
+            top: 0;
+            height: 100%;
+            width: 200px;
+            background: rgb(119, 158, 215);
+
+        }
+
+        #s1 ul {
+            list-style-type: none;
+            text-align: center;
+            margin: 0;
+            padding: 0;
+            font-size: 12px;
+        }
+
+        #s1 li {
+            padding: 5px;
+            font-weight: 300;
+            font-size: 16px;
+        }
+
+        .home {
+            background: rgb(26, 27, 29);
+        }
+
+        #s1 li:hover {
+            background: #333232;
+            padding: 5px;
+        }
+
+        #s1 a {
+            color: white;
+            text-decoration: none;
+            font-size: 18px;
+        }
+
+        /*RIGHT SECTION */
+
+        #s2 {
+            height: 100vh;
+            margin-left: 200px;
+
+
+        }
+
+        /* RESPONSIVE WINDOW */
+        @media screen and (max-width:700px) {
+            #s1 {
+                width: 100px;
+                height: inherit;
+            }
+
+            #s1 li {
+                width: 80px;
+                float: left;
+
+
+            }
+
+            #s1 a {
+                color: white;
+                text-decoration: none;
+                font-size: 14px;
+            }
+
+            #s1 li {
+                padding: 5px;
+                font-weight: 300;
+                font-size: 12px;
+            }
+
+            #s2 {
+
+                margin-left: 100px;
+            }
+        }
+
+        @media screen and (max-width: 500px) {
+            #s1 {
+                position: relative;
+            }
+
+            #s1 li {
+                text-align: center;
+                float: none;
+                width: auto;
+                padding: 5;
+
+            }
+        }
+
+        #checkout-form {
+            display: flex;
+            flex-direction: column;
+            max-width: 675px;
+        }
+
+        #check-form {
+            display: flex;
+            flex-direction: column;
+            max-width: 475px;
+        }
+
+        form>section:first-child {
+            margin-bottom: 50px;
+        }
+
+        form>section>h3 {
+            font-size: var(--text-m);
+            font-weight: 600;
+            color: #333;
+        }
+
+        form .form-group:not(:last-child) {
+            margin-bottom: 12px;
+        }
+
+        form .form-groups {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            grid-column-gap: 25px;
+        }
+
+        form .form-group>label {
+            font-size: var(--text-xs);
+            color: #4F4F4F;
+            font-weight: 600;
+        }
+
+        form .form-group>div {
+            position: relative;
+            margin-top: 7px;
+        }
+
+        form .form-group .material-icons {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            left: 15px;
+            font-size: var(--text-m);
+            color: #828282;
+        }
+
+        form .form-group input,
+        form .form-group select {
+            width: 100%;
+            padding: 12px 10px 12px 42px;
+            border-radius: 12px;
+            border: 1px solid #828282;
+            outline: none;
+            font-weight: 600;
+            font-size: var(--text-s);
+        }
+
+        option:disbled {
+            color: #828282;
+        }
+
+        form .form-group,
+        form .form-groups {
+            max-width: 475px;
+        }
+
+        form .form-group.checkbox {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        #save-info {
+            width: auto;
+        }
+
+        #save-info~label {
+            text-align: center;
+        }
+
+        form>button {
+            background-color: #4aa6f2;
+            outline: none;
+            border: 1px solid #4abaf2;
+            border-radius: 12px;
+            color: #FFF;
+            font-weight: 600;
+            font-size: 16px;
+            line-height: 20px;
+            padding: 17px 45px;
+            float: right;
+            margin-top: 24px;
+            transition: all .3s ease;
+            cursor: pointer;
+            align-self: flex-end;
+        }
+
+        form>button:hover {
+            background: transparent;
+            color: #4adef2;
+        }
+
+        footer {
+            margin-top: 90px;
+        }
+
+        footer>p {
+            font-size: 14px;
+            line-height: 17px;
+            font-weight: 600;
+            color: #BDBDBD;
+            text-align: center;
+        }
+
+        footer>p>a {
+            font-weight: 700;
+        }
+
+        @media only screen and (min-width: 768px) {
+            .global-container {
+                max-width: 1000px;
+                padding: 0 25px;
+            }
+
+            .cart-preview {
+                float: right;
+                margin-left: 90px;
+            }
+        }
+
+        @media only screen and (min-width: 900px) {
+            :root {
+                --text-xs: 12px;
+                --text-s: 16px;
+                --text-m: 18px;
+                --text-l: 36px;
+                --one-em: 22px;
+            }
+        }
+
+        button {
+            background-color: rgb(26, 142, 245);
+        }
+
+        .div-button {
+            background-color: white;
+            color: #4aa6f2;
+            border-style: solid;
+            border-width: 1px;
+            border-color: #282929;
+            padding: 10px;
+            border-radius: 10px;
+            width: 200px;
+        }
+
+        .container {
+            margin-left: 200px;
+        }
+    </style>
+</head>
+
+<body>
+    <!--SIDEBAR SECTION -->
+    <section style="margin-top: 75px;" id="s1">
+        <div id="linklist">
+            <ul>
+                <li class="home"><a href="#">Account Accecbility</a></li>
+                <a href="/user-profile">
+                    <li>Profile </li>
+                </a>
+                <a href="/user-profile/address-mgt">
+                    <li>Address </li>
+                </a>
+                <li class="home"><a href="#">payment</a></li>
+                <a href="#">
+                    <li>Gift Cards</li>
+                </a>
+                <a href="#">
+                    <li>Saved UpI</li>
+                </a>
+                <a href="#">
+                    <li>Saved Cards</li>
+                </a>
+                <li class="home"><a href="#">My Stuff</a></li>
+                <a href="/user-profile/offer">
+                    <li>Offer</li>
+                </a>
+                <a href="/user-profile/wishlist">
+                    <li>Wishlist</li>
+                </a>
+                <a href="/user-profile/order">
+                    <li>Order</li>
+                </a>
+                <a href="/user-profile/wallet">
+                    <li>Wallet</li>
+                </a>
+                <li class="home"><a href="/user/logout">Logout</a></li>
+            </ul>
+        </div>
+    </section>
+    <!--CONTENT SECTION -->
+    <section style="padding-top: 50px; height: auto;" id="s2">
+        <h3 style="text-align: center;">Offers</h3>
+        {{!-- <div style="padding: top; width: 50%;" class="div-button" onclick="NewAddress()">+Add NewAddress</div><br>
+        --}}
+        <form action="/user-profile/referal-offers" style="padding: 20px;padding-left: 90px;"
+            method="post" id="check-form">
+            <section id="Address">
+
+                <div class="form-group">
+                    <div class="form-group">
+                        {{!-- {{#if existuser}} --}}
+                        
+                            <span>{{this.message}}</span>
+                            <label for="">Friends Name</label>
+                            <input  type="text" id="name" name="name" placeholder="Name" />
+                            <span class="text-danger" id="name-error"></span>
+                             <label for="">Email</label>
+                            <input  type="email" id="email" name="email" placeholder="email" />
+                            <span class="text-danger" id="email-error"></span>
+                            
+                        </div>
+                        {{!-- {{/if}} --}}
+                    </div>
+                </div>
+                <button type="submit">Refer</button>
+            </section>
+        </form>
+        <form action="/user-profile/create-referalcode" style="padding: 20px;padding-left: 90px;"
+           id="check-form">
+            <section id="Address">
+
+                <div class="form-group">
+                    <div class="form-group">
+                        {{!-- {{#if existuser}} --}}
+                        
+                             <label for="">Create referal code</label>
+                            <input value="{{this.referal}}" placeholder="Referal code"/>
+                            
+                            
+                        </div>
+                        {{!-- {{/if}} --}}
+                    </div>
+                </div>
+                {{#if referal}}
+                 <button type="submit">Created</button>
+               
+                {{else}}
+                <button type="submit">Create referal code</button>
+           
+                {{/if}}
+            </section>
+        </form>
+        {{!-- Personal information --}}
+       
+
+</body>
+
+</html>
+<script>
+    document.getElementById("checkout-form").addEventListener('submit', (e) => {
+        var fullname = document.getElementById("fullname").value;
+        document.getElementById("fullname-error").innerHTML;
+        if (fullname === '') {
+            document.getElementById("fullname-error").innerHTML = 'This field is required';
+            e.preventDefault()
+        }
+
+        var address = document.getElementById("address").value;
+        document.getElementById("address-error").innerHTML;
+        if (address === '') {
+            document.getElementById("address-error").innerHTML = 'This field is required'
+            e.preventDefault()
+        }
+
+        var city = document.getElementById("city").value;
+        document.getElementById("city-error").innerHTML;
+        if (city === '') {
+            document.getElementById("city-error").innerHTML = 'This field is required'
+            e.preventDefault()
+        }
+
+        var state = document.getElementById("state").value;
+        document.getElementById("state-error").innerHTML;
+        if (state === '') {
+            document.getElementById("state-error").innerHTML = 'This field is required'
+            e.preventDefault()
+        }
+
+        var email = document.getElementById("email").value;
+        document.getElementById("email-error").innerHTML;
+        if (email === '') {
+            document.getElementById("email-error").innerHTML = 'This field is required'
+            e.preventDefault()
+        }
+
+        var phone = document.getElementById("phone").value;
+        document.getElementById("phone-error").innerHTML;
+        if (phone === '') {
+            document.getElementById("phone-error").innerHTML = 'This field is required'
+            e.preventDefault()
+        }
+
+        var postalcode = document.getElementById("postal-code").value;
+        document.getElementById("postalcode-error").innerHTML;
+        if (postalcode === '') {
+            document.getElementById("postalcode-error").innerHTML = 'This field is required'
+            e.preventDefault()
+        }
+    })
+
+    function NewAddress() {
+        var x = document.getElementById("Address");
+        if (x.style.display === "none") {
+            x.style.display = "block";
+        } else {
+            x.style.display = "none";
+        }
+    }
+
+    document.getElementById("check-form").addEventListener('submit', (e) => {
+        var password = document.getElementById("password").value;
+        document.getElementById("password-error").innerHTML;
+        if (password === '') {
+            document.getElementById("password-error").innerHTML = 'This field is required';
+            e.preventDefault()
+        }
+
+        var newpassword = document.getElementById("newpassword").value;
+        document.getElementById("new-password-error").innerHTML;
+        if (newpassword === '') {
+            document.getElementById("new-password-error").innerHTML = 'This field is required';
+            e.preventDefault()
+        }
+        var confirm = document.getElementById("confirmpassword").value;
+        document.getElementById("confirm-password-error").innerHTML;
+        if (confirm === '') {
+            document.getElementById("confirm-password-error").innerHTML = 'This field is required';
+            e.preventDefault()
+        }
+        if (confirm != newpassword) {
+            document.getElementById("confirm-password-error").innerHTML = 'Password is not match';
+            e.preventDefault()
+        }
+    })
+</script>

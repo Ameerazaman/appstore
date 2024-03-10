@@ -1,16 +1,16 @@
 const express = require('express')
 const mongoose = require('mongoose')
 const router = express.Router()
-const users = require('../models/user/usermodel')
-const products = require('../models/admin/productModel')
-const { getAddProduct, deleteProduct, getEditProduct, doAddProduct, postEditProduct, getEditImage, postEditImage, MultImage, getProduct, DeleteMultiImg } = require('../controllers/admin/productController')
-const { verifyAdmin, upload, ProductRules, productRes, editProductRes, categoryRules, categoryRes, editCategoryRes, EditCategoryRes, EditProductRes, verifyUser, cropImage } = require('../middlewares/middleware')
-const{doLogin, postLogin, adminLogout}=require('../controllers/admin/adminControllers')
+const users = require('../../models/user/usermodel')
+const products = require('../../models/admin/productModel')
+const { getAddProduct, deleteProduct, getEditProduct, doAddProduct, postEditProduct, getEditImage, postEditImage, MultImage, getProduct, DeleteMultiImg, productDetailPage } = require('../../controllers/admin/productController')
+const { verifyAdmin, upload, ProductRules, productRes, editProductRes, categoryRules, categoryRes, editCategoryRes, EditCategoryRes, EditProductRes, verifyUser, cropImage } = require('../../middlewares/middleware')
+const{doLogin, postLogin, adminLogout}=require('../../controllers/admin/adminControllers')
 const fileUpload = require('express-fileupload')
 const multer = require('multer');
-const { getCustomers, blockCustomer, unblockCustomers, searchCustomer } = require('../controllers/admin/customerController')
-const { getCategory, doAddcategory, deleteCategory, getEditcategory, postEditCategory, getAddcategory, getEditCategoryImg, postEditCategoryImg } = require('../controllers/admin/catogaryController')
-const { getDashboard } = require('../controllers/admin/dashboarController')
+const { getCustomers, blockCustomer, unblockCustomers, searchCustomer } = require('../../controllers/admin/customerController')
+const { getCategory, doAddcategory, deleteCategory, getEditcategory, postEditCategory, getAddcategory, getEditCategoryImg, postEditCategoryImg } = require('../../controllers/admin/catogaryController')
+const { getDashboard, monthlySales } = require('../../controllers/admin/dashboarController')
 
 
 
@@ -49,7 +49,8 @@ router.post('/search',searchCustomer)
 //Get Dashboard/////
 router.get("/dashboard",verifyAdmin,getDashboard)
 
-
+// get monthly sales
+router.get("/dashboard/monthly",verifyAdmin,monthlySales)
 /**********************************************Product****************** */
 router.get("/product",getProduct)
 
@@ -77,6 +78,10 @@ router.post('/multi-image/:id',verifyAdmin, upload.array('image',4),MultImage)
 
 // Delete multiple images in edit product page
 router.get("/deleteMultImg/:id/:imagefile",DeleteMultiImg)
+
+// get product detail apge
+
+router.get("/product-detail/:id",verifyAdmin,productDetailPage)
 
 ///**********************************Catogary *********************************/
 

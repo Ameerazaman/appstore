@@ -6,6 +6,9 @@ const categoryschema=new mongoose.Schema({
     image:{
         type:String
     },
+    offer:{
+        type:Number
+    },
     description:{
         type:String
     }

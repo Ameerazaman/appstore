@@ -1,14 +1,14 @@
 const multer = require('multer')
 const sharp = require('sharp');
 
-const {check,validationResult,body}=require('express-validator')
+const {check,validationResult,body}=require('express-validator');
+const Users = require('../models/user/usermodel');
 
 
 const verifyAdmin = (req, res, next) => {
     if (session.userid) {
         console.log("session exist")
         next()
-        
     }
     else {
         res.render('admin/login')
@@ -22,7 +22,7 @@ const verifyUser = (req, res, next) => {
     }
     else {
         console.log("session failed")
-        res.render('users/login')
+        res.redirect('/user')
     }
 }
 //file upload///upload images
@@ -201,7 +201,29 @@ const EditCategoryRes=(req,res,next)=>{
 }
 
 
-// crop image
+// block middlewar
+const blockMiddleware = (req, res, next) => {
+    // Extract user ID from request or wherever it's stored (e.g., req.user.id)
+    const userId = req.user.id; // Assuming you have user information stored in req.user
+
+    // Find the user in the database by ID
+    Users.findById(userId, (err, user) => {
+        if (err) {
+            // Handle error if user is not found
+            return res.status(500).json({ error: "Internal Server Error" });
+        }
+        if (!user) {
+            // If user is not found, handle accordingly
+            return res.status(404).json({ error: "User not found" });
+        }
+        if (user.isBlocked) {
+            // If user is blocked, send an error response
+            return res.status(403).json({ error: "Access Forbidden. Your account is blocked." });
+        }
+        // If user is not blocked, proceed to the next middleware or route handler
+        next();
+    });
+};
 
 
 
@@ -209,4 +231,4 @@ const EditCategoryRes=(req,res,next)=>{
 module.exports = {
      verifyAdmin, verifyUser, upload ,validationRules,
      validationRes,productRes,ProductRules,categoryRes,
-     categoryRules,EditCategoryRes,EditProductRes }
+     categoryRules,EditCategoryRes,EditProductRes,blockMiddleware }

@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+       <h3 style="text-align: center;">Address Management</h3>
+
+    <div style="margin-left: 90px; width: 45%;" class="div-button" onclick="NewAddress()">+Add NewAddress</div><br>
+  
+    <form action="/user-profile/edit-addressmgt/{{data._id}}" style="padding: 20px;padding-left: 90px;" method="post" id="checkout-form">
+      <section id="Address" >
+
+        <div class="form-group">
+          <label style="padding: 0%;" for="address-type">Address Type</label>
+          <div style="margin: 20px;padding: 30px;display: flex; width: auto;">
+            <input style="width: 20px;height: 20px;" type="radio" id="home" name="home" value="home">
+              <label for="cash-on-delivery">Home</label>
+             
+            <input style="margin-left: 20px;width: 20px;height: 20px;" type="radio" id="work" name="work" value="work">
+            <label for="razer-pay">Work</label>
+             
+        </div>
+
+        <div class="form-group">
+          <label for="fullname">Full name</label>
+          <div>
+            <input value="{{data.fullname}}" type="text" id="fullname" name="fullname" placeholder="Your full name..." />
+            <span class="text-danger" id="fullname-error"></span>
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="email">Email</label>
+          <div>
+            <input value="{{data.email}}" type="email" id="email" name="email" placeholder="Your Email..." />
+            <span class="text-danger" id="email-error"></span>
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="Phone">Phone Number</label>
+          <div>
+            <input value="{{data.phone}}" type="Number" id="phone" name="phone" placeholder="Your Phone Number..." />
+            <span class="text-danger" id="phone-error"></span>
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="address">Address</label>
+          <div>
+
+            <input value="{{data.address}}" type="text" id="address" placeholder="Your address..." name="address" />
+            <span class="text-danger" id="address-error"></span>
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="city">City</label>
+          <div>
+
+            <input value="{{data.city}}" type="text" id="city" name="city" placeholder="Your city..." />
+            <span class="text-danger" id="city-error"></span>
+          </div>
+        </div>
+        <div class="form-groups">
+          <div class="form-group">
+            <label for="country">Country</label>
+            <div>
+
+              <select name="state" id="state" >
+                <option disabled selected>Your state...</option>
+                <option>Kerala</option>
+                <option>karnadaka</option>
+                <option>Thamilnadu</option>
+                <option>Andra</option>
+                <option>Delhi</option>
+                <option>Punjab</option>
+              </select>
+              <span class="text-danger" id="state-error"></span>
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="postal-code">Postal code</label>
+            <div>
+
+              <input value="{{data.postalcode}}" type="text" id="postal-code" name="postalcode" placeholder="Your postal code..." />
+              <span class="text-danger" id="postalcode-error"></span>
+            </div>
+
+          </div>
+        </div>
+        <button type="submit">Save</button>
+      </section>
+    </form>
+</body>
+</html>
+<script>
+     document.getElementById("checkout-form").addEventListener('submit', (e) => {
+    var fullname = document.getElementById("fullname").value;
+    document.getElementById("fullname-error").innerHTML;
+    if (fullname === '') {
+      document.getElementById("fullname-error").innerHTML = 'This field is required';
+      e.preventDefault()
+    }
+
+    var address = document.getElementById("address").value;
+    document.getElementById("address-error").innerHTML;
+    if (address === '') {
+      document.getElementById("address-error").innerHTML = 'This field is required'
+      e.preventDefault()
+    }
+
+    var city = document.getElementById("city").value;
+    document.getElementById("city-error").innerHTML;
+    if (city === '') {
+      document.getElementById("city-error").innerHTML = 'This field is required'
+      e.preventDefault()
+    }
+
+    var state = document.getElementById("state").value;
+    document.getElementById("state-error").innerHTML;
+    if (state === '') {
+      document.getElementById("state-error").innerHTML = 'This field is required'
+      e.preventDefault()
+    }
+
+    var email = document.getElementById("email").value;
+    document.getElementById("email-error").innerHTML;
+    if (email === '') {
+      document.getElementById("email-error").innerHTML = 'This field is required'
+      e.preventDefault()
+    }
+
+    var phone = document.getElementById("phone").value;
+    document.getElementById("phone-error").innerHTML;
+    if (phone === '') {
+      document.getElementById("phone-error").innerHTML = 'This field is required'
+      e.preventDefault()
+    }
+
+    var postalcode = document.getElementById("postal-code").value;
+    document.getElementById("postalcode-error").innerHTML;
+    if (postalcode === '') {
+      document.getElementById("postalcode-error").innerHTML = 'This field is required'
+      e.preventDefault()
+    }
+  })
+</script>

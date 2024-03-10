@@ -17,7 +17,12 @@ const getAddProduct = async (req, res) => {
 // // post Product page//
 const doAddProduct = async (req, res) => {
 console.log(req.body)
-    // const filepath = req.file.filename
+    const checkProduct=await products.findOne({product:req.body.product})
+if(checkProduct){
+    const message="product already exist"
+    res.render("admin/add-product",{message})
+}
+else{
     const pro = await products.create(req.body)
 
     const productId = pro._id
@@ -30,6 +35,8 @@ console.log(req.body)
     // const proup = await products.findByIdAndUpdate(productId, { image: filepath })
 
     res.redirect('/admin/product')
+}
+  
 
     //     const subImagesArray = req.files.map((file) => {
     //         return file.filename
@@ -75,7 +82,7 @@ const postEditProduct = async (req, res) => {
     console.log("passed to post page")
     const proId = req.params.id;
     console.log(req.body)
-    const output = await products.findByIdAndUpdate({ _id: proId }, { product: req.body.product, category: req.body.category, description: req.body.description, discount: req.body.discount, price: req.body.price, status: req.body.status, quantity: req.body.quantity })
+    const output = await products.findByIdAndUpdate({ _id: proId }, { product: req.body.product, category: req.body.category,offer:req.body.offer, description: req.body.description, discount: req.body.discount, price: req.body.price, status: req.body.status, quantity: req.body.quantity })
     res.redirect("/admin/product")
 }
 //get edit product image
@@ -121,6 +128,17 @@ const DeleteMultiImg=async (req,res)=>{
      res.redirect("/admin/edit-product")
     
 }
+// product detail page
+const productDetailPage=async(req,res)=>{
+    try{
+        const datas= await products.findOne({_id:req.params.id}).lean()
+        res.render("admin/product-detail",{datas})
+    }
+    catch(error){
+        console.log("Error in product detailpage in product controlller")
+    }
+  
+}
 module.exports={
     getAddProduct,
     doAddProduct,
@@ -131,6 +149,7 @@ module.exports={
     postEditImage,
     MultImage,
      getProduct,
-     DeleteMultiImg
+     DeleteMultiImg,
+     productDetailPage
 }
    

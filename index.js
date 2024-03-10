@@ -1,18 +1,26 @@
 const express = require('express')
+const Razorpay = require('razorpay');
 const mongoose = require('mongoose')
 const path = require('path')
 
-// routes
+// user side
 var user = require('./routes/users/user')
-var admin = require('./routes/admin')
 var cart = require("./routes/users/cart")
 var checkout = require("./routes/users/checkout")
+var userprofile=require("./routes/users/user-profile")
+var wishlist=require("./routes/users/wishlist")
 
-
+// admin side
+var admin = require('./routes/admin/admin')
+var order=require("./routes/admin/order")
+var coupon=require("./routes/admin/coupon")
+var dashboard=require("./routes/admin/dashboard")
+var referaloffer=require("./routes/admin/referaloffer")
 const bodyParser = require('body-parser');
 var hbs = require('express-handlebars').engine
 const nodemailer = require('nodemailer');
 const crypto = require('crypto');
+require('dotenv').config();
 const app = express()
 const nocache = require("nocache")
 var connect = require("./config/connection")
@@ -61,9 +69,19 @@ app.get('/', async (req, res) => {
   const check = await products.find().lean()
   res.render('users/landing-page', { check })
 })
-app.use('/user', user)
+// Admiin side
+
 app.use('/admin', admin)
+app.use("/order",order)
+app.use("/coupon",coupon)
+app.use("/dashboard",dashboard)
+app.use("/referaloffer",referaloffer)
+// user side
+app.use('/user', user)
 app.use('/cart', cart)
 app.use('/checkout',checkout)
+app.use("/user-profile",userprofile)
+app.use("/wishlist",wishlist)
 
-app.listen(3000, console.log("server started"))
+
+app.listen(3004, console.log("server started"))

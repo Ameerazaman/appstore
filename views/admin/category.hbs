@@ -72,17 +72,18 @@
 
                     <div class="nav-option option4">
                         <img src="/images/order.png" class="nav-img" alt="institution">
-                        <h5>Orders</h5>
+                        <a href="/order"><h5>Orders</h5></a>
                     </div>
 
                     <div class="nav-option option5">
                         <img src="/images/new coupon.png" class="nav-img" alt="blog">
-                        <h5>Coupon</h5>
+                        <a href="/coupon"><h5>Coupon</h5></a>
                     </div>
 
                     <div class="nav-option option6">
-                        <img src="/images/coupon.png" class="nav-img" alt="settings">
-                        <h5> Banner</h5>
+                      <img src="/images/coupon.png" class="nav-img" alt="settings">
+              <a href="/referaloffer"><h5> Offer</h5>
+            </a>
                     </div>
 
                     <div class="nav-option option6">
@@ -190,6 +191,7 @@
                                 <th scope="col">No</th>
                                 <th scope="col">Catogary Name</th>
                                 <th scope="col">Image</th>
+                                <th scope="col">Offer</th>
                                 <th scope="col">Description</th>
                                 <th scope="col">Edit</th>
                                 <th scope="col">Delete</th>
@@ -201,6 +203,7 @@
                                 <th scope="row">{{@index}}</th>
                                 <td>{{this.category}}</td>
                                 <td><img style="height: 20px;width: 20px;" src="/images/{{this.image}}" alt=""></td>
+                                <td>{{this.offer}}</td>
                                 <td>{{this.description}}</td>
                                 <td><a href="/admin/editCategory/{{this._id}}"><img style="height: 20px;width: ;20px"
                                             class="img-icon"

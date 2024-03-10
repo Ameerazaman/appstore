@@ -4,11 +4,12 @@ const router = express.Router()
 const users = require('../../models/user/usermodel')
 const nodemailer = require('nodemailer')
 
-const { doSignup, getLogin, postLogin, getSignup, otpSubmit, postSignup, resendOtp, getProductDetail, userLogout, getcategory, homePage, getForgot, getForgotOtp, forgotOtpVerify, changeForgotPassword } = require('../../controllers/user/userControllers')
+const { doSignup, getLogin, postLogin, getSignup, otpSubmit, postSignup, resendOtp, getProductDetail, userLogout, getcategory, homePage, getForgot, getForgotOtp, forgotOtpVerify, changeForgotPassword, filter, search, searchProducts } = require('../../controllers/user/userControllers')
 const products = require('../../models/admin/productModel')
 const category = require('../../models/admin/categorymodel')
 const { verifyUser, } = require('../../middlewares/middleware')
 const { addToCart, deleteCart } = require('../../controllers/user/cartController')
+const { deleteProfile } = require('../../controllers/user/userprofileController')
 //////////
 //Otp generation//
 // get Home Page
@@ -51,5 +52,18 @@ router.post("/forgotpassword",getForgotOtp)
 router.post("/forgototpverify",forgotOtpVerify)
 // change forgot password
 router.post("/change-forgot-password",changeForgotPassword)
+
+// *********************************filter*********************************
+
+router.post("/filter",verifyUser,filter)
+
+// ***********************************Search products********************************
+
+router.post("/search",verifyUser,searchProducts)
+
+// ***********************************Delete*******************************
+
+
+
 
 module.exports = router;

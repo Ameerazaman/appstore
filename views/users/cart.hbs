@@ -12,10 +12,11 @@
       }
     }
   </style>
-</head>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" integrity="sha512-wX2OU3fX0W/Q/2blzLm9V8b6vTZYI1vPP2hGSBrkLB9ap3Fq9kR5fNzgDj7+Dg9SKb7H19r4T3xMBpLE7U7+2w==" crossorigin="anonymous" referrerpolicy="no-referrer" /></head>
 
 <body>
   <section class="h-100 h-custom container">
+  
     <div class="container py-5 h-100">
       <div style="width: 100%;" class="row d-flex justify-content-center align-items-center h-100">
         <div style="width: 100%;" class="col">
@@ -24,7 +25,7 @@
 
               <div class="row">
 
-                <div class="col-lg-7">
+                <div class="col-lg-8">
                   <h5 class="mb-3"><a href="/user/login" class="text-body"><i
                         class="fas fa-long-arrow-alt-left me-2"></i>Continue shopping</a></h5>
                   <hr>
@@ -35,30 +36,38 @@
                       <p class="mb-0">You have 4 items in your cart</p>
                     </div>
                     <div>
-                      <p class="mb-0"><span class="text-muted">Sort by:</span> <a href="#!" class="text-body">price <i
-                            class="fas fa-angle-down mt-1"></i></a></p>
+                      <p class="mb-0"><span class="text-muted">Share</span> <a href="#!" class="text-body"> <i class="fa fa-share"></i></a></p>
                     </div>
                   </div>
+                 
+                 
+                  {{#if categoryDiscount}}
                   {{#each data}}
-                  <div class="card mb-3">
+
+                  <div class="card mb-2">
                     <div class="card-body">
                       <div class="d-flex justify-content-between">
                         <div class="d-flex flex-row align-items-center">
                           <div>
-                            <img src="/images/{{this.product.image}}" class="img-fluid rounded-3" alt="Shopping item"
-                              style="width: 65px;">
+
+                            <img src="/images/{{this.product.image}}" style="width: 65px;">
+                            {{!-- <img src="/images/{{this.product.image}}" alt=""> --}}
                           </div>
+
                           <div class="ms-3">
                             <h5>{{this.product.product}}</h5>
-                            <p class="small mb-0">256GB, Navy Blue</p>
-                          </div>
+                                  </div>
                         </div>
                         <div class="d-flex flex-row align-items-center">
-                          <div style="width: 80px;margin-left: 30px;">
+                          <div style="width: 80px;margin-left: 20px;">
                             <p class="mb-0">{{this.subtotal}}</p>
                           </div>
+                            
+                          <div style="width: 80px;margin-left: 20px;">
+                            <p class="mb-0">{{this.product.discount}}</p><small>(product-off)</small>
+                          </div>
                           <a style="text-decoration: none;" href="/cart/quantityincrement/{{this.proId}}"><button
-                              style="width:30px;height:30px;">+</button></a>
+                              style="width:30px;height:30px;margin-left: 30px;">+</button></a>
                           <div style="width: 50px;padding-top: 30px;">
 
 
@@ -69,65 +78,95 @@
                           </div>
                           <a style="text-decoration: none;" href="/cart/quantitydecrement/{{this.proId}}"><button
                               style="width:30px;height:30px;">-</button></a>
-                          <div style="width: 80px;margin-left: 30px;">
-                            <p class="mb-0">{{this.discountProduct}}</p>
+
+                        
+                          <div>
+                          <a href="/cart/deletecart/{{this._id}}"><img style="height: 20px;width:20px;margin-left: 30px;"
+                                                class="img-icon"
+                                                src="data:image/png;base64,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"
+                                                alt=""></button></a>
                           </div>
-                          <a href="/cart/deletecart/{{this._id}}" style="color: #cecece;"><i
-                              class="fas fa-trash-alt"></i></a>
+
                         </div>
                       </div>
                     </div>
                   </div>
                   {{/each}}
-                </div>
-                <div class="col-lg-5">
+                  
+                  {{else}}
+                   {{#each data}}
 
-                  <div class="card bg-primary text-white rounded-3">
+                  <div class="card mb-2">
+                    <div class="card-body">
+                      <div class="d-flex justify-content-between">
+                        <div class="d-flex flex-row align-items-center">
+                          <div>
+
+                            <img src="/images/{{this.product.image}}" style="width: 65px;">
+                            {{!-- <img src="/images/{{this.product.image}}" alt=""> --}}
+                          </div>
+
+                          <div class="ms-3">
+                            <h5>{{this.product.product}}</h5>
+                                  </div>
+                        </div>
+                        <div class="d-flex flex-row align-items-center">
+                          <div style="width: 80px;margin-left: 20px;">
+                            <p class="mb-0">{{this.subtotal}}</p>
+                          </div>
+                             <div style="width: 80px;margin-left: 20px;">
+                            <button><a href="/cart/categoryOffer/{{this.product._id}}" class="mb-0">{{this.product.categoryOffer}}%</a></button><small>(category-off)</small>
+                          </div>
+                          <div style="width: 80px;margin-left: 20px;">
+                            <p class="mb-0">{{this.product.discount}}</p><small>(product-off)</small>
+                          </div>
+                          <a style="text-decoration: none;" href="/cart/quantityincrement/{{this.proId}}"><button
+                              style="width:30px;height:30px;margin-left: 30px;">+</button></a>
+                          <div style="width: 50px;padding-top: 30px;">
+
+
+                            <input id="form1" min="0" name="quantity" value="{{this.quantity}}" type="number"
+                              class="form-control form-control-sm" />
+
+
+                          </div>
+                          <a style="text-decoration: none;" href="/cart/quantitydecrement/{{this.proId}}"><button
+                              style="width:30px;height:30px;">-</button></a>
+
+                        
+                          <div>
+                          <a href="/cart/deletecart/{{this._id}}"><img style="height: 20px;width:20px;margin-left: 30px;"
+                                                class="img-icon"
+                                                src="data:image/png;base64,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"
+                                                alt=""></button></a>
+                          </div>
+
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  {{/each}}
+                  {{/if}}
+                </div>
+                <div class="col-lg-4">
+
+                  <div style="background-color: rgb(113, 177, 249);" class="card  text-white rounded-3">
                     <div class="card-body">
                       <div class="d-flex justify-content-between align-items-center mb-4">
-                        <h5 class="mb-0">Card details</h5>
+
+                        <h5 class="mb-0">Price details</h5>
                         <img src="https://mdbcdn.b-cdn.net/img/Photos/Avatars/avatar-6.webp" class="img-fluid rounded-3"
                           style="width: 45px;" alt="Avatar">
                       </div>
 
-                      <p class="small mb-2">Card type</p>
-                      <a href="#!" type="submit" class="text-white"><i class="fab fa-cc-mastercard fa-2x me-2"></i></a>
-                      <a href="#!" type="submit" class="text-white"><i class="fab fa-cc-visa fa-2x me-2"></i></a>
-                      <a href="#!" type="submit" class="text-white"><i class="fab fa-cc-amex fa-2x me-2"></i></a>
-                      <a href="#!" type="submit" class="text-white"><i class="fab fa-cc-paypal fa-2x"></i></a>
+                      <p class="small mb-2">Select Coupon</p>
 
-                      {{!-- <form class="mt-4">
-                        <div class="form-outline form-white mb-4">
-                          <input type="text" id="typeName" class="form-control form-control-lg" siez="17"
-                            placeholder="Cardholder's Name" />
-                          <label class="form-label" for="typeName">Cardholder's Name</label>
-                        </div>
-
-                        <div class="form-outline form-white mb-4">
-                          <input type="text" id="typeText" class="form-control form-control-lg" siez="17"
-                            placeholder="1234 5678 9012 3457" minlength="19" maxlength="19" />
-                          <label class="form-label" for="typeText">Card Number</label>
-                        </div>
-
-                        <div class="row mb-4">
-                          <div class="col-md-6">
-                            <div class="form-outline form-white">
-                              <input type="text" id="typeExp" class="form-control form-control-lg" placeholder="MM/YYYY"
-                                size="7" id="exp" minlength="7" maxlength="7" />
-                              <label class="form-label" for="typeExp">Expiration</label>
-                            </div>
-                          </div>
-                          <div class="col-md-6">
-                            <div class="form-outline form-white">
-                              <input type="password" id="typeText" class="form-control form-control-lg"
-                                placeholder="&#9679;&#9679;&#9679;" size="1" minlength="3" maxlength="3" />
-                              <label class="form-label" for="typeText">Cvv</label>
-                            </div>
-                          </div>
-                        </div>
-
-                      </form> --}}
-
+                      {{#each coupondata}}
+                      <button style="background-color: rgb(6, 50, 105);"><a style="color: rgb(56, 55, 55);"
+                          href="/cart/select-coupon/{{this._id}}" type="submit"
+                          class="text-white">{{this.discount}}%</a></button>
+                      {{/each}}
+                      <span style="color: rgb(4, 6, 14);">{{this.message}}</span>
                       <hr class="my-4">
                       {{#each result}}
                       <div class="d-flex justify-content-between">
@@ -150,10 +189,30 @@
                         <p class="mb-2">{{this.totalPriceAfterDiscount}}</p>
                       </div>
                       {{/each}}
+                      {{#if couponDiscount}}
+                      <div class="d-flex justify-content-between mb-4">
+                        <p class="mb-2">Coupon Discount</p>
+                        <p class="mb-2">{{this.couponDiscount}}</p>
+                      </div>
+                      {{/if}}
+                      {{#if categoryDiscount}}
+                      <div class="d-flex justify-content-between mb-4">
+                        <p class="mb-2">Category Discount</p>
+                        <p class="mb-2">{{this.categoryDiscount}}</p>
+                      </div>
+                      {{/if}}
+
+                      {{#if totalAmount}}
+                      <div class="d-flex justify-content-between mb-4">
+                        <p class="mb-2">Total</p>
+                        <p class="mb-2">{{this.totalAmount}}</p>
+                      </div>
+                      {{/if}}
                       <button type="button" class="btn btn-info btn-block btn-lg">
                         <div class="d-flex justify-content-between">
-                          
-                          <a href="/checkout"><span>Place Order<i class="fas fa-long-arrow-alt-right ms-2"></i></span></a>
+
+                          <a href="/checkout"><span>Place Order<i
+                                class="fas fa-long-arrow-alt-right ms-2"></i></span></a>
                         </div>
                       </button>
 

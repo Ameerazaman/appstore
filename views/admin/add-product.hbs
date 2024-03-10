@@ -231,31 +231,34 @@
         <h4 style="text-align: center;">Add new Products</h4>
         <div class="formbold-mb-5">
           <label style="color: #262728;">Name of Product</label>
-          <span class="text-danger" id="product-name-error"></span>
-          <input type="text" name="product" id="product" placeholder="Enter your Product" class="formbold-form-input" />
 
+          <input type="text" name="product" id="product" placeholder="Enter your Product" class="formbold-form-input" />
+          <span class="text-danger" id="product-name-error">{{this.message}}</span><br>
           <label style="color: #262728;">Category</label>
           <br>
-          <span class="text-danger" id="category-name-error"></span>
+
           <select name="category" id="category">
             {{#each categorydata}}
             <option value="{{this.category}}">{{this.category}}</option>
             {{/each}}
           </select>
+          <span class="text-danger" id="category-name-error"></span>
           <br>
           <label style="color: #262728;">Description</label>
-          <span class="text-danger" id="description-name-error"></span>
+
           <input type="text" name="description" id="description" placeholder="description of product"
             class="formbold-form-input" />
+          <span class="text-danger" id="description-name-error"></span>
           <label style="color: #262728;">Price</label>
-          <span class="text-danger" id="price-name-error"></span>
-          <input type="number" name="price" id="price" placeholder="Price of Product" class="formbold-form-input" />
 
+          <input type="number" name="price" id="price" placeholder="Price of Product" class="formbold-form-input" />
+          <span class="text-danger" id="price-name-error"></span>
 
           <label style="color: #262728;">Quantity</label>
-          <span class="text-danger" id="quantity-name-error"></span>
+
           <input type="number" name="quantity" id="quantity" placeholder="Price of Product"
             class="formbold-form-input" />
+          <span class="text-danger" id="quantity-name-error"></span>
           <label style="color: #262728;">Status</label>
           <select name="status" id="status">
             <option value="">choose....</option>
@@ -264,9 +267,13 @@
             <option value="published">Published</option>
           </select><br>
           <label style="color: #262728;">Discount</label>
-          <span class="text-danger" id="discount-name-error"></span>
+
           <input type="number" name="discount" id="discount" placeholder="Discount of product"
             class="formbold-form-input" />
+          <span class="text-danger" id="discount-name-error"></span>
+          <label style="color: #262728;">Product Offer</label>
+
+          <input type="number" name="offer" id="offer" placeholder="Product offer" class="formbold-form-input" />
           <label for="">Multipple Images</label><br>
 
           <input name="image" type="file" multiple class="form-control-file" onchange="loadFile(event)">
@@ -277,19 +284,12 @@
     </div>
   </div>
   </div>
-
-  </div>
-
-
   </div>
   </div>
-
-
+  </div>
 </body>
 
 </html>
-
-
 <script>
 
   document.getElementById("add-product-form").addEventListener('submit', (e) => {
@@ -301,7 +301,6 @@
       e.preventDefault()
     }
 
-
     var category = document.getElementById("category").value
     document.getElementById("category-name-error").innerHTML;
     if (category === '') {
@@ -309,14 +308,12 @@
       e.preventDefault()
     }
 
-
     var description = document.getElementById("description").value
     document.getElementById("description-name-error").innerHTML;
     if (description === '') {
       document.getElementById("description-name-error").innerHTML = "This field is required"
       e.preventDefault()
     }
-
 
     var price = document.getElementById("price").value
     document.getElementById("price-name-error").innerHTML;

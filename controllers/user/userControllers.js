@@ -6,6 +6,7 @@ const nodemailer = require('nodemailer')
 
 const cart = require("../../models/user/add-to-cart-model")
 const Users = require('../../models/user/usermodel')
+
 // generate otp//
 function generateOTP(limit) {
     var digits = '0123456789';
@@ -24,7 +25,22 @@ const homePage = async (req, res) => {
 
         const categorydata = await category.find().lean()
         const productdata = await products.find().lean()
-        res.render('users/home', { newdata, categorydata, productdata, admin: false })
+        console.log("productdata home",productdata)
+        for (let i = 0; i < productdata.length; i++) {
+           
+            if (productdata[i].quantity <=2) {
+               const result=await products.findByIdAndUpdate({_id:productdata[i]._id},{status:"Out of Stock"})
+            }
+            else if (productdata[i].quantity > 10) {
+                const result=await products.findByIdAndUpdate({_id:productdata[i]._id},{status:"Published"})
+            }
+            else if (productdata[i].quantity < 10) {
+                const result=await products.findByIdAndUpdate({_id:productdata[i]._id},{status:"Low Stock"})
+
+            }
+        
+        }
+        res.render('users/home', { newdata, categorydata, productdata })
     } else {
         res.redirect("/user/login")
     }
@@ -52,27 +68,26 @@ const getLogin = async (req, res) => {
     }
     else {
         const check = "true"
-        res.render('users/login', { admin: false, check })
+        res.render('users/login', { admin:true, check })
     }
 
 
 }
 // post login page
 const postLogin = async (req, res) => {
-    console.log(req.body)
+    console.log("login page",req.body.username)
     const check = await User.findOne({ username: req.body.username })
-    console.log(check.isBlocked)
-
+    
     if (!check) {
         console.log('login failed')
         const message = "User not found"
-        res.render('users/login', { message, admin: false })
+        res.render('users/login', { message, admin:false})
 
     }
     if (check.isBlocked === true) {
         console.log("user is blocked")
         const message = "user is blocked"
-        res.render('users/login', { message, admin: false })
+        res.render('users/login', { message, admin:true})
 
     }
 
@@ -91,7 +106,7 @@ const postLogin = async (req, res) => {
 // get signup page
 const getSignup = async (req, res) => {
     const check = "true"
-    res.render('users/signup', { check })
+    res.render('users/signup', { check,admin:true })
 
 
 }
@@ -106,7 +121,7 @@ const postSignup = async (req, res) => {
         if (existuser) {
             console.log(existuser);
             const message = 'User already exist.Please choose diffrent username';
-            res.render("users/signup", { message })
+            res.render("users/signup", { message,admin:true })
             console.log("failed signup")
         }
         else {
@@ -142,7 +157,7 @@ const postSignup = async (req, res) => {
                     console.log(req.session.otp)
                 }
                 main();
-                res.render("users/verification")
+                res.render("users/verification",{admin:true})
 
 
             })
@@ -162,7 +177,7 @@ const otpSubmit = async (req, res) => {
         else {
             let message = "OTP is incorrect"
 
-            res.render('users/verification', { message })
+            res.render('users/verification', { message ,admin:true})
         }
     }
     catch (error) {
@@ -289,6 +304,7 @@ const getProductDetail = async (req, res) => {
 }
 const userLogout = async (req, res) => {
     req.session.destroy()
+    console.log("logout")
     res.redirect('/user')
 }
 
@@ -321,10 +337,67 @@ const getcategory = async (req, res) => {
     }
 }
 
+
+// filter
+const filter = async (req, res) => {
+    try {
+      
+        const filters = req.body;
+        let query = {};
+       
+        // Checkboxes for sorting
+        if (filters['low-to-high']) {
+            query.sort = { price: 1 }; // Sorting low to high
+        } else if (filters['high-to-low']) {
+            query.sort = { price: -1 }; // Sorting high to low
+        } else if (filters['a-z']) {
+            query.sort = { product: 1 }; // Sorting A-Z
+        } else if (filters['z-a']) {
+            query.sort = { product: -1 }; // Sorting Z-A
+        }
+        const sort=query.sort
+        console.log("sort",sort)
+        // Checkbox for category filtering
+        if (filters.category && filters.category.length > 0) {
+            query.category = { $in: filters.category }; // Filtering based on selected categories
+        }
+        console.log("category",query.category)
+        console.log("Query:", query); // Log the constructed query
+
+        const productdata = await products.find({category:query.category}).sort(sort).lean();
+        console.log("Product Data:", productdata); // Log the fetched product data
+        res.render("users/home", { productdata });
+    } catch (error) {
+        console.log("Error in filter route in user controller:", error);
+        res.status(500).send("Internal Server Error");
+    }
+}
+
+
+// search products
+const searchProducts=async(req,res)=>{
+    try{
+        console.log(req.body.search)
+        const query = req.body.search; // Assuming the search query is provided as a query parameter
+        const regex = new RegExp(query, 'i'); // 'i' flag for case-insensitive search
+        const productdata= await products.find({
+            $or: [
+                { product: regex },
+                { category: regex }
+            ]
+        }).lean();
+        console.log("productdata",productdata)
+        res.render("users/home",{productdata})
+    }
+    catch(error){
+        console.log("Error iin serach product route in user controlleer")
+    }
+}
 module.exports = {
     getcategory, homePage, doSignup,
     getLogin, postLogin, getSignup,
     postSignup, otpSubmit, resendOtp,
     getProductDetail, userLogout, getForgot,
     getForgotOtp, forgotOtpVerify, changeForgotPassword,
+    filter,searchProducts
 }
