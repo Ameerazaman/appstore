@@ -25,8 +25,13 @@ const userschema=mongoose.Schema({
       },
       referalcode:{
         type:String
-      }
-        
+      },
+      enterAt: {
+        type: String,
+        default: function () {
+            return new Date().toDateString()
+        }
+    }, 
 })
 const Users=mongoose.model("Users",userschema)
 module.exports=Users

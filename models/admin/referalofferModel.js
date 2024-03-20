@@ -10,7 +10,12 @@ const referalSchema = new mongoose.Schema({
     },
     users: {
         type: Array
+    ,
+    amount:{
+        type:Number
     }
+}
+
 });
 
 const referaloffer= mongoose.model('referaloffer', referalSchema);

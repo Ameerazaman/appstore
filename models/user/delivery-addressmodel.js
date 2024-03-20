@@ -1,23 +1,29 @@
 const mongoose = require('mongoose');
 
-const deliveryAddressSchema= new mongoose.Schema({
-    fullname:{
-        type:String
+const deliveryAddressSchema = new mongoose.Schema({
+    userId: {
+        type: String
     },
-    address:{
-        type:String
+    fullname: {
+        type: String
     },
-    city:{
-        type:String
+    address: {
+        type: String
     },
-    state:{
-        type:String
+    city: {
+        type: String
     },
-    postalcode:{
-        type:Number
+    state: {
+        type: String
     },
-    payment:{
-        type:String
+    postalcode: {
+        type: Number
+    },
+    payment: {
+        type: String
+    },
+    phone: {
+        type: Number
     }
 })
 

@@ -154,32 +154,33 @@ const getCart = async (req, res) => {
             req.session.cartId = data._id
             const total = result[0].totalPriceAfterDiscount
             const coupondata = await Coupon.find({ minAmount: { $lt: total }, users: { $ne: userId } }).lean();
-            
+
             req.session.coupondata = coupondata
 
             for (let i = 0; i < data.length; i++) {
-                
+
                 const categoryData = await category.findOne({ category: data[i].product.category });
-               
+
                 if (categoryData) {
                     const UpdateProduct = await products.findByIdAndUpdate({ _id: data[i].proId }, { categoryOffer: categoryData.offer });
                 }
             }
-
+            const categoryOffer = await category.find().lean()
             if (coupondata.length === 0) {
                 const message = "coupons are already used"
 
-                res.render("users/cart", { data, result, coupondata, message })
+                res.render("users/cart", { data, result, coupondata, message, categoryOffer })
             }
             else {
 
-                res.render("users/cart", { data, result, coupondata })
+                res.render("users/cart", { data, result, coupondata, categoryOffer })
             }
 
 
         }
         else {
-            res.render("users/cart")
+            const message="Cart Page is Empty"
+            res.render("users/404",{message,null:true})
         }
     }
     catch (error) {
@@ -196,11 +197,12 @@ const selectCoupon = async (req, res) => {
         const coupondata = await Coupon.findOne({ _id: req.params.id })
 
         if (coupondata) {
-            const updadateData = await Coupon.findByIdAndUpdate(
-                req.params.id,
-                { $push: { users: userId } },
-                { new: true } // To return the updated document
-            )
+            // const updadateData = await Coupon.findByIdAndUpdate(
+            //     req.params.id,
+            //     { $push: { users: userId } },
+            //     { new: true } // To return the updated document
+            // )
+            req.session.couponId=coupondata._id
             const result = await cart.aggregate([
                 { $match: { userId: userId } },
                 { $unwind: "$products" },
@@ -306,21 +308,37 @@ const selectCoupon = async (req, res) => {
     }
 }
 // category offer
-const categoryOffer=async(req,res)=>{
-    try{
+const categoryOffer = async (req, res) => {
+    try {
+        const data = req.session.data
         const userId = req.session.user._id
-        const productdata=await products.findById({_id:req.params.id})
-        const result=req.session.result
-        const data=req.session.data
+        const categoryData = await category.findById({ _id: req.params.id })
+        // console.log("categorydata",data[0].product)
+
+
+        //const categorydiscount = function () {
+            var categoryDiscount = 0
+            for (let i = 0; i < data.length; i++) {
+                
+                console.log("data", data)
+                if (data[i].product.category == categoryData.category) {
+                    var categoryDiscount = ((data[i].product.price * categoryData.offer) / 100) + categoryDiscount
+                    console.log("discount", categoryDiscount)
+
+                }
+
+            }
+
+        const result = req.session.result
+
         const total = result[0].totalPriceAfterDiscount
-        const multipledData = total * productdata.categoryOffer
-        const categoryDiscount = multipledData / 100
+
         const totalAmount = total - categoryDiscount;
         req.session.totalAmount = totalAmount
-        res.render("users/cart",{result,data,totalAmount,categoryDiscount})
+        res.render("users/cart", { result, data, totalAmount, categoryDiscount })
 
     }
-    catch(error){
+    catch (error) {
         console.log("Error in category offer in cart controller")
     }
 }
@@ -397,4 +415,4 @@ const decrementQuantity = async (req, res) => {
     }
 };
 
-module.exports = { categoryOffer, addToCart , deleteCart , selectCoupon, incrementQuantity, decrementQuantity, getCart }
+module.exports = { categoryOffer, addToCart, deleteCart, selectCoupon, incrementQuantity, decrementQuantity, getCart }

@@ -21,11 +21,11 @@ function generateOTP(limit) {
 // get home page
 const homePage = async (req, res) => {
     if (req.session.username) {
-        const newdata = await products.find().limit(2).lean()
+        const newdata = await products.find().limit(4).sort({_id:-1}).lean()
 
         const categorydata = await category.find().lean()
-        const productdata = await products.find().lean()
-        console.log("productdata home",productdata)
+        const productdata = await products.find().limit(4).lean()
+      
         for (let i = 0; i < productdata.length; i++) {
            
             if (productdata[i].quantity <=2) {
@@ -44,8 +44,6 @@ const homePage = async (req, res) => {
     } else {
         res.redirect("/user/login")
     }
-
-
 }
 
 const doSignup = (data) => {
@@ -68,7 +66,7 @@ const getLogin = async (req, res) => {
     }
     else {
         const check = "true"
-        res.render('users/login', { admin:true, check })
+        res.render('users/login', { check })
     }
 
 
@@ -81,22 +79,19 @@ const postLogin = async (req, res) => {
     if (!check) {
         console.log('login failed')
         const message = "User not found"
-        res.render('users/login', { message, admin:false})
+        res.render('users/login', { message, })
 
     }
     if (check.isBlocked === true) {
         console.log("user is blocked")
         const message = "user is blocked"
         res.render('users/login', { message, admin:true})
-
     }
 
     else {
         req.session.username = req.body.username
-        req.session.user = req.body
-        req.session.user._id = check._id
-        console.log(req.session.user)
-
+        req.session.user = check
+        console.log("session",req.session.user._id)
         res.redirect("/user/home")
 
 
@@ -106,7 +101,7 @@ const postLogin = async (req, res) => {
 // get signup page
 const getSignup = async (req, res) => {
     const check = "true"
-    res.render('users/signup', { check,admin:true })
+    res.render('users/signup', { check })
 
 
 }
@@ -121,7 +116,7 @@ const postSignup = async (req, res) => {
         if (existuser) {
             console.log(existuser);
             const message = 'User already exist.Please choose diffrent username';
-            res.render("users/signup", { message,admin:true })
+            res.render("users/signup", { message})
             console.log("failed signup")
         }
         else {
@@ -157,7 +152,7 @@ const postSignup = async (req, res) => {
                     console.log(req.session.otp)
                 }
                 main();
-                res.render("users/verification",{admin:true})
+                res.render("users/verification")
 
 
             })
@@ -373,7 +368,16 @@ const filter = async (req, res) => {
     }
 }
 
-
+// get product page
+const getproduct=async(req,res)=>{
+    try{
+        const productdata=await products.find().lean()
+        res.render("users/product",{productdata})
+    }
+    catch(error){
+        console.log("Error in get product page in user controller")
+    }
+}
 // search products
 const searchProducts=async(req,res)=>{
     try{
@@ -399,5 +403,5 @@ module.exports = {
     postSignup, otpSubmit, resendOtp,
     getProductDetail, userLogout, getForgot,
     getForgotOtp, forgotOtpVerify, changeForgotPassword,
-    filter,searchProducts
+    filter,searchProducts,getproduct
 }

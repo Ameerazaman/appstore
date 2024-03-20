@@ -1,22 +1,24 @@
 const multer = require('multer')
 const sharp = require('sharp');
 
-const {check,validationResult,body}=require('express-validator');
+const { check, validationResult, body } = require('express-validator');
 const Users = require('../models/user/usermodel');
 
 
 const verifyAdmin = (req, res, next) => {
+    
     if (session.userid) {
         console.log("session exist")
         next()
     }
     else {
-        res.render('admin/login')
+        res.render('admin/login',{admin:true})
     }
 }
 
 
 const verifyUser = (req, res, next) => {
+   
     if (req.session.username) {
         next()
     }
@@ -38,75 +40,75 @@ const storage = multer.diskStorage({
 const upload = multer({ storage: storage });
 //***************validation signup********************************* */
 
-const validationRules=[
+const validationRules = [
     body("username")
-    .isAlpha()
-    .not()
-    .isEmpty()
-    .isLength({min:4})
-    .withMessage("username must be mininum 4 charectors")
-    .isLength({max:10})
-    .withMessage("Username should not exceed 10 charectors")
-    .matches(/^[a-zA-Z0-9]+$/)
-    .withMessage('Special Charectors are not allowed'),
+        .isAlpha()
+        .not()
+        .isEmpty()
+        .isLength({ min: 4 })
+        .withMessage("username must be mininum 4 charectors")
+        .isLength({ max: 10 })
+        .withMessage("Username should not exceed 10 charectors")
+        .matches(/^[a-zA-Z0-9]+$/)
+        .withMessage('Special Charectors are not allowed'),
     body("email")
-    .isEmail()
-    .withMessage("Enter valid Email Address")
-    .isLength({min:12})
-    .withMessage("Mininmum 12 chrectors"),
+        .isEmail()
+        .withMessage("Enter valid Email Address")
+        .isLength({ min: 12 })
+        .withMessage("Mininmum 12 chrectors"),
     body("password")
-    .isEmpty()
-    .withMessage("Password is required")
-    .isLength({min:4})
-    .withMessage("Minimum 4 charectors required")
-    .custom((value)=>{
-        if(/\s/.test(value)){
-            throw new Error("Space are not allowed")
-        }
-    })
-    .custom((value)=>{
-        if(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{4,}$/.test(value)){
-         throw new Error("Password must be contain atleats 4 charectors")
-        }
-        return true;
-    })
-,]
+        .isEmpty()
+        .withMessage("Password is required")
+        .isLength({ min: 4 })
+        .withMessage("Minimum 4 charectors required")
+        .custom((value) => {
+            if (/\s/.test(value)) {
+                throw new Error("Space are not allowed")
+            }
+        })
+        .custom((value) => {
+            if (/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{4,}$/.test(value)) {
+                throw new Error("Password must be contain atleats 4 charectors")
+            }
+            return true;
+        })
+    ,]
 
 
-const validationRes=(req,res,next)=>{
-    const error=validationResult(req);
-    if(!error.isEmpty()){
-        res.render("users/login",{err:error.mapped()})
+const validationRes = (req, res, next) => {
+    const error = validationResult(req);
+    if (!error.isEmpty()) {
+        res.render("users/login", { err: error.mapped() })
     }
-    else{
+    else {
         next()
     }
 }
 ///Product page rules//
-const ProductRules=[
+const ProductRules = [
     body("product")
-    .not()
-    .isEmpty()
-    .withMessage("Please fill product field"),
+        .not()
+        .isEmpty()
+        .withMessage("Please fill product field"),
 
     body("description")
-    .not()
-    .isEmpty()
-  
-    .withMessage("Please fill decription field")
-    .isLength({min:2}).withMessage("minimum 2 required"),
-    
+        .not()
+        .isEmpty()
+
+        .withMessage("Please fill decription field")
+        .isLength({ min: 2 }).withMessage("minimum 2 required"),
+
 
     body("category")
-    .not()
-    .isEmpty()
-    .withMessage("Please fill Category field"),
-   
+        .not()
+        .isEmpty()
+        .withMessage("Please fill Category field"),
+
     body("price")
-    .not()
-    .isEmpty()
-    .withMessage("Please fill price field")
-    
+        .not()
+        .isEmpty()
+        .withMessage("Please fill price field")
+
     // .custom((value,{req})=>{
     //  const price=parseFloat(value)
     //  const discount=parseFloat(req.body.discount);
@@ -121,9 +123,9 @@ const ProductRules=[
     ,
 
     body("discount")
-    .not()
-    .isEmpty()
-    .withMessage("Please fill Category field")
+        .not()
+        .isEmpty()
+        .withMessage("Please fill Category field")
     // .custom((value,{req})=>{
     //     if(value<=-1){
     //         throw new error("Disount should not be negative")
@@ -133,102 +135,100 @@ const ProductRules=[
 
 
 ]
-  
+
 
 //res product rules//
-const productRes=(req,res,next)=>{
+const productRes = (req, res, next) => {
     // console.log(req.body)
-    const error=validationResult(req);
+    const error = validationResult(req);
     // console.log('error mapped',error.mapped())
     console.log(error.mapped())
-    if(!error.isEmpty()){
-        res.render("admin/add-product",{err:error.mapped()})
+    if (!error.isEmpty()) {
+        res.render("admin/add-product", { err: error.mapped() })
     }
-    else{
+    else {
         next()
     }
 }
 //res editproduct rules//
-const EditProductRes=(req,res,next)=>{
-   
-    const error=validationResult(req);
-    if(!error.isEmpty()){
+const EditProductRes = (req, res, next) => {
+
+    const error = validationResult(req);
+    if (!error.isEmpty()) {
         console.log("edit product res called")
-        res.render("admin/edit-product",{err:error.mapped()})
+        res.render("admin/edit-product", { err: error.mapped() })
     }
-    else{
+    else {
         console.log("edit product response")
         next()
     }
 }
 //Category validation Rules//
-const categoryRules=[
+const categoryRules = [
 
     check("description")
-    .not()
-    .isEmpty()
-    .withMessage("Enter description of category"),
-    
+        .not()
+        .isEmpty()
+        .withMessage("Enter description of category"),
+
 
     check("category")
-    .not()
-    .isEmpty()
-    .withMessage("Enter category")
+        .not()
+        .isEmpty()
+        .withMessage("Enter category")
 ]
 //////
 //res category rules//
-const categoryRes=(req,res,next)=>{
-    const error=validationResult(req);
+const categoryRes = (req, res, next) => {
+    const error = validationResult(req);
     console.log("edit product res called")
-    if(!error.isEmpty()){
-        res.render("admin/add-category",{err:error.mapped()})
+    if (!error.isEmpty()) {
+        res.render("admin/add-category", { err: error.mapped() })
     }
-    else{
+    else {
         next()
     }
 }
 //res editcategory rules//
-const EditCategoryRes=(req,res,next)=>{
+const EditCategoryRes = (req, res, next) => {
 
-    const error=validationResult(req);
+    const error = validationResult(req);
     console.log("edit product res called")
-    if(!error.isEmpty()){
-        res.render("admin/edit-category",{err:error.mapped()})
+    if (!error.isEmpty()) {
+        res.render("admin/edit-category", { err: error.mapped() })
     }
-    else{
+    else {
         next()
     }
 }
 
 
 // block middlewar
-const blockMiddleware = (req, res, next) => {
-    // Extract user ID from request or wherever it's stored (e.g., req.user.id)
-    const userId = req.user.id; // Assuming you have user information stored in req.user
-
-    // Find the user in the database by ID
-    Users.findById(userId, (err, user) => {
-        if (err) {
-            // Handle error if user is not found
-            return res.status(500).json({ error: "Internal Server Error" });
-        }
-        if (!user) {
-            // If user is not found, handle accordingly
-            return res.status(404).json({ error: "User not found" });
-        }
-        if (user.isBlocked) {
-            // If user is blocked, send an error response
-            return res.status(403).json({ error: "Access Forbidden. Your account is blocked." });
-        }
-        // If user is not blocked, proceed to the next middleware or route handler
+const blockMiddleware = async (req, res, next) => {
+    const userId = req.session.user._id
+    console.log(userId)
+    const user = await Users.findOne({ _id: userId })
+    if (!user) {
+        return res.redirect("/user")
+    }
+    if (user.isBlocked) {
+        req.session.destroy((err) => {
+            if (err) {
+                console.log("error destroy session", err)
+            }
+            res.render("user/login",{error:true})
+        })
+    }
+    else{
         next();
-    });
+    }
 };
 
 
 
 
 module.exports = {
-     verifyAdmin, verifyUser, upload ,validationRules,
-     validationRes,productRes,ProductRules,categoryRes,
-     categoryRules,EditCategoryRes,EditProductRes,blockMiddleware }
+    verifyAdmin, verifyUser, upload, validationRules,
+    validationRes, productRes, ProductRules, categoryRes,
+    categoryRules, EditCategoryRes, EditProductRes, blockMiddleware
+}

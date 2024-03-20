@@ -14,7 +14,6 @@ var wishlist=require("./routes/users/wishlist")
 var admin = require('./routes/admin/admin')
 var order=require("./routes/admin/order")
 var coupon=require("./routes/admin/coupon")
-var dashboard=require("./routes/admin/dashboard")
 var referaloffer=require("./routes/admin/referaloffer")
 const bodyParser = require('body-parser');
 var hbs = require('express-handlebars').engine
@@ -74,7 +73,7 @@ app.get('/', async (req, res) => {
 app.use('/admin', admin)
 app.use("/order",order)
 app.use("/coupon",coupon)
-app.use("/dashboard",dashboard)
+
 app.use("/referaloffer",referaloffer)
 // user side
 app.use('/user', user)

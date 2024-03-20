@@ -1,3 +1,4 @@
+{{!--
 <!DOCTYPE html>
 <html lang="en">
 
@@ -12,11 +13,14 @@
       }
     }
   </style>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" integrity="sha512-wX2OU3fX0W/Q/2blzLm9V8b6vTZYI1vPP2hGSBrkLB9ap3Fq9kR5fNzgDj7+Dg9SKb7H19r4T3xMBpLE7U7+2w==" crossorigin="anonymous" referrerpolicy="no-referrer" /></head>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css"
+    integrity="sha512-wX2OU3fX0W/Q/2blzLm9V8b6vTZYI1vPP2hGSBrkLB9ap3Fq9kR5fNzgDj7+Dg9SKb7H19r4T3xMBpLE7U7+2w=="
+    crossorigin="anonymous" referrerpolicy="no-referrer" />
+</head>
 
 <body>
   <section class="h-100 h-custom container">
-  
+
     <div class="container py-5 h-100">
       <div style="width: 100%;" class="row d-flex justify-content-center align-items-center h-100">
         <div style="width: 100%;" class="col">
@@ -36,11 +40,12 @@
                       <p class="mb-0">You have 4 items in your cart</p>
                     </div>
                     <div>
-                      <p class="mb-0"><span class="text-muted">Share</span> <a href="#!" class="text-body"> <i class="fa fa-share"></i></a></p>
+                      <p class="mb-0"><span class="text-muted">Share</span> <a href="#!" class="text-body"> <i
+                            class="fa fa-share"></i></a></p>
                     </div>
                   </div>
-                 
-                 
+
+
                   {{#if categoryDiscount}}
                   {{#each data}}
 
@@ -52,17 +57,18 @@
 
                             <img src="/images/{{this.product.image}}" style="width: 65px;">
                             {{!-- <img src="/images/{{this.product.image}}" alt=""> --}}
+                            {{!--
                           </div>
 
                           <div class="ms-3">
                             <h5>{{this.product.product}}</h5>
-                                  </div>
+                          </div>
                         </div>
                         <div class="d-flex flex-row align-items-center">
                           <div style="width: 80px;margin-left: 20px;">
                             <p class="mb-0">{{this.subtotal}}</p>
                           </div>
-                            
+
                           <div style="width: 80px;margin-left: 20px;">
                             <p class="mb-0">{{this.product.discount}}</p><small>(product-off)</small>
                           </div>
@@ -79,12 +85,12 @@
                           <a style="text-decoration: none;" href="/cart/quantitydecrement/{{this.proId}}"><button
                               style="width:30px;height:30px;">-</button></a>
 
-                        
+
                           <div>
-                          <a href="/cart/deletecart/{{this._id}}"><img style="height: 20px;width:20px;margin-left: 30px;"
-                                                class="img-icon"
-                                                src="data:image/png;base64,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"
-                                                alt=""></button></a>
+                            <a href="/cart/deletecart/{{this._id}}"><img
+                                style="height: 20px;width:20px;margin-left: 30px;" class="img-icon"
+                                src="data:image/png;base64,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"
+                                alt=""></button></a>
                           </div>
 
                         </div>
@@ -92,9 +98,9 @@
                     </div>
                   </div>
                   {{/each}}
-                  
+
                   {{else}}
-                   {{#each data}}
+                  {{#each data}}
 
                   <div class="card mb-2">
                     <div class="card-body">
@@ -104,18 +110,20 @@
 
                             <img src="/images/{{this.product.image}}" style="width: 65px;">
                             {{!-- <img src="/images/{{this.product.image}}" alt=""> --}}
+                            {{!--
                           </div>
 
                           <div class="ms-3">
                             <h5>{{this.product.product}}</h5>
-                                  </div>
+                          </div>
                         </div>
                         <div class="d-flex flex-row align-items-center">
                           <div style="width: 80px;margin-left: 20px;">
                             <p class="mb-0">{{this.subtotal}}</p>
                           </div>
-                             <div style="width: 80px;margin-left: 20px;">
-                            <button><a href="/cart/categoryOffer/{{this.product._id}}" class="mb-0">{{this.product.categoryOffer}}%</a></button><small>(category-off)</small>
+                          <div style="width: 80px;margin-left: 20px;">
+                            <button><a href="/cart/categoryOffer/{{this.product._id}}"
+                                class="mb-0">{{this.product.categoryOffer}}%</a></button><small>(category-off)</small>
                           </div>
                           <div style="width: 80px;margin-left: 20px;">
                             <p class="mb-0">{{this.product.discount}}</p><small>(product-off)</small>
@@ -133,12 +141,12 @@
                           <a style="text-decoration: none;" href="/cart/quantitydecrement/{{this.proId}}"><button
                               style="width:30px;height:30px;">-</button></a>
 
-                        
+
                           <div>
-                          <a href="/cart/deletecart/{{this._id}}"><img style="height: 20px;width:20px;margin-left: 30px;"
-                                                class="img-icon"
-                                                src="data:image/png;base64,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"
-                                                alt=""></button></a>
+                            <a href="/cart/deletecart/{{this._id}}"><img
+                                style="height: 20px;width:20px;margin-left: 30px;" class="img-icon"
+                                src="data:image/png;base64,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"
+                                alt=""></button></a>
                           </div>
 
                         </div>
@@ -194,8 +202,8 @@
                         <p class="mb-2">Coupon Discount</p>
                         <p class="mb-2">{{this.couponDiscount}}</p>
                       </div>
-                      {{/if}}
-                      {{#if categoryDiscount}}
+                      {{/if}} --}}
+                      {{!-- {{#if categoryDiscount}}
                       <div class="d-flex justify-content-between mb-4">
                         <p class="mb-2">Category Discount</p>
                         <p class="mb-2">{{this.categoryDiscount}}</p>
@@ -231,4 +239,542 @@
   </section>
 </body>
 
+</html> --}}
+
+
+<!doctype html>
+
+<html lang="en">
+
+<head>
+
+  <!-- Required meta tags -->
+
+  <meta charset="utf-8">
+
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <!-- Bootstrap CSS -->
+
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/5.0.0-alpha1/css/bootstrap.min.css"
+    integrity="sha384-r4NyP46KrjDleawBgD5tp8Y7UzmLA05oM1iAEQ17CSuDqnUK2+k9luXQOfXJCJ4I" crossorigin="anonymous">
+
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.10.0/css/all.min.css"
+    integrity="sha512-PgQMlq+nqFLV4ylk1gwUOgm6CtIIXkKwaIHp/PAIWHzig/lKZSEGKEysh0TCVbHJXCLN7WetD8TFecIky75ZfQ=="
+    crossorigin="anonymous" />
+
+  <link rel="stylesheet" type="text/css" href="css/style.css">
+
+  <title>NirajCart</title>
+  <style>
+    import url('https://fonts.googleapis.com/css2?family=Mulish:wght@300&display=swap');
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Mulish', sans-serif;
+    }
+
+    :root {
+      --text-clr: #4f4f4f;
+    }
+
+    p {
+      color: #6c757d;
+    }
+
+    a {
+      text-decoration: none;
+      color: var(--text-clr);
+    }
+
+    a:hover {
+      text-decoration: none;
+      color: var(--text-clr);
+    }
+
+    h2 {
+      color: var(--text-clr);
+      font-size: 1.5rem;
+    }
+
+    .main_cart {
+      background: #fff;
+    }
+
+    .card {
+      border: none;
+    }
+
+    .product_img img {
+      min-width: 80px;
+      max-height: 80px;
+    }
+
+    .product_name {
+      color: black;
+      font-size: 1.4rem;
+      text-transform: capitalize;
+      font-weight: 500;
+    }
+
+    .card-title p {
+      font-size: 0.9rem;
+      font-weight: 500;
+    }
+
+    .remove-and-wish p {
+      font-size: 0.8rem;
+      margin-bottom: 0;
+    }
+
+    .price-money h3 {
+      font-size: 1rem;
+      font-weight: 600;
+    }
+
+    .set_quantity {
+      position: relative;
+    }
+
+    .set_quantity::after {
+      content: "(Note, 1 piece)";
+      width: auto;
+      height: auto;
+      text-align: center;
+      position: absolute;
+      bottom: -20px;
+      right: 1.5rem;
+      font-size: 0.8rem;
+    }
+
+    .page-link {
+      line-height: 16px;
+      width: 45px;
+      font-size: 1rem;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      color: #495057;
+    }
+
+    .page-item input {
+      line-height: 22px;
+      padding: 3px;
+      font-size: 15px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+    }
+
+    .page-link:hover {
+      text-decoration: none;
+      color: #495057;
+      outline: none !important;
+    }
+
+    .page-link:focus {
+      box-shadow: none;
+    }
+
+    .price_indiv p {
+      font-size: 1.1rem;
+    }
+
+    .fa-heart:hover {
+      color: red;
+    }
+
+    h1,
+    h5,
+    h3 {
+      font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+    }
+  </style>
+
+</head>
+
+<body class="bg-light">
+  <br><br>
+  <div class="container-fluid">
+
+    <div class="row">
+
+      <div class="col-md-10 col-11 mx-auto">
+
+        <div class="row mt-5 gx-3">
+
+          <!-- left side div -->
+
+          <div class="col-md-12 col-lg-8 col-11 mx-auto main_cart mb-lg-0 mb-5 shadow">
+
+            {{#each data}}
+            <div class="card p-2">
+
+              <div class="row">
+
+                <!-- cart images div -->
+
+                <div
+                  class="col-md-3 col-4 mx-auto bg-light d-flex justify-content-center align-items-center shadow product_img">
+
+                  <img style="width:auto;height:auto" src="/images/{{this.product.image}}" class="img-fluid"
+                    alt="cart img">
+
+                </div>
+
+                <!-- cart product details -->
+
+                <div class="col-md-7 col-11 mx-auto px-4 mt-2">
+
+                  <div class="row">
+
+                    <!-- product name  -->
+
+                    <div class="col-6 card-title">
+
+                      <h1 class="mb-4 product_name">{{this.product.product}}</h1>
+                      <small style="color: green;">Product offer </small>
+                      <p style="color: red;" class="mb-2">{{this.product.discount}}(off)</p>
+
+
+
+                    </div>
+
+                    <!-- quantity inc dec -->
+
+                    <div class="col-6">
+
+                      <ul class="pagination justify-content-end set_quantity">
+
+                        <li class="page-item">
+
+                          <button class="page-link ">
+
+                            <a href="/cart/quantitydecrement/{{this.proId}}"><i class="fas fa-minus"></i> </a></button>
+
+                        </li>
+
+                        <li class="page-item"><input type="text" name="" class="page-link" value="{{this.quantity}}"
+                            id="textbox">
+
+                        </li>
+
+                        <li class="page-item">
+
+                          <button class="page-link"><a href="/cart/quantityincrement/{{this.proId}}"><i
+                                class="fas fa-plus"></i></a></button>
+
+                        </li>
+
+                      </ul>
+
+                    </div>
+
+                  </div>
+
+                  <!-- //remover move and price -->
+
+                  <div class="row">
+
+                    <div class="col-8 d-flex justify-content-between remove_wish">
+
+                      <p><i class="fas fa-trash-alt"></i><a style="text-decoration: none;color: #495057;"
+                          href="/cart/deletecart/{{this._id}}"> REMOVE ITEM</a></p>
+
+                      <p><i class="fas fa-heart"></i>MOVE TO WISH LIST </p></a>
+
+                    </div>
+
+                    <div class="col-4 d-flex justify-content-end price_money">
+
+                      <h5><span id="itemval">{{this.subtotal}} </span></h5>
+
+                    </div>
+
+                  </div>
+
+                </div>
+
+              </div>
+
+            </div>
+            <br>
+
+            {{/each}}
+            <!-- 2nd cart product -->
+
+          </div>
+
+          <!-- right side div -->
+
+          <div class="col-md-12 col-lg-4 col-11 mx-auto mt-lg-0 mt-md-5">
+
+            <div class="right_side p-3 shadow bg-white">
+
+              <h3 class="product_name mb-5">The Total Amount Of</h3>
+              {{#each result}}
+              <div class="price_indiv d-flex justify-content-between">
+
+                <p>Sub Total</p>
+
+                <p><span id="product_total_amt">{{this.totalPrice}}</span></p>
+
+              </div>
+
+              <div class="price_indiv d-flex justify-content-between">
+
+                <p>Total Discount</p>
+
+                <p><span id="shipping_charge"></span>{{this.totalDiscount}}</p>
+              </div>
+
+              <hr />
+
+              <div class="total-amt d-flex justify-content-between font-weight-bold">
+
+                <p>The total amount of (including VAT)</p>
+
+                <p><span id="total_cart_amt">{{this.totalPriceAfterDiscount}}</span></p>
+
+              </div>
+              {{/each}}
+              {{#if couponDiscount}}
+
+              <div class="total-amt d-flex justify-content-between font-weight-bold">
+
+                <p>couponDiscount</p>
+
+                <p><span id="total_cart_amt">{{this.couponDiscount}}</span></p>
+
+              </div>
+              {{/if}}
+              {{#if categoryDiscount}}
+              <div class="total-amt d-flex justify-content-between font-weight-bold">
+
+                <p>Category Discount</p>
+
+                <p><span id="total_cart_amt">{{this.categoryDiscount}}</span></p>
+
+              </div>
+              {{/if}}
+
+              {{#if totalAmount}}
+              <div class="total-amt d-flex justify-content-between font-weight-bold">
+
+                <p>Total Amount</p>
+
+                <p><span id="total_cart_amt">{{this.totalAmount}}</span></p>
+
+              </div>
+              {{/if}}
+              <button class="btn btn-primary text-uppercase"><a style="color: white;"
+                  href="/checkout">Checkout</a></button>
+
+            </div>
+
+            <!-- discount code part -->
+
+            <div class="discount_code mt-3 shadow">
+
+              <div class="card">
+
+                <div class="card-body">
+
+                  <a class="d-flex justify-content-between" data-toggle="collapse" href="#collapseExample"
+                    aria-expanded="false" aria-controls="collapseExample">
+                    {{#if message}}
+                    Add a coupon discount({{this.message}})
+                    {{else}}
+                    Add a coupon discount(optional)
+                    {{/if}}
+                    <span><i class="fas fa-chevron-down pt-1"></i></span>
+
+                  </a>
+
+                  <div class="collapse" id="collapseExample">
+                    {{#each coupondata}}
+                    <div class="mt-3" style="display: flex;">
+
+                      <input style="width: 70%;" type="text" name="" value="{{this.code}}" id="discount_code1"
+                        class="form-control font-weight-bold" placeholder="Enter the discount code">
+                      <button style="margin-left: 10px;" class="btn btn-primary btn-sm mt-3"><a
+                          style="text-decoration: none;color: white;"
+                          href="/cart/select-coupon/{{this._id}}">Apply</a></button>
+
+                    </div>
+                    {{/each}}
+
+                  </div>
+
+                </div>
+
+              </div>
+
+            </div>
+
+            <!-- discount code ends -->
+
+            <div class="discount_code mt-3 shadow">
+
+              <div class="card">
+
+                <div class="card-body">
+
+                  <a class="d-flex justify-content-between" data-toggle="collapse" href="#collapseExample"
+                    aria-expanded="false" aria-controls="collapseExample">
+
+                    Add a Category discount(optional)
+
+                    <span><i class="fas fa-chevron-down pt-1"></i></span>
+
+                  </a>
+
+                  <div class="collapse" id="collapseExample">
+
+                    <div class="mt-3">
+                      {{#each categoryOffer}}
+                      <div style="display: flex;padding: 10px;">
+                      <input style="width: 70%;" type="text" name="" value="{{this.category}}, {{this.offer}}%"
+                        id="discount_code1" class="form-control font-weight-bold" placeholder="Enter the discount code">
+                      <button style="margin-left: 10px;" class="btn btn-primary btn-sm mt-3"><a
+                          style="text-decoration: none;color: white;"
+                          href="/cart/categoryOffer/{{this._id}}">Apply</a></button>
+                          </div>
+                      {{/each}}
+                    </div>
+
+
+                  </div>
+
+                </div>
+
+              </div>
+
+            </div>
+
+
+          </div>
+
+        </div>
+
+      </div>
+
+    </div>
+
+  </div>
+
+</body>
+
 </html>
+<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"
+  integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/5.0.0-alpha1/js/bootstrap.min.js"
+  integrity="sha384-oesi62hOLfzrys4LxRF63OJCXdXDipiYWBnvTl9Y9/TRlw5xlKIEHpNyvvDShgf/" crossorigin="anonymous"></script>
+
+
+
+<script type="text/javascript">
+
+
+
+  var product_total_amt = document.getElementById('product_total_amt');
+
+  var shipping_charge = document.getElementById('shipping_charge');
+
+  var total_cart_amt = document.getElementById('total_cart_amt');
+
+  var discountCode = document.getElementById('discount_code1');
+
+  const decreaseNumber = (incdec, itemprice) => {
+
+    var itemval = document.getElementById(incdec);
+
+    var itemprice = document.getElementById(itemprice);
+
+    console.log(itemprice.innerHTML);
+
+    // console.log(itemval.value);
+
+    if (itemval.value <= 0) {
+
+      itemval.value = 0;
+
+      alert('Negative quantity not allowed');
+
+    } else {
+
+      itemval.value = parseInt(itemval.value) - 1;
+
+      itemval.style.background = '#fff';
+
+      itemval.style.color = '#000';
+
+      itemprice.innerHTML = parseInt(itemprice.innerHTML) - 15;
+
+      product_total_amt.innerHTML = parseInt(product_total_amt.innerHTML) - 15;
+
+      total_cart_amt.innerHTML = parseInt(product_total_amt.innerHTML) + parseInt(shipping_charge.innerHTML);
+
+    }
+
+  }
+
+  const increaseNumber = (incdec, itemprice) => {
+
+    var itemval = document.getElementById(incdec);
+
+    var itemprice = document.getElementById(itemprice);
+
+    // console.log(itemval.value);
+
+    if (itemval.value >= 5) {
+
+      itemval.value = 5;
+
+      alert('max 5 allowed');
+
+      itemval.style.background = 'red';
+
+      itemval.style.color = '#fff';
+
+    } else {
+
+      itemval.value = parseInt(itemval.value) + 1;
+
+      itemprice.innerHTML = parseInt(itemprice.innerHTML) + 15;
+
+      product_total_amt.innerHTML = parseInt(product_total_amt.innerHTML) + 15;
+
+      total_cart_amt.innerHTML = parseInt(product_total_amt.innerHTML) + parseInt(shipping_charge.innerHTML);
+
+    }
+
+  }
+
+  const discount_code = () => {
+
+    let totalamtcurr = parseInt(total_cart_amt.innerHTML);
+
+    let error_trw = document.getElementById('error_trw');
+
+    if (discountCode.value === 'thapa') {
+
+      let newtotalamt = totalamtcurr - 15;
+
+      total_cart_amt.innerHTML = newtotalamt;
+
+      error_trw.innerHTML = "Hurray! code is valid";
+
+    } else {
+
+      error_trw.innerHTML = "Try Again! Valid code is thapa";
+
+    }
+
+  }
+
+</script>

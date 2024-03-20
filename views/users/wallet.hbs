@@ -3,232 +3,303 @@
 
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width,  
+                   initial-scale=1.0">
+    <title>GeeksForGeeks</title>
+
+    <link rel="stylesheet" href="/dashboard.css">
+    {{!-- pagination --}}
+
     <style>
-        .cart-wrap {
-            padding: 40px 0;
-            font-family: 'Open Sans', sans-serif;
+        h5 {
+            font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+            color: black;
         }
 
-        .main-heading {
-            font-size: 19px;
-            margin-bottom: 20px;
-        }
-
-        .table-wishlist table {
-            width: 100%;
-        }
-
-        .table-wishlist thead {
-            border-bottom: 1px solid #e5e5e5;
-            margin-bottom: 5px;
-        }
-
-        .table-wishlist thead tr th {
-            padding: 8px 0 18px;
-            color: #484848;
-            font-size: 15px;
-            font-weight: 400;
-        }
-
-        .table-wishlist tr td {
-            padding: 25px 0;
-            vertical-align: middle;
-        }
-
-        .table-wishlist tr td .img-product {
-            width: 72px;
-            float: left;
-            margin-left: 8px;
-            margin-right: 31px;
-            line-height: 63px;
-        }
-
-        .table-wishlist tr td .img-product img {
-            width: 100%;
-        }
-
-        .table-wishlist tr td .name-product {
-            font-size: 15px;
-            color: #484848;
-            padding-top: 8px;
-            line-height: 24px;
-            width: 50%;
-        }
-
-        .table-wishlist tr td.price {
-            font-weight: 600;
-        }
-
-        .table-wishlist tr td .quanlity {
-            position: relative;
-        }
-
-        .total {
-            font-size: 24px;
-            font-weight: 600;
-            color: #8660e9;
-        }
-
-        .display-flex {
+        #checkout-form {
             display: flex;
+            flex-direction: column;
+            max-width: 675px;
         }
 
-        .align-center {
+        #check-form {
+            display: flex;
+            flex-direction: column;
+            max-width: 475px;
+        }
+
+        form>section:first-child {
+            margin-bottom: 50px;
+        }
+
+        form>section>h3 {
+            font-size: var(--text-m);
+            font-weight: 600;
+            color: #333;
+        }
+
+        form .form-group:not(:last-child) {
+            margin-bottom: 12px;
+        }
+
+        form .form-groups {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            grid-column-gap: 25px;
+        }
+
+        form .form-group>label {
+            font-size: var(--text-xs);
+            color: #4F4F4F;
+            font-weight: 600;
+        }
+
+        form .form-group>div {
+            position: relative;
+            margin-top: 7px;
+        }
+
+        form .form-group .material-icons {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            left: 15px;
+            font-size: var(--text-m);
+            color: #828282;
+        }
+
+        form .form-group input,
+        form .form-group select {
+            width: 100%;
+            padding: 12px 10px 12px 42px;
+            border-radius: 12px;
+            border: 1px solid #828282;
+            outline: none;
+            font-weight: 600;
+            font-size: var(--text-s);
+        }
+
+        option:disbled {
+            color: #828282;
+        }
+
+        form .form-group,
+        form .form-groups {
+            max-width: 475px;
+        }
+
+        form .form-group.checkbox {
+            display: flex;
             align-items: center;
+            gap: 5px;
         }
 
-        .round-black-btn {
-            border-radius: 25px;
-            background: #212529;
-            color: #fff;
-            padding: 5px 20px;
-            display: inline-block;
-            border: solid 2px #212529;
-            transition: all 0.5s ease-in-out 0s;
-            cursor: pointer;
-            font-size: 14px;
+        .pagination {
+            margin-top: 10px;
         }
 
-        .round-black-btn:hover,
-        .round-black-btn:focus {
-            background: transparent;
-            color: #212529;
-            text-decoration: none;
+        .pagination button {
+            margin-right: 5px;
         }
 
-        .mb-10 {
-            margin-bottom: 10px !important;
+        .pagination button.active {
+            font-weight: bold;
         }
 
-        .mt-30 {
-            margin-top: 30px !important;
-        }
-
-        .d-block {
-            display: block;
-        }
-
-        .custom-form label {
-            font-size: 14px;
-            line-height: 14px;
-        }
-
-        .pretty.p-default {
-            margin-bottom: 15px;
-        }
-
-        .pretty input:checked~.state.p-primary-o label:before,
-        .pretty.p-toggle .state.p-primary-o label:before {
-            border-color: #8660e9;
-        }
-
-        .pretty.p-default:not(.p-fill) input:checked~.state.p-primary-o label:after {
-            background-color: #8660e9 !important;
-        }
-
-        .main-heading.border-b {
-            border-bottom: solid 1px #ededed;
-            padding-bottom: 15px;
-            margin-bottom: 20px !important;
-        }
-
-        .custom-form .pretty .state label {
-            padding-left: 6px;
-        }
-
-        .custom-form .pretty .state label:before {
-            top: 1px;
-        }
-
-        .custom-form .pretty .state label:after {
-            top: 1px;
-        }
-
-        .custom-form .form-control {
-            font-size: 14px;
-            height: 38px;
-        }
-
-        .custom-form .form-control:focus {
-            box-shadow: none;
-        }
-
-        .custom-form textarea.form-control {
-            height: auto;
-        }
-
-        .mt-40 {
-            margin-top: 40px !important;
-        }
-
-        .in-stock-box {
-            background: hsl(219, 100%, 50%);
-            font-size: 12px;
-            text-align: center;
-            border-radius: 25px;
-            padding: 4px 15px;
-            display: inline-block;
-            color: #fff;
-        }
-
-        .trash-icon {
-            font-size: 20px;
-            color: #212529;
+        button {
+            padding: 8px;
+            border-radius: 10px;
+            color: aliceblue;
         }
     </style>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 </head>
 
 <body>
 
-    <div class="cart-wrap">
-        <div class="container">
-            <div class="row">
-                <div class="col-md-12">
-                    <div class="main-heading mb-10">My Wallet</div>
 
-                    <div class="table-wishlist">
-                        <table cellpadding="0" cellspacing="0" border="0" width="100%">
-                            <thead>
-                                <tr>
-                                    <th width="45%">Product Name</th>
-                                    <th width="15%">Unit Price</th>
-                                    
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {{#each data}}
-                                 {{#each orders}}
-                                <tr>
-                                  
-                                    <td width="45%">
-                                        <div class="display-flex align-center">
-                                            <div class="img-product">
-                                                <img src="/images/{{this.image}}" alt="" class="mCS_img_loaded">
-                                            </div>
-                                            <div class="name-product">
-                                                {{this.product}}
-                                            </div>
-                                        </div>
-                                    </td>
-                                    <td width="15%" class="price">{{this.price}}</td>
-                                   
-                                 
-                                </tr>
-                                 {{/each}}
-                                 
-                                {{/each}}
+    <div class="main-container">
 
-                            </tbody>
-                        </table>
-                                <h5 style="color: green;">Total Wallet Amount after Discount is:{{total}}</h5>
+        <div class="navcontainer">
+            <nav class="nav">
 
+                <div>
+                    <div style="background-color: rgb(47, 47, 189);" class="option1 nav-option">
+
+                        <i class="fa fa-wheelchair"></i>
+                        <h5 style="color:white;font-family: ;"> Account Accebility</h5>
                     </div>
+
+                    <div class="option2 nav-option">
+
+                        <i class="fa fa-user"></i>
+                        <a style="text-decoration: none;color: rgb(36, 32, 32);" href="/user-profile">
+                            <h5>Profile</h5>
+                        </a>
+                    </div>
+
+                    <div class="option2 nav-option">
+
+                        <i class="fa fa-address-book"></i>
+                        <a style="text-decoration: none;color: rgb(36, 32, 32);" href="/user-profile/address-mgt">
+                            <h5>Address</h5>
+                        </a>
+                    </div>
+
+
+
+
+                    <div style="background-color: rgb(47, 47, 189);" class="option1 nav-option">
+
+                        <i class="fa fa-money"></i>
+                        <h5 style="color:white ;">Payments</h5>
+                    </div>
+                    <div class="nav-option option6">
+
+                        <i class="fa fa-gift"></i>
+                        <h5>Gift Card</h5>
+                    </div>
+
+                    <div class="nav-option option6">
+
+                        <i class="fa fa-credit-card"></i>
+                        <a style="text-decoration: none;color: rgb(36, 32, 32);" href="/admin/customers">
+                            <h5>Saved UpI</h5>
+                        </a>
+                    </div>
+                    <div style="background-color: rgb(47, 47, 189);" class="option1 nav-option">
+
+                        <i class="fa fa-folder"></i>
+                        <a style="text-decoration: none;color: rgb(36, 32, 32);" href="/admin/others">
+                            <h5 style="color:white ;">My Stuff</h5>
+                        </a>
+                    </div>
+                    <div class="nav-option logout">
+
+                        <i class="fa fa-tag"></i>
+                        <a style="text-decoration: none;color: rgb(36, 32, 32);" href="/user-profile/offer">
+                            <h5>Offer</h5>
+                        </a>
+                    </div>
+                    <div class="nav-option logout">
+
+                        <i class="fa fa-heart"></i>
+                        <a style="text-decoration: none;color: rgb(36, 32, 32);" href="/user-profile/wishlist">
+                            <h5>Wishlist</h5>
+                        </a>
+                    </div>
+                    <div class="nav-option logout">
+
+                        <i class="fa fa-clipboard"></i>
+                        <a style="text-decoration: none;color: rgb(36, 32, 32);" href="/user-profile/order">
+                            <h5>Order</h5>
+                        </a>
+                    </div>
+                    <div class="nav-option option5">
+
+                        <i class="fa fa-credit-card"></i>
+                        <a style="text-decoration: none;color: rgb(36, 32, 32);" href="/user-profile/wallet">
+                            <h5>Wallet</h5>
+                        </a>
+                    </div>
+
+                </div>
+            </nav>
+        </div>
+        <div class="main">
+
+            <div class="searchbar2">
+                <input type="text" name="" id="" placeholder="Search">
+                <div class="searchbtn">
+                    <img src="https://media.geeksforgeeks.org/wp-content/uploads/20221210180758/Untitled-design-(28).png"
+                        class="icn srchicn" alt="search-button">
                 </div>
             </div>
+
+            <div style="margin-right: auto;">
+
+                <div style="background-color:rgb(126, 133, 214) ;" class="box box1">
+                    <div class="text">
+                        <h2 class="topic-heading">{{total}}</h2>
+
+                        <i class="fa fa-balance-scale"></i>
+                        <h2 class="topic">My Balance</h2>
+                    </div>
+
+                </div>
+
+                {{!-- <div class="box box2">
+                    <div class="text">
+                        <h2 class="topic-heading">150</h2>
+                        <h2 class="topic">Likes</h2>
+                    </div>
+
+                    <img src="https://media.geeksforgeeks.org/wp-content/uploads/20221210185030/14.png" alt="likes">
+                </div> --}}
+
+                {{!-- <div class="box box3">
+                    <div class="text">
+                        <h2 class="topic-heading">320</h2>
+                        <h2 class="topic">Comments</h2>
+                    </div>
+
+                    <img src="https://media.geeksforgeeks.org/wp-content/uploads/20221210184645/Untitled-design-(32).png"
+                        alt="comments">
+                </div>
+
+                <div class="box box4">
+                    <div class="text">
+                        <h2 class="topic-heading">70</h2>
+                        <h2 class="topic">Published</h2>
+                    </div>
+
+                    <img src="https://media.geeksforgeeks.org/wp-content/uploads/20221210185029/13.png" alt="published">
+                </div>
+            </div> --}}
+        </div>
+        <div class="report-container">
+            <div class="report-header">
+                <h5 class="recent-Articles">My Wallet</h5>
+
+            </div>
+            <section style="padding-top: 50px; height: auto;" id="s2">
+                <table class="table table-bordered table-hover">
+                    <thead class="thead-dark">
+                        <tr>
+                            <th scope="col">Transaction Id</th>
+                        
+                            <th scope="col">Transaction Type</th>
+                            <th scope="col">Price</th>
+                            <th scope="col">Reason Type</th>
+                            <th scope="col">Date</th>
+                            
+                        </tr>
+                    </thead>
+                    <tbody id="productBody">
+                        {{#each data}}
+                      
+                        
+                            <tr>
+                              
+                                <td>{{this.orderId}}</td>                            
+                                <td style="color: green;">{{this.transactiontype}}</td>
+                                <td>{{this.price}}</td>
+                                <td>{{this.reasontype}}</td>
+                                <td>{{this.date}}</td>
+                            </tr>
+                        </a>
+                        {{/each}}
+                    </tbody>
+                </table>
+            </section>
+            </form>
+
         </div>
     </div>
+
+    </div>
+
 
 </body>
 

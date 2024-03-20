@@ -177,16 +177,24 @@
             font-size: 20px;
             color: #212529;
         }
+        tr{
+             
+            box-shadow: 0 20px 27px 0 rgba(227, 226, 226, 0.3);
+        }
+        h5,th,td,span,div{
+            font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+        }
     </style>
 </head>
 
 <body>
-
+<br><br><br>
     <div class="cart-wrap">
         <div class="container">
             <div class="row">
                 <div class="col-md-12">
-                    <div class="main-heading mb-10">My wishlist</div>
+                    <div class="main-heading mb-10">
+                        <h5>My wishlist</h5></div>
 
                     <div class="table-wishlist">
                         <table cellpadding="0" cellspacing="0" border="0" width="100%">
@@ -195,15 +203,14 @@
                                     <th width="45%">Product Name</th>
                                     <th width="15%">Unit Price</th>
                                     <th width="15%">Stock Status</th>
-                                    <th width="15%"></th>
-                                    <th width="10%"></th>
+                                    <th width="15%">Add to Cart</th>
+                                    <th width="10%">Delete</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 {{#each data}}
-                                <tr>
-
-                                    <td width="45%">
+                                <tr style="margin: 20px;">
+                                    <td  width="45%">
                                         <div class="display-flex align-center">
                                             <div class="img-product">
                                                 <img src="/images/{{this.product.image}}" alt="" class="mCS_img_loaded">

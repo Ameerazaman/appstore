@@ -10,127 +10,113 @@
 
 </head>
 <style>
-    .footer-area {
-        padding: 40px 0px;
-        background-color: #2874f0;
-        color: #fff;
-    }
+   footer {
+    width: 100%;
+    background: var(--black);
+}
 
-    .footer-area a {
-        text-decoration: none;
-    }
+.footer-container .content_1 img {
+    height: 25px;
+    width: 180px;
+}
 
-    .footer-area .footer-heading {
-        font-size: 24px;
-        color: #fff;
-    }
+.footer-container {
+    display: flex;
+    justify-content: space-between;
+    padding: 60px 0;
+}
 
-    .footer-area .footer-underline {
-        height: 1px;
-        width: 70px;
-        background-color: #ddd;
-        margin: 10px 0px;
-    }
+.footer-container h4 {
+    color: var(--white);
+    font-weight: 500;
+    letter-spacing: 1px;
+    margin-bottom: 25px;
+    font-size: 18px;
+}
 
-    .copyright-area {
-        padding: 14px 0px;
-        background-color: #262626;
-    }
+.footer-container a {
+    display: block;
+    text-decoration: none;
+    color: var(--grey);
+    margin-bottom: 15px;
+    font-size: 14px;
+}
 
-    .copyright-area p {
-        margin-bottom: 0px;
-        color: #fff;
-    }
+.footer-container .content_1 p,
+.footer-container .content_4 p {
+    color: var(--grey);
+    margin: 25px 0;
+    font-size: 14px;
+}
 
-    .copyright-area .social-media {
-        text-align: end;
-    }
+.footer-container .content_4 input[type="email"] {
+    background-color: var(--black);
+    border: none;
+    color: var(--white);
+    outline: none;
+    padding: 15px 0;
+}
 
-    .copyright-area .social-media a {
-        margin: 0px 10px;
-        color: #fff;
-        width: 20px;
-    }
+.footer-container .content_4 .f-mail {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.footer-container .content_4 .bx {
+    color: var(--white);
+}
+
+.f-design {
+    width: 100%;
+    color: var(--white);
+    text-align: center;
+}
+
+.f-design .f-design-txt {
+    border-top: 1px solid var(--grey);
+    padding: 25px 0;
+    font-size: 14px;
+    color: var(--grey);
+}
+
 </style>
 
 <body>
-    <footer style="margin-top:100px;">
-        <div>
-            <div class="footer-area">
-                <div style="height: auto;" class="container">
-                    <div class="row">
-                        <div style="background-color: rgb(29, 30, 28); padding: 15px; border-radius: 20px;"
-                            class="col-md-3">
-                            <h4 class="footer-heading">Request a call from our team</h4>
-                            <div class="footer-underline"></div>
-                        
-                                <input style="background-color: rgb(29, 30, 28);" type="text" placeholder="Email">
-              
-
-                       
-                                <input style="margin-top: 10px;background-color: rgb(29, 30, 28);" type="text"
-                                    placeholder="username">
-                           
-                        </div>
-                        <div class="col-md-3" style="padding-left:auto">
-                            <h4 class="footer-heading">Quick Links</h4>
-                            <div class="footer-underline"></div>
-                            <div class="mb-2"><a href="" class="text-white">Home</a></div>
-                            <div class="mb-2"><a href="" class="text-white">About Us</a></div>
-
-                            <div class="mb-2"><a href="" class="text-white">Contact Us</a></div>
-                            <div class="mb-2"><a href="" class="text-white">Blogs</a></div>
-                            <div class="mb-2"><a href="" class="text-white">Sitemaps</a></div>
-                        </div>
-                        <div class="col-md-3">
-                            <h4 class="footer-heading">Shop Now</h4>
-                            <div class="footer-underline"></div>
-                            <div class="mb-2"><a href="" class="text-white">Collections</a></div>
-                            <div class="mb-2"><a href="" class="text-white">Trending Products</a></div>
-                            <div class="mb-2"><a href="" class="text-white">New Arrivals Products</a></div>
-                            <div class="mb-2"><a href="" class="text-white">Featured Products</a></div>
-                            <div class="mb-2"><a href="" class="text-white">Cart</a></div>
-                        </div>
-                        <div class="col-md-3">
-                            <h4 class="footer-heading">Reach Us</h4>
-                            <div class="footer-underline"></div>
-                            <div class="mb-2">
-                                <p>
-                                    <i class="fa fa-map-marker"></i> #444, some main road, some area, some street,
-                                    bangalore, india - 560077
-                                </p>
-                            </div>
-                            <div class="mb-2">
-                                <a href="" class="text-white">
-                                    <i class="fa fa-phone"></i> +91 888-XXX-XXXX
-                                </a>
-                            </div>
-                            <div class="mb-2">
-                                <a href="" class="text-white">
-                                    <i class="fa fa-envelope"></i> fundaofwebit@gmail.com
-                                </a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+     <footer>
+        <div class="footer-container container">
+            <div class="content_1">
+                <img src="https://i.postimg.cc/htGyQ4JB/footer-logo.png" alt="logo">
+                <p>The customer is at the heart of our<br>unique business model, which includes<br>design.</p>
+                <img src="https://i.postimg.cc/Nj9dgJ98/cards.png" alt="cards">
             </div>
-            <div class="copyright-area">
-                <div style="height: auto;" class="container">
-                    <div class="row">
-                        <div class="col-md-8">
-                            <p class=""> &copy; 2022 - Funda of Web IT - Ecommerce. All rights reserved.</p>
-                        </div>
-                        <div class="col-md-4">
-                            <div class="social-media">
-                                Get Connected:
-                                <a href=""><i class="fa fa-facebook"></i></a>
-                                <a href=""><i class="fa fa-twitter"></i></a>
-                                <a href=""><i class="fa fa-instagram"></i></a>
-                                <a href=""><i class="fa fa-youtube"></i></a>
-                            </div>
-                        </div>
-                    </div>
+            <div class="content_2">
+                <h4>SHOPPING</h4>
+                <a href="#sellers">Clothing Store</a>
+                <a href="#sellers">Trending Shoes</a>
+                <a href="#sellers">Accessories</a>
+                <a href="#sellers">Sale</a>
+            </div>
+            <div class="content_3">
+                <h4>SHOPPING</h4>
+                <a href="./contact.html">Contact Us</a>
+                <a href="https://payment-method-sb.netlify.app/" target="_blank">Payment Method</a>
+                <a href="https://delivery-status-sb.netlify.app/" target="_blank">Delivery</a>
+                <a href="https://codepen.io/sandeshbodake/full/Jexxrv" target="_blank">Return and Exchange</a>
+            </div>
+            <div class="content_4">
+                <h4>NEWLETTER</h4>
+                <p>Be the first to know about new<br>arrivals, look books, sales & promos!</p>
+                <div class="f-mail">
+                    <input type="email" placeholder="Your Email">
+                    <i class='bx bx-envelope'></i>
                 </div>
+                <hr>
+            </div>
+        </div>
+        <div class="f-design">
+            <div class="f-design-txt container">
+                <p>Design and Code by code.sanket</p>
             </div>
         </div>
     </footer>

@@ -36,16 +36,6 @@ else{
 
     res.redirect('/admin/product')
 }
-  
-
-    //     const subImagesArray = req.files.map((file) => {
-    //         return file.filename
-    //     })
-    //     console.log("dfutfgoyhg",subImagesArray[0])
-
-    //     const datas = await products.findByIdAndUpdate(productId, { $push: { subImage: { $each: subImagesArray } } })
-    //     res.redirect("/admin/product")
-    // }
 }
 
 

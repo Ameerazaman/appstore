@@ -15,11 +15,11 @@ router.get("/quantityinc/:id",verifyUser,incQuantity)
 
 router.get("/quantitydec/:id",verifyUser,decQuantity)
 // select Address
-router.post("/select-Address",verifyUser,selectAddress)
+router.get("/select-Address/:id",verifyUser,selectAddress)
 // save address
 router.post("/save-address",verifyUser,postAddress)
 // save payment
-router.post("/save-payment",verifyUser,postPayment)
+router.get("/save-payment/:payment",verifyUser,postPayment)
 // order is success
 router.get("/create-order",verifyUser,successOrder)
 // checking razorpay

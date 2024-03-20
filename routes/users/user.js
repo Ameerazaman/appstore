@@ -3,11 +3,10 @@ const mongoose = require('mongoose')
 const router = express.Router()
 const users = require('../../models/user/usermodel')
 const nodemailer = require('nodemailer')
-
-const { doSignup, getLogin, postLogin, getSignup, otpSubmit, postSignup, resendOtp, getProductDetail, userLogout, getcategory, homePage, getForgot, getForgotOtp, forgotOtpVerify, changeForgotPassword, filter, search, searchProducts } = require('../../controllers/user/userControllers')
+const { doSignup, getLogin, postLogin, getSignup, otpSubmit, postSignup, resendOtp, getProductDetail, userLogout, getcategory, homePage, getForgot, getForgotOtp, forgotOtpVerify, changeForgotPassword, filter, search, searchProducts, getproduct } = require('../../controllers/user/userControllers')
 const products = require('../../models/admin/productModel')
 const category = require('../../models/admin/categorymodel')
-const { verifyUser, } = require('../../middlewares/middleware')
+const { verifyUser, blockMiddleware, } = require('../../middlewares/middleware')
 const { addToCart, deleteCart } = require('../../controllers/user/cartController')
 const { deleteProfile } = require('../../controllers/user/userprofileController')
 //////////
@@ -28,9 +27,9 @@ router.get('/signup', getSignup)
 router.post('/signup',postSignup)
 
 //otp submit
-router.post('/signup/verification',verifyUser,otpSubmit)
+router.post('/signup/verification',verifyUser,blockMiddleware,otpSubmit)
 
-////********************Resend OTP***************** */
+////********************Resend OTP*********************/
 router.get('/resend-otp',verifyUser,resendOtp)
 //Get product detail page
 router.get("/product-detail/:id",verifyUser, getProductDetail)
@@ -53,17 +52,16 @@ router.post("/forgototpverify",forgotOtpVerify)
 // change forgot password
 router.post("/change-forgot-password",changeForgotPassword)
 
-// *********************************filter*********************************
+//*********************************filter*********************************
 
 router.post("/filter",verifyUser,filter)
 
-// ***********************************Search products********************************
+//***********************************Search products********************************
 
 router.post("/search",verifyUser,searchProducts)
 
-// ***********************************Delete*******************************
+//*************************************product page***********************************
 
-
-
+router.get("/product",verifyUser,getproduct)
 
 module.exports = router;

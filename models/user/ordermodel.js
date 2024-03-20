@@ -34,6 +34,13 @@ const orderschema = mongoose.Schema({
     },
     productsCount: {
         type: Number
+    },
+    paymentstatus:{
+        type:String,
+        default:"Paid"
+    },
+    coupondiscount:{
+        type:Number
     }
 })
 const Order = mongoose.model("Order", orderschema)

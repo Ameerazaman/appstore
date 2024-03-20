@@ -1,10 +1,18 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 
 <head>
-    <link href="https://fonts.googleapis.com/css?family=Roboto&display=swap" rel="stylesheet">
-    <style>
-        html {
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width,  
+                   initial-scale=1.0">
+  <title>GeeksForGeeks</title>
+
+  <link rel="stylesheet" href="/dashboard.css">
+  {{!-- pagination --}}
+
+  <style>
+  html {
             height: 200vh;
         }
 
@@ -234,99 +242,219 @@
                 flex-direction: column;
             }
         }
-    </style>
+        h5{
+          font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+        }
+        .card{
+            box-shadow: 0 20px 27px 0 rgba(227, 226, 226, 0.9);
+
+        }
+  </style>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 </head>
 
 <body>
-    <div style="display: flex;">
-        <!--SIDEBAR SECTION -->
-        <section style="margin-left: 30px;margin-top: 50px;" id="s1">
-            <div id="linklist">
-                <ul>
-                    <li class="home"><a href="#">Account Accecbility</a></li>
-                    <a href="/user-profile">
-                        <li>Profile </li>
-                    </a>
-                    <a href="/user-profile/address-mgt">
-                        <li>Address </li>
-                    </a>
-                    <a href="/user-profile/change-password">
-                        <li>Change password </li>
-                    </a>
-                    <li class="home"><a href="#">payment</a></li>
-                    <a href="#">
-                        <li>Gift Cards</li>
-                    </a>
-                    <a href="#">
-                        <li>Saved UpI</li>
-                    </a>
-                    <a href="#">
-                        <li>Saved Cards</li>
-                    </a>
-                    <li class="home"><a href="#">My Stuff</a></li>
-                    <a href="#">
-                        <li>Coupon</li>
-                    </a>
-                    <a href="/user-profile/wishlist">
-                        <li>Wishlist</li>
-                    </a>
-                    <a href="/user-profile/order">
-                        <li>Order</li>
-                    </a>
-                    <a href="#">
-                        <li>Reviews</li>
-                    </a>
-                    <li class="home"><a href="/user/logout">Logout</a></li>
-                </ul>
-            </div>
-        </section>
-        <section style=" height: auto;padding: 50px;width: 100%;" id="s2">
-            <h5 style="text-align: center;">My OrderdList</h5>
-            {{#each data}}
 
 
-            <div style="padding: 20px;" class="card mb-3 ">
-                <div style="display: flex;justify-content: space-evenly;">
-                    <p class="text-success">Status:{{this.status}}</p>
-                    <a href="/user-profile/order-detail/{{this._id}}">
-                        <p>View</p>
-                    </a>
-                    <p>Date:{{this.orderedAt}}</p>
-                </div>
-                {{#each this.products}}
-                <div class="card-body">
+  <div class="main-container">
 
-                    <div class="product-info">
-                        <div>
-                            <img src="/images/{{this.product.image}}" class="img-fluid rounded-3" alt="Shopping item"
-                                style="width: 65px;">
-                        </div>
-                        <div class="product-details ms-3">
-                            <h5>{{this.product.product}}</h5>
-                            <p class="small mb-0">256GB, Navy Blue</p>
-                        </div>
-                    </div>
-                    <div class="quantity-controls">
-                        <div style="width: 80px; margin-left: 30px;">
-                            <p class="mb-0">{{this.subtotal}}</p>
-                        </div>
+    <div class="navcontainer">
+      <nav class="nav">
 
-                        <div style="width: 80px; margin-left: 30px;">
-                            <a href=""></a>
-                        </div>
+        <div>
+          <div style="background-color: rgb(47, 47, 189);" class="option1 nav-option">
+          
+            <i class="fa fa-wheelchair"></i>
+            <h5 style="color:white;font-family: ;"> Account Accebility</h5>
+          </div>
 
-                        <div class="delete-button">
-                            <a href="/cart/deletecart/{{this._id}}"><i class="fas fa-trash-alt"></i></a>
-                        </div>
-                    </div>
-                </div>
-                {{/each}}
-            </div>
+          <div class="option2 nav-option">
+            
+            <i class="fa fa-user"></i>
+            <a style="text-decoration: none;color: rgb(36, 32, 32);" href="/user-profile">
+              <h5>Profile</h5>
+            </a>
+          </div>
 
-            {{/each}}
+          <div class="option2 nav-option">
+           
+            <i class="fa fa-address-book"></i>
+            <a style="text-decoration: none;color: rgb(36, 32, 32);" href="/user-profile/address-mgt">
+              <h5>Address</h5>
+            </a>
+          </div>
 
-        </section>
+
+
+
+          <div style="background-color: rgb(47, 47, 189);" class="option1 nav-option">
+           
+            <i class="fa fa-money"></i>
+            <h5 style="color:white ;">Payments</h5>
+          </div>
+          <div class="nav-option option6">
+            
+            <i class="fa fa-gift"></i>
+            <h5>Gift Card</h5>
+          </div>
+
+          <div class="nav-option option6">
+           
+            <i class="fa fa-credit-card"></i>
+            <a style="text-decoration: none;color: rgb(36, 32, 32);" href="/admin/customers">
+              <h5>Saved UpI</h5>
+            </a>
+          </div>
+          <div style="background-color: rgb(47, 47, 189);" class="option1 nav-option">
+          
+            <i class="fa fa-folder"></i>
+            <a style="text-decoration: none;color: rgb(36, 32, 32);" href="/admin/others">
+              <h5 style="color:white ;">My Stuff</h5>
+            </a>
+          </div>
+          <div class="nav-option logout">
+            
+            <i class="fa fa-tag"></i>
+            <a style="text-decoration: none;color: rgb(36, 32, 32);" href="/user-profile/offer">
+              <h5>Offer</h5>
+            </a>
+          </div>
+          <div class="nav-option logout">
+           
+            <i class="fa fa-heart"></i>
+            <a style="text-decoration: none;color: rgb(36, 32, 32);" href="/user-profile/wishlist">
+              <h5>Wishlist</h5>
+            </a>
+          </div>
+          <div class="nav-option logout">
+           
+            <i class="fa fa-clipboard"></i>
+            <a style="text-decoration: none;color: rgb(36, 32, 32);" href="/user-profile/order">
+              <h5>Order</h5>
+            </a>
+          </div>
+          <div class="nav-option option5">
+           
+           <i class="fa fa-credit-card"></i>
+            <a style="text-decoration: none;color: rgb(36, 32, 32);" href="/user-profile/wallet">
+              <h5>Wallet</h5>
+            </a>
+          </div>
+
+        </div>
+      </nav>
     </div>
-</body>
+    <div class="main">
 
-</html>
+      <div class="searchbar2">
+        <input type="text" name="" id="" placeholder="Search">
+        <div class="searchbtn">
+          <img src="https://media.geeksforgeeks.org/wp-content/uploads/20221210180758/Untitled-design-(28).png"
+            class="icn srchicn" alt="search-button">
+        </div>
+      </div>
+
+      {{!-- <div class="box-container">
+
+        <div class="box box1">
+          <div class="text">
+            <h2 class="topic-heading">60.5k</h2>
+            <h2 class="topic">Article Views</h2>
+          </div>
+
+          <img src="https://media.geeksforgeeks.org/wp-content/uploads/20221210184645/Untitled-design-(31).png"
+            alt="Views">
+        </div>
+
+        <div class="box box2">
+          <div class="text">
+            <h2 class="topic-heading">150</h2>
+            <h2 class="topic">Likes</h2>
+          </div>
+
+          <img src="https://media.geeksforgeeks.org/wp-content/uploads/20221210185030/14.png" alt="likes">
+        </div>
+
+        <div class="box box3">
+          <div class="text">
+            <h2 class="topic-heading">320</h2>
+            <h2 class="topic">Comments</h2>
+          </div>
+
+          <img src="https://media.geeksforgeeks.org/wp-content/uploads/20221210184645/Untitled-design-(32).png"
+            alt="comments">
+        </div>
+
+        <div class="box box4">
+          <div class="text">
+            <h2 class="topic-heading">70</h2>
+            <h2 class="topic">Published</h2>
+          </div>
+
+          <img src="https://media.geeksforgeeks.org/wp-content/uploads/20221210185029/13.png" alt="published">
+        </div>
+      </div> --}}
+
+      <div class="report-container">
+        <div class="report-header">
+          <h5 class="recent-Articles">My OrderdList</h5>
+        </div>
+        <section style="padding-top: 50px; height: auto;" id="s2">
+          
+          {{#each data}}
+
+
+          <div style="padding: 20px;" class="card mb-3 ">
+            <div style="display: flex;justify-content: space-evenly;">
+              <p class="text-success">Status:{{this.status}}</p>
+              <a href="/user-profile/order-detail/{{this._id}}">
+               <i class="fa fa-eye black"></i> 
+              </a>
+              <p>Date:{{this.orderedAt}}</p>
+            </div>
+            {{#each this.products}}
+            <div class="card-body">
+
+              <div class="product-info">
+                <div>
+                  <img src="/images/{{this.product.image}}" class="img-fluid rounded-3" alt="Shopping item"
+                    style="width: 65px;">
+                </div>
+                <div class="product-details ms-3">
+                  <h5>{{this.product.product}}</h5>
+                  <p class="small mb-0">256GB, Navy Blue</p>
+                </div>
+              </div>
+              <div class="quantity-controls">
+                <div style="width: 80px; margin-left: 30px;">
+                  <p class="mb-0">{{this.subtotal}}</p>
+                </div>
+
+                <div style="width: 80px; margin-left: 30px;">
+                  <a href=""></a>
+                </div>
+
+                <div class="delete-button">
+                  <a href="/cart/deletecart/{{this._id}}"><i class="fas fa-trash-alt"></i></a>
+                </div>
+              </div>
+            </div>
+            {{/each}}
+          </div>
+
+          {{/each}}
+        </section>
+
+      </div>
+    </div>
+
+  </div>
+  </div>
+
+
+  <script>
+</script>
+
+</body >
+
+</html >

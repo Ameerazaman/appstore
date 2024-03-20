@@ -10,7 +10,7 @@ const fileUpload = require('express-fileupload')
 const multer = require('multer');
 const { getCustomers, blockCustomer, unblockCustomers, searchCustomer } = require('../../controllers/admin/customerController')
 const { getCategory, doAddcategory, deleteCategory, getEditcategory, postEditCategory, getAddcategory, getEditCategoryImg, postEditCategoryImg } = require('../../controllers/admin/catogaryController')
-const { getDashboard, monthlySales } = require('../../controllers/admin/dashboarController')
+const { getDashboard, getSales, customDate, salesReport, report, salesReportDashboard, ameera, getSalesReport, customDateReport, downloadSalesReport, downloadSalesReportPdf } = require('../../controllers/admin/dashboarController')
 
 
 
@@ -43,17 +43,29 @@ router.get('/unblock/:id',verifyAdmin,unblockCustomers)
 router.post('/search',searchCustomer) 
 
 
-//*************************************dashbord(Products) */**************** */
+//*************************************dashbord */**************** */
 
 
 //Get Dashboard/////
 router.get("/dashboard",verifyAdmin,getDashboard)
-
-// get monthly sales
-router.get("/dashboard/monthly",verifyAdmin,monthlySales)
+// get sales based on dropdown
+router.get("/dashboard/:sale",verifyAdmin,getSales)
+// get customdate sales
+router.post("/dashboard/customdate",verifyAdmin,customDate)
+// get sales report page
+router.get("/dash/sales-reports",verifyAdmin,salesReportDashboard);
+// report sales report
+router.get("/dash/:report",verifyAdmin,getSalesReport)
+// custom date report
+router.post("/dash/customdate-report",verifyAdmin,customDateReport)
+// download sales report csv
+router.get("/dash/csv-report/:period",verifyAdmin,downloadSalesReport)
+// download sales report pdf
+router.get("/dash/pdf-report/:period",verifyAdmin,downloadSalesReportPdf)
 /**********************************************Product****************** */
-router.get("/product",getProduct)
 
+
+router.get("/product",getProduct)
 //get add product
 router.get("/add-product", getAddProduct)
 //post add products//

@@ -192,8 +192,21 @@
 
       <div class="report-container">
         <div class="report-header">
-          <h1 class="recent-Articles">Product</h1>
-          <a href="/admin/add-product"><button class="view">Product+</button></a>
+          <h1 class="recent-Articles">Sales Report</h1>
+           <div class="dropdown">
+            <button class="btn dropdown-toggle view"
+              style="width: auto;background-color: white;color: blueviolet;border-color: blueviolet;" type="button"
+              id="dropdownMenu2" data-bs-toggle="dropdown" aria-expanded="false">
+              Sales
+            </button>
+            <ul class="dropdown-menu" aria-labelledby="dropdownMenu2">
+              <li><button class="dropdown-item" type="button"><a href="/admin/dashboard/daily-report">Daily</a></button></li>
+              <li><button class="dropdown-item" type="button"><a href="/admin/dashboard/daily-report">Weekly</a></button></li>
+              <li><button class="dropdown-item" type="button"><a href="/admin/dashboard/daily-report">Monthly</a></button>
+              <li><button class="dropdown-item" type="button"><a href="/admin/dashboard/daily-report">Total</a></button>
+              </li>
+            </ul>
+          </div>
         </div>
         <div class="container table-responsive py-5">
           <table class="table table-bordered table-hover">
