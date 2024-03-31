@@ -12,6 +12,21 @@
     {{!-- pagination --}}
 
     <style>
+        .pagination {
+            margin-top: 10px;
+
+        }
+
+        .pagination button {
+            margin-right: 5px;
+            background-color: rgb(172, 155, 249);
+            border-radius: 10px;
+        }
+
+        .pagination button.active {
+            font-weight: bold;
+        }
+
         h5 {
             font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
             color: black;
@@ -117,19 +132,11 @@
 </head>
 
 <body>
-
-
     <div class="main-container">
-
         <div class="navcontainer">
-            <nav class="nav">
+            <nav style="background-color: #f9f9f9;" class="nav">
 
                 <div>
-                    <div style="background-color: rgb(47, 47, 189);" class="option1 nav-option">
-
-                        <i class="fa fa-wheelchair"></i>
-                        <h5 style="color:white;font-family: ;"> Account Accebility</h5>
-                    </div>
 
                     <div class="option2 nav-option">
 
@@ -149,32 +156,6 @@
 
 
 
-
-                    <div style="background-color: rgb(47, 47, 189);" class="option1 nav-option">
-
-                        <i class="fa fa-money"></i>
-                        <h5 style="color:white ;">Payments</h5>
-                    </div>
-                    <div class="nav-option option6">
-
-                        <i class="fa fa-gift"></i>
-                        <h5>Gift Card</h5>
-                    </div>
-
-                    <div class="nav-option option6">
-
-                        <i class="fa fa-credit-card"></i>
-                        <a style="text-decoration: none;color: rgb(36, 32, 32);" href="/admin/customers">
-                            <h5>Saved UpI</h5>
-                        </a>
-                    </div>
-                    <div style="background-color: rgb(47, 47, 189);" class="option1 nav-option">
-
-                        <i class="fa fa-folder"></i>
-                        <a style="text-decoration: none;color: rgb(36, 32, 32);" href="/admin/others">
-                            <h5 style="color:white ;">My Stuff</h5>
-                        </a>
-                    </div>
                     <div class="nav-option logout">
 
                         <i class="fa fa-tag"></i>
@@ -185,7 +166,7 @@
                     <div class="nav-option logout">
 
                         <i class="fa fa-heart"></i>
-                        <a style="text-decoration: none;color: rgb(36, 32, 32);" href="/user-profile/wishlist">
+                        <a style="text-decoration: none;color: rgb(36, 32, 32);" href="/wishlist">
                             <h5>Wishlist</h5>
                         </a>
                     </div>
@@ -268,26 +249,26 @@
                     <thead class="thead-dark">
                         <tr>
                             <th scope="col">Transaction Id</th>
-                        
+
                             <th scope="col">Transaction Type</th>
                             <th scope="col">Price</th>
                             <th scope="col">Reason Type</th>
                             <th scope="col">Date</th>
-                            
+
                         </tr>
                     </thead>
                     <tbody id="productBody">
                         {{#each data}}
-                      
-                        
-                            <tr>
-                              
-                                <td>{{this.orderId}}</td>                            
-                                <td style="color: green;">{{this.transactiontype}}</td>
-                                <td>{{this.price}}</td>
-                                <td>{{this.reasontype}}</td>
-                                <td>{{this.date}}</td>
-                            </tr>
+
+
+                        <tr>
+
+                            <td>{{this.orderId}}</td>
+                            <td style="color: green;">{{this.transactiontype}}</td>
+                            <td>{{this.price}}</td>
+                            <td>{{this.reasontype}}</td>
+                            <td>{{this.date}}</td>
+                        </tr>
                         </a>
                         {{/each}}
                     </tbody>
@@ -296,11 +277,53 @@
             </form>
 
         </div>
+        <div id="pagination" class="pagination">
+            <button style="margin-left: 45%;" id="prevButton">Prev</button>
+            <button id="nextButton">Next</button>
+        </div>
     </div>
 
     </div>
 
+    <script>
+        const productsPerPage = 5;
+        const tbody = document.getElementById('productBody');
+        const rows = Array.from(tbody.querySelectorAll('tr'));
+        let currentPage = 1;
 
+        function displayPage(page) {
+            const startIndex = (page - 1) * productsPerPage;
+            const endIndex = startIndex + productsPerPage;
+
+            rows.forEach((row, index) => {
+                if (index >= startIndex && index < endIndex) {
+                    row.style.display = 'table-row';
+                } else {
+                    row.style.display = 'none';
+                }
+            });
+        }
+
+        function displayPagination() {
+            document.getElementById('prevButton').addEventListener('click', () => {
+                if (currentPage > 1) {
+                    currentPage--;
+                    displayPage(currentPage);
+                }
+            });
+
+            document.getElementById('nextButton').addEventListener('click', () => {
+                const totalPages = Math.ceil(rows.length / productsPerPage);
+                if (currentPage < totalPages) {
+                    currentPage++;
+                    displayPage(currentPage);
+                }
+            });
+        }
+
+        displayPage(currentPage);
+        displayPagination();
+    </script>
 </body>
 
 </html>

@@ -364,6 +364,7 @@ section {
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
 </head>
 <body>
+  <br><br>
     <section id="services" class="services section-bg margin:10px">
    <div class="container-fluid">
      <div class="col-sm-12 text-center mb-4">
@@ -373,14 +374,18 @@ section {
          <div style="padding-left: 80px;" class="col-md-6 _boxzoom">
             <div class="zoom-thumb">
                <ul class="piclist">
-                  {{#each data.subImage}}
-                  <li><img src="/images/{{this}}" alt=""></li>
-               {{/each}}
+                  
+                  <li><img src="/images/{{data.productImage1}}" alt=""></li>
+                  <li><img src="/images/{{data.productImage2}}" alt=""></li>
+                  <li><img src="/images/{{data.productImage3}}" alt=""></li>
+                  <li><img src="/images/{{data.productImage4}}" alt=""></li>
+               
+             
                </ul>
             </div>
             <div style="border-color: rgb(60, 150, 235);border-width: 2px;" class="_product-images">
-               <div style="width: 300px;height: 300px;padding-left: 50px;" class="picZoomer">
-                  <img class="my_img" src="/images/{{data.image}}" alt="">
+               <div  class="picZoomer">
+                  <img class="my_img" src="/images/{{data.productImage1}}" alt="">
                </div>
             </div>
          </div>
@@ -389,28 +394,20 @@ section {
                <p class="_p-name"> CATEGORY:{{data.category}}</p>
                <div class="_p-price-box">
                   <div class="p-list">
-                     <span> M.R.P. : <i class="fa fa-inr"></i> <del> 1399  </del>   </span>
-                     <span class="price"> Rs. 699 </span>
-                  </div>
-                  <div class="_p-add-cart">
-                     <div class="_p-qty">
-                        <span>Add Quantity</span>
-                        <div class="value-button decrease_" id="" value="Decrease Value">-</div>
-                        <input type="number" name="qty" id="number" value="1" />
-                        <div class="value-button increase_" id="" value="Increase Value">+</div>
-                     </div>
+                     <span> M.R.P. : <i class="fa fa-inr"></i> {{data.discount}}off   </span>
+                     <span class="price"> {{data.price}}</span>
                   </div>
                   <div class="_p-features">
                      <span> Description About this product:- </span>
                     {{data.description}}                    
                   </div>
-                  <form action="" method="post" accept-charset="utf-8">
+                 
                      <ul class="spe_ul"></ul>
                      <div class="_p-qty-and-cart">
                         <div class="_p-add-cart">
-                           <button class="btn-theme btn buy-btn" tabindex="0">
-                           <i class="fa fa-shopping-cart"></i> Buy Now
-                           </button>
+                           <a href="/wishlist"><button class="btn-theme btn buy-btn" tabindex="0">
+                           <i class="fa fa-heart"></i>wishlist
+                           </button></a>
                            <button class="btn-theme btn btn-success" tabindex="0">
                            <a style="text-decoration: none;color: white;" href="/cart/add-to-cart/{{data._id}}"><i class="fa fa-shopping-cart"></i> Add to Cart</a>
                            </button>
@@ -419,7 +416,7 @@ section {
                            <input type="hidden" name="url" value="" />    
                         </div>
                      </div>
-                  </form>
+                  
                </div>
             </div>
          </div>
@@ -445,7 +442,7 @@ section {
                   <a alt="Add to Wish List" title="Add to Wish List" href="javascript:void(0);"><i class="fa fa-heart"></i></a>
                 </span>
                 <a href="#">
-                  <img style="width: auto;height: auto;margin: 20px;" src="/images/{{this.image}}"> 
+                  <img style="width: auto;height: auto;margin: 20px;" src="/images/{{this.productImage1}}"> 
                 </a>
               </div>
               <h4 class="mb-1"><a href="details.php">{{this.product}}</a></h4>
@@ -465,11 +462,7 @@ section {
       </div>
     </div>
   </div>
-   <div class="pagination">
-    <button style="width: auto;" id="prev">&laquo; Prev</button>
-
-    <button style="width: auto" id="next">Next &raquo;</button>
-  </div>
+   
 </section>
 <script>
     /*!     

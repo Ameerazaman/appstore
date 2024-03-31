@@ -1,30 +1,30 @@
 const express = require('express')
 const mongoose = require('mongoose');
 const router = express.Router()
-const { verifyUser } = require('../../middlewares/middleware');
-const { addToCart, deleteCart, incrementQuantity, decrementQuantity, getCart, checkoutPage, selectCoupon, categoryOffer } = require('../../controllers/user/cartController');
+const { verifyUser, blockMiddleware } = require('../../middlewares/middleware');
+const { addToCart, deleteCart, incrementQuantity, decrementQuantity, getCart, checkoutPage, categoryOffer } = require('../../controllers/user/cartController');
 const cart=require("../../models/user/add-to-cart-model")
 
 
 // get cart page
-router.get("/cartpage",verifyUser,getCart)
+router.get("/cartpage",verifyUser,blockMiddleware,getCart)
 // /product add- to cart car page
-router.get("/add-to-cart/:id",verifyUser,addToCart)
+router.get("/add-to-cart/:id",verifyUser,blockMiddleware,addToCart)
 
 // delete cart
-router.get("/deletecart/:id",verifyUser,deleteCart)
+router.delete("/deletecart/:id",verifyUser ,blockMiddleware,deleteCart)
 
 // incrrement the quantity
-router.get("/quantityincrement/:id",verifyUser,incrementQuantity)
+router.put("/inc_qty/:id", verifyUser, blockMiddleware, incrementQuantity);
 
 // decrement quantity
 
-router.get("/quantitydecrement/:id",verifyUser,decrementQuantity)
+router.put("/dec_qty/:id",verifyUser,blockMiddleware,decrementQuantity)
 
 // use coupn
-router.get("/select-coupon/:id",verifyUser,selectCoupon)
+
 // category offer
-router.get("/categoryOffer/:id",verifyUser,categoryOffer)
+router.get("/categoryOffer/:id",verifyUser,blockMiddleware,categoryOffer)
 // *******************************************CheckOut Page****************************************
 
 

@@ -5,7 +5,7 @@ const Order = require('../../models/user/ordermodel')
 const getOrder = async (req, res) => {
 
     try {
-        const data=await Order.find().lean()
+        const data=await Order.find().sort({_id:-1}).lean()
         res.render("admin/order", { admin: true, data})
     }
 

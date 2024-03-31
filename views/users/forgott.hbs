@@ -13,24 +13,10 @@
 
 <body>
 
-    <form action="/user/forgotpassword" method="post">
-        <form action="javascript: void(0)" class="otp-form" name="otp-form">
-            <div class="box">
-                <div style="padding-top: 10%;border: 1px;" class="title">
-                    <p style="color: rgb(66, 70, 70);font-size:large ;">Please enter the Email to verify your account
-                    </p>
-                    <span style="color: red;">{{this.message}}</span>
-                    <label for="">Enter Your Email</label>
-                </div>
-            </div>
-            <div class="otp-input-fields">
-                <input type="email" placeholder="email" id="email" name="email"><br>
-                <button type="submit">submit</button>
-            </div>
-        </form>
-    </form>
+  
     <form action="/user/forgototpverify" method="post">
-    <div class="box">
+    {{#if otpsubmit}}
+    <div class="box1">
         <div style="padding-top: 10%;border: 1px;" class="title">
 
             <label for="">Enter Your OTP</label>
@@ -54,7 +40,25 @@
                     class="btn btn-warning otp-btn">Resend</button></a>
         </p>
     </div>
-
+    {{else}}
+      <form action="/user/forgotpassword" method="post">
+        <form action="javascript: void(0)" class="otp-form" name="otp-form">
+            <div class="box1">
+                <div style="padding-top: 10%;border: 1px;" class="title">
+                    <p style="color: rgb(66, 70, 70);font-size:large ;">Please enter the Email to verify your account
+                    </p>
+                    <span style="color: red;">{{this.message}}</span>
+                    <label for="">Enter Your Email</label>
+                </div>
+            </div>
+            <div class="otp-input-fields">
+                <input type="email" placeholder="email" id="email" name="email"><br>
+                <button type="submit">submit</button>
+            </div>
+        </form>
+    </form>
+{{/if}}
+<br><br><br>
     <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
         integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
         crossorigin="anonymous"></script>

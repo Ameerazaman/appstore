@@ -278,10 +278,15 @@
 
 
   document.getElementById("edit-category-form").addEventListener('submit', (e) => {
+    
     var description = document.getElementById("description").value
     document.getElementById("description-name-error").innerHTML;
-    if (description === '') {
+    if (description ==='') {
       document.getElementById("description-name-error").innerHTML = "This field is required"
+      e.preventDefault()
+    }
+    else if (/^\s|\s$/.test(description)) {
+      document.getElementById("description-name-error").innerHTML = "space are not allowed"
       e.preventDefault()
     }
 
@@ -289,6 +294,10 @@
     document.getElementById("category-name-error").innerHTML;
     if (category === '') {
       document.getElementById("category-name-error").innerHTML = "This field is required"
+      e.preventDefault()
+    }
+     else if (/^\s|\s$/.test(category)) {
+      document.getElementById("category-name-error").innerHTML = "space are not allowed"
       e.preventDefault()
     }
   })

@@ -40,6 +40,7 @@
     "pdfkit": "^0.14.0",
     "razorpay": "^2.9.2",
     "sharp": "^0.33.2",
+    "sweetalert": "^2.1.2",
     "validator": "^13.11.0"
   },
   "description": ""

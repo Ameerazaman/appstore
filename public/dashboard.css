@@ -40,7 +40,7 @@ header {
 .logo { 
   font-size: 27px; 
   font-weight: 600; 
-  color: rgb(47, 141, 70); 
+  color: rgb(33, 35, 33); 
 } 
   
 .icn { 
@@ -292,7 +292,9 @@ header {
   border: none; 
   cursor: pointer; 
 } 
-  
+ h5{
+  font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+ } 
 .report-body { 
   max-width: 1160px; 
   overflow-x: auto; 
@@ -378,27 +380,11 @@ header {
   .navclose { 
     left: 00px; 
   } 
-  .searchbar { 
-    display: none; 
-  } 
+   
   .main { 
     padding: 40px 30px 30px 30px; 
   } 
-  .searchbar2 { 
-    width: 100%; 
-    display: flex; 
-    margin: 0 0 40px 0; 
-    justify-content: center; 
-  } 
-  .searchbar2 input { 
-    width: 250px; 
-    height: 42px; 
-    border-radius: 50px 0 0 50px; 
-    background-color: var(--background-color3); 
-    padding: 0 20px; 
-    font-size: 15px; 
-    border: 2px solid var(--secondary-color); 
-  } 
+  
 } 
   
 @media screen and (max-width: 490px) { 
@@ -450,9 +436,7 @@ header {
     height: 60px; 
     padding: 10px 10px 5px 10px; 
   } 
-  .searchbtn img { 
-    height: 20px; 
-  } 
+   
 } 
   
 @media screen and (max-width: 320px) { 
@@ -485,12 +469,7 @@ header {
   .label-tag { 
     width: 70px; 
   } 
-  .searchbtn { 
-    width: 40px; 
-  } 
-  .searchbar2 input { 
-    width: 180px; 
-  } 
+  
 }
 a{
   text-decoration: none;

@@ -37,7 +37,7 @@ const postLogin = async (req, res) => {
     session.userid = req.body.username;
     session.password = req.body.password;
     console.log(req.session)
-
+    
 
     res.redirect('/admin/dashboard')
   }

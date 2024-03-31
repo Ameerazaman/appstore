@@ -17,22 +17,22 @@ router.get("/home",homePage)
 router.get('/',getLogin)
 
 //Post Login page
-router.post('/login', postLogin)
+router.post('/login',postLogin)
 
 //get Signup page
 
 router.get('/signup', getSignup)
   
 // post signup
-router.post('/signup',postSignup)
+router.post('/signup' ,postSignup)
 
 //otp submit
-router.post('/signup/verification',verifyUser,blockMiddleware,otpSubmit)
+router.post('/signup/verification',verifyUser,otpSubmit)
 
 ////********************Resend OTP*********************/
 router.get('/resend-otp',verifyUser,resendOtp)
 //Get product detail page
-router.get("/product-detail/:id",verifyUser, getProductDetail)
+router.get("/product-detail/:id",verifyUser,blockMiddleware, getProductDetail)
 
 //user Logout
 router.get("/logout",verifyUser,userLogout)
@@ -41,7 +41,7 @@ router.get("/logout",verifyUser,userLogout)
 
 
 //get category
-router.get("/category/:category",verifyUser,getcategory)
+router.get("/category/:category",verifyUser,blockMiddleware,getcategory)
 // 8**********************************forgott password****************************
 // get forgot page
 router.get("/forgotpassword",getForgot)
@@ -54,14 +54,14 @@ router.post("/change-forgot-password",changeForgotPassword)
 
 //*********************************filter*********************************
 
-router.post("/filter",verifyUser,filter)
+router.post("/filter",verifyUser,blockMiddleware,filter)
 
 //***********************************Search products********************************
 
-router.post("/search",verifyUser,searchProducts)
+router.post("/search",verifyUser,blockMiddleware,searchProducts)
 
 //*************************************product page***********************************
 
-router.get("/product",verifyUser,getproduct)
+router.get("/product",verifyUser ,blockMiddleware,getproduct)
 
 module.exports = router;

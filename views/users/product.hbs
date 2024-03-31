@@ -324,14 +324,14 @@
         .shop__thumb:hover {
             border-color: rgba(0, 0, 0, 0.07);
             -webkit-box-shadow: 0 5px 30px rgba(0, 0, 0, 0.07);
-            box-shadow: 0 5px 30px rgba(0, 0, 0, 0.07);
+            box-shadow: 0 5px 30px rgba(0, 0, 0, 0.35);
         }
 
         .shop__thumb>a {
             color: #333333;
         }
 
-        .shop__thumb>a:hover {
+        .shop__thumb>a {
             text-decoration: none;
         }
 
@@ -340,6 +340,8 @@
             margin-bottom: 20px;
             overflow: hidden;
         }
+
+
 
         .shop-thumb__title {
             font-weight: 600;
@@ -752,9 +754,90 @@
             color: #ccc;
             font-weight: 600;
         }
+
+
+        /* CSS */
+        .button-79 {
+            backface-visibility: hidden;
+            background: #2185e3;
+            border: 0;
+            border-radius: .375rem;
+            box-sizing: border-box;
+            color: #fff;
+            cursor: pointer;
+            display: inline-block;
+            font-family: Circular, Helvetica, sans-serif;
+            font-size: 1rem;
+            font-weight: 700;
+            letter-spacing: -.01em;
+            line-height: 1.3;
+            padding: 6px;
+            position: relative;
+            text-align: left;
+            text-decoration: none;
+            transform: translateZ(0) scale(1);
+            transition: transform .2s;
+            user-select: none;
+            -webkit-user-select: none;
+            touch-action: manipulation;
+            width: auto;
+        }
+
+        .button-79:disabled {
+            color: #787878;
+            cursor: auto;
+        }
+
+        .button-79:not(:disabled):hover {
+            transform: scale(1.05);
+        }
+
+        .button-79:not(:disabled):hover:active {
+            transform: scale(1.05) translateY(.125rem);
+        }
+
+        .button-79:focus {
+            outline: 0 solid transparent;
+        }
+
+        .button-79:focus:before {
+            border-width: .125rem;
+            content: "";
+            left: calc(-1*.375rem);
+            pointer-events: none;
+            position: absolute;
+            top: calc(-1*.375rem);
+            transition: border-radius;
+            user-select: none;
+        }
+
+        .button-79:focus:not(:focus-visible) {
+            outline: 0 solid transparent;
+        }
+
+        .button-79:not(:disabled):active {
+            transform: translateY(.125rem);
+        }
+
+        h5,
+        a,
+        span,
+        h4,
+        h3,
+        h2,
+        h1,
+        label,
+        button {
+            font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+        }
+
+        .img-responsive:hover {
+            width: 250px;
+            height: 250px;
+        }
     </style>
     <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet">
-
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 </head>
 
 <body>
@@ -763,16 +846,19 @@
     <div class="container">
         <div class="row">
             <div class="col-sm-4 col-md-3">
-                <form>
+                <form action="/user/search" method="post">
                     <div class="well">
                         <div class="row">
                             <div class="col-sm-12">
                                 <div class="input-group">
-                                    <input type="text" class="form-control" placeholder="Search products...">
+                                    <input type="text" class="form-control" placeholder="Search products..."
+                                        name="search">
                                     <span class="input-group-btn">
+
                                         <button class="btn btn-primary" type="submit">
                                             <i class="fa fa-search"></i>
                                         </button>
+
                                     </span>
                                 </div>
                             </div>
@@ -781,178 +867,290 @@
                 </form>
 
                 <!-- Filter -->
+
                 <form class="shop__filter">
                     <!-- Price -->
-                    <h3 class="headline">
+                    <br>
+                    <h5 class="headline">
                         <span>Price</span>
-                    </h3>
-                    <div class="radio">
-                        <input type="radio" name="shop-filter__price" id="shop-filter-price_1" value="" checked="">
-                        <label for="shop-filter-price_1">Under $25</label>
+                    </h5>
+                    <hr>
+                    <div>
+                        <input type="checkbox" name="low-to-high" id="shop-filter-price_1" value="low-to-high">
+                        <label for="shop-filter-price_1">Low to High</label>
                     </div>
-                    <div class="radio">
-                        <input type="radio" name="shop-filter__price" id="shop-filter-price_2" value="">
-                        <label for="shop-filter-price_2">$25 to $50</label>
-                    </div>
-                    <div class="radio">
-                        <input type="radio" name="shop-filter__price" id="shop-filter-price_3" value="">
-                        <label for="shop-filter-price_3">$50 to $100</label>
-                    </div>
-                    <div class="radio">
-                        <input type="radio" name="shop-filter__price" id="shop-filter-price_4" value="specify">
-                        <label for="shop-filter-price_4">Other (specify)</label>
-                    </div>
-                    <div class="form-group shop-filter__price">
-                        <div class="row">
-                            <div class="col-xs-4">
-                                <label for="shop-filter-price_from" class="sr-only"></label>
-                                <input id="shop-filter-price_from" type="number" min="0" class="form-control"
-                                    placeholder="From" disabled="">
-                            </div>
-                            <div class="col-xs-4">
-                                <label for="shop-filter-price_to" class="sr-only"></label>
-                                <input id="shop-filter-price_to" type="number" min="0" class="form-control"
-                                    placeholder="To" disabled="">
-                            </div>
-                            <div class="col-xs-4">
-                                <button type="submit" class="btn btn-block btn-default" disabled="">Go</button>
-                            </div>
-                        </div>
+                    <div>
+                        <input type="checkbox" name="high-to-low" id="shop-filter-price_2" value="high-to-low">
+                        <label for="shop-filter-price_2">High to Low</label>
                     </div>
 
                     <!-- Checkboxes -->
-                    <h3 class="headline">
-                        <span>Brand</span>
-                    </h3>
-                    <div class="checkbox">
-                        <input type="checkbox" value="" id="shop-filter-checkbox_1" checked="">
-                        <label for="shop-filter-checkbox_1">Adidas</label>
+                    <br>
+                    <h5 class="headline">
+                        <span>Category</span>
+                    </h5>
+                    <hr>
+                    <div>
+                        <input type="checkbox" id="shop-filter-checkbox_1" name="category" value="Mobile Phone">
+                        <label for="shop-filter-checkbox_1">Mobile Phone</label>
                     </div>
-                    <div class="checkbox">
-                        <input type="checkbox" value="" id="shop-filter-checkbox_2">
-                        <label for="shop-filter-checkbox_2">Calvin Klein</label>
+                    <div>
+                        <input type="checkbox" id="shop-filter-checkbox_2" name="category" value="Laptop">
+                        <label for="shop-filter-checkbox_2">Laptop</label>
                     </div>
-                    <div class="checkbox">
-                        <input type="checkbox" value="" id="shop-filter-checkbox_3">
-                        <label for="shop-filter-checkbox_3">Columbia</label>
+                    <div>
+                        <input type="checkbox" id="shop-filter-checkbox_3" name="category" value="Watch">
+                        <label for="shop-filter-checkbox_3">Watch</label>
                     </div>
-                    <div class="checkbox">
-                        <input type="checkbox" value="" id="shop-filter-checkbox_4">
-                        <label for="shop-filter-checkbox_4">Tommy Hilfiger</label>
-                    </div>
-                    <div class="checkbox">
-                        <input type="checkbox" value="" id="shop-filter-checkbox_5">
-                        <label for="shop-filter-checkbox_5">Not specified</label>
-                    </div>
+                    <br>
 
                     <!-- Radios -->
-                    <h3 class="headline">
-                        <span>Material</span>
-                    </h3>
-                    <div class="radio">
-                        <input type="radio" name="shop-filter__radio" id="shop-filter-radio_1" value="" checked="">
-                        <label for="shop-filter-radio_1">100% Cotton</label>
+                    <h5 class="headline">
+                        <span>Alphabetical</span>
+                    </h5>
+                    <div>
+                        <input type="checkbox" name="a-z" id="shop-filter-radio_1" value="a-z">
+                        <label for="shop-filter-radio_1">A to Z</label>
                     </div>
-                    <div class="radio">
-                        <input type="radio" name="shop-filter__radio" id="shop-filter-radio_2" value="">
-                        <label for="shop-filter-radio_2">Bamboo</label>
+                    <div>
+                        <input type="checkbox" name="z-a" id="shop-filter-radio_2" value="z-a">
+                        <label for="shop-filter-radio_2">Z to A</label>
                     </div>
-                    <div class="radio">
-                        <input type="radio" name="shop-filter__radio" id="shop-filter-radio_3" value="">
-                        <label for="shop-filter-radio_3">Leather</label>
-                    </div>
-                    <div class="radio">
-                        <input type="radio" name="shop-filter__radio" id="shop-filter-radio_4" value="">
-                        <label for="shop-filter-radio_4">Polyester</label>
-                    </div>
-                    <div class="radio">
-                        <input type="radio" name="shop-filter__radio" id="shop-filter-radio_5" value="">
-                        <label for="shop-filter-radio_5">Not specified</label>
-                    </div>
+                    <div class="btn btn-primary" onclick="applyFilters()">Apply</div>
 
-                    <!-- Colors -->
-                    <h3 class="headline">
-                        <span>Colors</span>
-                    </h3>
-                    <div class="shop-filter__color">
-                        <input type="text" id="shop-filter-color_1" value="" data-input-color="black">
-                        <label for="shop-filter-color_1" style="background-color: black;"></label>
-                    </div>
-                    <div class="shop-filter__color">
-                        <input type="text" id="shop-filter-color_2" value="" data-input-color="gray">
-                        <label for="shop-filter-color_2" style="background-color: gray;"></label>
-                    </div>
-                    <div class="shop-filter__color">
-                        <input type="text" id="shop-filter-color_3" value="" data-input-color="brown">
-                        <label for="shop-filter-color_3" style="background-color: brown;"></label>
-                    </div>
-                    <div class="shop-filter__color">
-                        <input type="text" id="shop-filter-color_4" value="" data-input-color="beige">
-                        <label for="shop-filter-color_4" style="background-color: beige;"></label>
-                    </div>
-                    <div class="shop-filter__color">
-                        <input type="text" id="shop-filter-color_5" value="" data-input-color="white">
-                        <label for="shop-filter-color_5" style="background-color: white;"></label>
-                    </div>
                 </form>
+
             </div>
 
             <div class="col-sm-8 col-md-9">
                 <!-- Filters -->
                 <ul class="shop__sorting">
-                    <li class="active"><a href="#">Popular</a></li>
-                    <li><a href="#">Newest</a></li>
-                    <li><a href="#">Bestselling</a></li>
-                    <li><a href="#">Price (low)</a></li>
-                    <li><a href="#">Price (high)</a></li>
+
                 </ul>
 
                 <div class="row">
                     {{#each productdata}}
                     <div class="col-sm-6 col-md-4">
-                        <div class="shop__thumb">
-                            <a href="#">
-                                <i style="margin-left: auto;" class="fa fa-shopping-cart"></i>
-
-                                <div class="shop-thumb__img">
-                                    <img src="/images/{{this.image}}" class="img-responsive" alt="...">
+                        <div style="border-bottom: #2185e3;" class="shop__thumb">
+                            <a href="/user/product-detail/{{this._id}}">
+                                <div style="width:100%;height:70%;" class="shop-thumb__img">
+                                    <img style="width:200px;height: 200px;" src="/images/{{this.productImage1}}"
+                                        class="img-responsive" alt="...">
                                 </div>
-                                <h5 class="shop-thumb__title">
+                                <h5>
                                     {{this.product}}
                                 </h5>
-                                <div class="shop-thumb__price">
-                                    <span class="shop-thumb-price_new">{{this.price}}</span>
-                                </div>
-                                <div style="display: none;" class="product-btn">
-                                    <button><i style="color: palevioletred;" class="fa fa-heart"></i></button>
-                                </div>
+                                <h5 style="display: none;" id="quantity{{this._id}}">
+                                    {{this.quantity}}
+                                </h5>
+
                             </a>
+                            <div class="shop-thumb__price">
+
+                                <span class="price"><i class="fa fa-inr"></i>Price {{this.price}}</span>
+                                <span style="color: green;" class="offer-price">Off <i class="fa fa-inr"></i>
+                                    {{this.discount}}</span><br>
+                                <a class="btn btn-sm" href="javascript:void(0);"
+                                    onclick="addToCart('{{this._id}}', '{{this.quantity}}')">
+                                    <button style="color: rgb(255, 255, 255);" class="button-79" style="width:40px;">
+                                        Add to Cart <i class="fa fa-shopping-cart"></i>
+                                    </button>
+                                </a>
+                                <a href="/wishlist/add-product/{{this._id}}"><button style="color: rgb(255, 255, 255);"
+                                        class="button-79" style="width:40px;"> <i class="fa fa-heart"></i></button></a>
+
+                            </div>
+
                         </div>
+
                     </div>
                     {{/each}}
 
                 </div> <!-- / .row -->
 
                 <!-- Pagination -->
-                <div class="row">
-                    <div class="col-sm-12">
-
-                        <ul class="pagination pull-right">
-                            <li class="disabled"><a href="#">«</a></li>
-                            <li class="active"><a href="#">1 <span class="sr-only">(current)</span></a></li>
-                            <li><a href="#">2</a></li>
-                            <li><a href="#">3</a></li>
-                            <li><a href="#">4</a></li>
-                            <li><a href="#">5</a></li>
-                            <li><a href="#">»</a></li>
-                        </ul>
-
-                    </div>
-                </div> <!-- / .row -->
+                <!-- / .row -->
 
             </div> <!-- / .col-sm-8 -->
         </div> <!-- / .row -->
     </div>
+    <br><br>
+    <div class="pagination">
+        <button class="button-79"
+            style="width: auto;color: rgb(26, 25, 25);margin-left: 50%;background-color: rgb(240, 240, 240);"
+            id="prev">&laquo; Prev</button>
+
+        <button class="button-79" style="width: auto;color: rgb(27, 27, 27);margin-left: 5px;background-color: #e7e6e6;"
+            id="next">Next &raquo;</button>
+    </div>
+
 </body>
 
 </html>
+<script>
+
+    document.addEventListener("DOMContentLoaded", function () {
+        const productCards = document.querySelectorAll('.shop__thumb');
+        const prevButton = document.getElementById('prev');
+        const nextButton = document.getElementById('next');
+
+        let currentPage = 1;
+        const productsPerPage = 9;
+
+        function showPage(page) {
+            const startIndex = (page - 1) * productsPerPage;
+            const endIndex = startIndex + productsPerPage;
+
+            productCards.forEach((card, index) => {
+                if (index >= startIndex && index < endIndex) {
+                    card.style.display = 'block';
+                } else {
+                    card.style.display = 'none';
+                }
+            });
+        }
+
+        function updatePaginationButtons() {
+            prevButton.disabled = currentPage === 1;
+            nextButton.disabled = currentPage === Math.ceil(productCards.length / productsPerPage);
+        }
+
+        function goToPrevPage() {
+            if (currentPage > 1) {
+                currentPage--;
+                showPage(currentPage);
+                updatePaginationButtons();
+            }
+        }
+
+        function goToNextPage() {
+            if (currentPage < Math.ceil(productCards.length / productsPerPage)) {
+                currentPage++;
+                showPage(currentPage);
+                updatePaginationButtons();
+            }
+        }
+
+        prevButton.addEventListener('click', goToPrevPage);
+        nextButton.addEventListener('click', goToNextPage);
+
+        // Initially show the first page
+        showPage(currentPage);
+        updatePaginationButtons();
+    });
+</script>
+<script>
+    function addToCart(id) {
+        document.getElementById("")
+
+        Swal.fire({
+            title: 'Are you sure?',
+            text: "Once returned, the product will be removed from your order history!",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Yes, return it!'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                // Redirect to return page
+                window.location.href = "/user-profile/order-return/" + id;
+            }
+        });
+    }
+
+</script>
+<script>
+    function addToCart(id, quantity) {
+        var stock = parseInt(quantity, 10); // Parse the stock quantity as an integer
+
+        if (stock < 1) {
+            Swal.fire({
+                title: 'Out of Stock',
+                text: 'This product is out of stock',
+                icon: 'error',
+                confirmButtonColor: '#3085d6',
+                confirmButtonText: 'OK'
+            });
+        } else {
+            window.location.href = "/cart/add-to-cart/" + id;
+        }
+    }
+</script>
+<script>
+        function applyFilters() {
+            console.log("hai");
+        // Extract selected options from form elements
+        const selectedPriceOption = document.querySelector('input[name="low-to-high"]:checked') ? 'low-to-high' :
+        document.querySelector('input[name="high-to-low"]:checked') ? 'high-to-low' : null;
+        const selectedCategories = Array.from(document.querySelectorAll('input[name="category"]:checked')).map(input => input.value);
+        const selectedAlphabeticalOption = document.querySelector('input[name="a-z"]:checked') ? 'a-z' :
+        document.querySelector('input[name="z-a"]:checked') ? 'z-a' : null;
+        console.log("price", selectedPriceOption, "category", selectedCategories, "alpha", selectedAlphabeticalOption)
+        // Construct request body
+        const requestBody = {
+            priceOption: selectedPriceOption,
+        category: selectedCategories,
+        alpha: selectedAlphabeticalOption // Corrected property name
+        };
+
+        const requestOptions = {
+            method: 'POST',
+        headers: {
+            'Content-Type': 'application/json', // Adjust content type if needed
+                // Add any other headers if required
+            },
+        body: JSON.stringify(requestBody),
+        };
+
+        console.log(requestOptions, "options")
+        fetch(`/user/filter`, requestOptions)
+            .then(response => response.json()) // Parse the JSON response
+            .then(data => {
+            console.log("productdata", data);
+        // Render the filtered product data
+        const productContainer = document.querySelector('.row'); // Assuming this is the container for product cards
+        productContainer.innerHTML = ''; // Clear the existing product cards
+
+                data.forEach(product => {
+                    var productCard = `
+        <div class="col-sm-6 col-md-4">
+            <div style="border-bottom: #2185e3;" class="shop__thumb">
+                <a href="/user/product-detail/${product._id}">
+                    <div style="width:100%;height:70%;" class="shop-thumb__img">
+                        <img style="width:200px;height: 200px;" src="/images/${product.productImage1}"
+                            class="img-responsive" alt="...">
+                    </div>
+                    <h5>${product.product}</h5>
+                    <h5 style="display: none;" id="quantity${product._id}">
+                        ${product.quantity}
+                    </h5>
+                </a>
+                <div class="shop-thumb__price">
+                    <span class="price"><i class="fa fa-inr"></i>Price ${product.price}</span>
+                    <span style="color: green;" class="offer-price">Off <i class="fa fa-inr"></i>
+                        ${product.discount}</span><br>
+                        <a class="btn btn-sm" href="javascript:void(0);"
+                            onclick="addToCart('${product._id}', '${product.quantity}')">
+                            <button style="color: rgb(255, 255, 255);" class="button-79" style="width:40px;">
+                                Add to Cart <i class="fa fa-shopping-cart"></i>
+                            </button>
+                        </a>
+                        <a href="/wishlist/add-product/${product._id}">
+                            <button style="color: rgb(255, 255, 255);" class="button-79" style="width:40px;"> <i class="fa fa-heart"></i></button>
+                        </a>
+                </div>
+            </div>
+        </div>
+                    `;
+                    productContainer.insertAdjacentHTML('beforeend', productCard);
+                });
+
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            });
+    }
+</script>
+
+</script>

@@ -11,7 +11,11 @@ const categoryschema=new mongoose.Schema({
     },
     description:{
         type:String
-    }
+    },
+    isUnlist:{
+        type:Boolean,
+        default:false
+      },
 
 })
 const category = mongoose.model('category', categoryschema);

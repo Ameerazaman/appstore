@@ -263,40 +263,88 @@
 
 
     document.getElementById("checkout-form").addEventListener('submit', (e) => {
-        var fullname = document.getElementById("fullname").value;
-        document.getElementById("fullname-error").innerHTML;
-        if (fullname === '') {
-            document.getElementById("fullname-error").innerHTML = 'This field is required';
-            e.preventDefault()
-        }
+            var fullname = document.getElementById("fullname").value;
+            var fullnameError = document.getElementById("fullname-error");
+            if (fullname.trim() === '') {
+                document.getElementById("fullname-error").innerHTML = 'This field is required';
+                e.preventDefault();
+            }
+            else if (/^\s|\s$/.test(fullname)) { // Check for spaces at the beginning or end
+                document.getElementById("fullname-error").innerHTML = 'Spaces at beginning or end are not allowed';
+                e.preventDefault();
+            }
 
-        var address = document.getElementById("address").value;
-        document.getElementById("address-error").innerHTML;
-        if (address === '') {
-            document.getElementById("address-error").innerHTML = 'This field is required'
-            e.preventDefault()
-        }
+            var address = document.getElementById("address").value;
+            document.getElementById("address-error").innerHTML;
+            if (address.trim() === '') {
+                document.getElementById("address-error").innerHTML = 'This field is required'
+                e.preventDefault()
+            }
+            else if (/^\s|\s$/.test(address)) {
+                document.getElementById("address-error").innerHTML = 'space are not allowed'
+                e.preventDefault()
+            }
 
-        var city = document.getElementById("city").value;
-        document.getElementById("city-error").innerHTML;
-        if (city === '') {
-            document.getElementById("city-error").innerHTML = 'This field is required'
-            e.preventDefault()
-        }
 
-        var state = document.getElementById("state").value;
-        document.getElementById("state-error").innerHTML;
-        if (state === '') {
-            document.getElementById("state-error").innerHTML = 'This field is required'
-            e.preventDefault()
-        }
+            var city = document.getElementById("city").value;
+            document.getElementById("city-error").innerHTML;
+            if (city.trim() === '') {
+                document.getElementById("city-error").innerHTML = 'This field is required'
+                e.preventDefault()
+            }
+           else if (/^\s|\s$/.test(city)) {
+                document.getElementById("city-error").innerHTML = 'space are not allowed'
+                e.preventDefault()
+            }
 
-        var postalcode = document.getElementById("postal-code").value;
-        document.getElementById("postalcode-error").innerHTML;
-        if (postalcode === '') {
-            document.getElementById("postalcode-error").innerHTML = 'This field is required'
-            e.preventDefault()
-        }
-    })
 
+            var state = document.getElementById("state").value;
+            document.getElementById("state-error").innerHTML;
+            if (state.trim() === '') {
+                document.getElementById("state-error").innerHTML = 'This field is required'
+                e.preventDefault()
+            }
+            else if (/^\s|\s$/.test(state)) {
+                document.getElementById("state-error").innerHTML = 'space are not allowed'
+                e.preventDefault()
+            }
+
+
+            var email = document.getElementById("email").value;
+            document.getElementById("email-error").innerHTML;
+            if (email.trim() === '') {
+                document.getElementById("email-error").innerHTML = 'This field is required'
+                e.preventDefault()
+            }
+            else if (/^\s|\s$/.test(email)) {
+                document.getElementById("email-error").innerHTML = 'space are not allowed'
+                e.preventDefault()
+            }
+            var phone = document.getElementById("phone").value;
+            document.getElementById("phone-error").innerHTML;
+            if (phone.trim() === '') {
+                document.getElementById("phone-error").innerHTML = 'This field is required'
+                e.preventDefault()
+            }
+            else if (phone.length !== 10) {
+                document.getElementById("phone-error").innerHTML = 'Required 10 digits'
+                e.preventDefault()
+            }
+            else if (/^\s|\s$/.test(phone)) {
+                document.getElementById("phone-error").innerHTML = 'space are not allowed'
+                e.preventDefault()
+            }
+
+
+            var postalcode = document.getElementById("postal-code").value;
+            document.getElementById("postalcode-error").innerHTML;
+            if (postalcode.trim() === '') {
+                document.getElementById("postalcode-error").innerHTML = 'This field is required'
+                e.preventDefault()
+            }
+            else if (/\s/.test(postalcode)) {
+                document.getElementById("postalcode-error").innerHTML = 'space are not allowed'
+                e.preventDefault()
+            }
+        })
 </script>

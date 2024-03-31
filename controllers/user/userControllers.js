@@ -21,26 +21,39 @@ function generateOTP(limit) {
 // get home page
 const homePage = async (req, res) => {
     if (req.session.username) {
-        const newdata = await products.find().limit(4).sort({_id:-1}).lean()
-
-        const categorydata = await category.find().lean()
+        const userId = req.session.user._id;
+        const newdata = await products.find().limit(4).sort({ _id: -1 }).lean()
+        const cartCount = await cart.find({ userId: userId })
+        console.log("cartcount", cartCount.length)
+        const categorydata = await category.find({ isUnlist: { $ne: true } }).lean()
         const productdata = await products.find().limit(4).lean()
-      
-        for (let i = 0; i < productdata.length; i++) {
-           
-            if (productdata[i].quantity <=2) {
-               const result=await products.findByIdAndUpdate({_id:productdata[i]._id},{status:"Out of Stock"})
-            }
-            else if (productdata[i].quantity > 10) {
-                const result=await products.findByIdAndUpdate({_id:productdata[i]._id},{status:"Published"})
-            }
-            else if (productdata[i].quantity < 10) {
-                const result=await products.findByIdAndUpdate({_id:productdata[i]._id},{status:"Low Stock"})
+        const product = await products.find().lean()
+
+        if (product) {
+
+            for (let i = 0; i < product.length; i++) {
+
+                if (product[i].quantity < 1) {
+
+                    const result = await products.findByIdAndUpdate({ _id: product[i]._id }, { status: "Out of Stock" })
+
+                }
+                else if (product[i].quantity > 10) {
+
+                    const result = await products.findByIdAndUpdate({ _id: product[i]._id }, { status: "Published" })
+                }
+                else if (product[i].quantity <= 10) {
+
+                    const result = await products.findByIdAndUpdate({ _id: product[i]._id }, { status: "Low Stock" })
+
+                }
 
             }
-        
+            const cartcount = cartCount.length
+            req.session.cartcount = cartCount.length
+
+            res.render('users/home', { newdata, categorydata, productdata, cartcount })
         }
-        res.render('users/home', { newdata, categorydata, productdata })
     } else {
         res.redirect("/user/login")
     }
@@ -66,32 +79,32 @@ const getLogin = async (req, res) => {
     }
     else {
         const check = "true"
-        res.render('users/login', { check })
+        res.render('users/login', { check, null: true })
     }
 
 
 }
 // post login page
 const postLogin = async (req, res) => {
-    console.log("login page",req.body.username)
+    console.log("login page", req.body.username)
     const check = await User.findOne({ username: req.body.username })
-    
+
     if (!check) {
         console.log('login failed')
         const message = "User not found"
-        res.render('users/login', { message, })
+        res.render('users/login', { message })
 
     }
-    if (check.isBlocked === true) {
+    else if (check.isBlocked === true) {
         console.log("user is blocked")
         const message = "user is blocked"
-        res.render('users/login', { message, admin:true})
+        res.render('users/login', { message, admin: true })
     }
 
     else {
         req.session.username = req.body.username
         req.session.user = check
-        console.log("session",req.session.user._id)
+        console.log("session", req.session.user._id)
         res.redirect("/user/home")
 
 
@@ -116,7 +129,7 @@ const postSignup = async (req, res) => {
         if (existuser) {
             console.log(existuser);
             const message = 'User already exist.Please choose diffrent username';
-            res.render("users/signup", { message})
+            res.render("users/signup", { message })
             console.log("failed signup")
         }
         else {
@@ -172,7 +185,7 @@ const otpSubmit = async (req, res) => {
         else {
             let message = "OTP is incorrect"
 
-            res.render('users/verification', { message ,admin:true})
+            res.render('users/verification', { message, admin: true })
         }
     }
     catch (error) {
@@ -180,6 +193,7 @@ const otpSubmit = async (req, res) => {
     }
 
 }
+
 //Ressend otp//
 const resendOtp = function (req, res) {
 
@@ -237,10 +251,11 @@ const getForgotOtp = async (req, res) => {
             console.log(req.session.otp)
         }
         main();
-        res.redirect('/user/forgotpassword')
+        const otpsubmit = "submit"
+        res.render('users/forgott', { otpsubmit })
     }
-    else{
-        const message="User not exist";
+    else {
+        const message = "User not exist";
         res.render('users/forgott', { message })
     }
 }
@@ -267,12 +282,12 @@ const forgotOtpVerify = async (req, res) => {
 const changeForgotPassword = async (req, res) => {
     console.log(req.body)
     const userin = await User.findOne({ email: req.body.email })
-    console.log("userin",userin)
+    console.log("userin", userin)
     try {
         if (userin) {
             console.log("hai")
             const data = await User.updateOne({ email: req.body.email }, { password: req.body.password });
-            console.log(data,"data")
+            console.log(data, "data")
             res.redirect("/user")
         }
         else {
@@ -291,7 +306,11 @@ const getProductDetail = async (req, res) => {
         const proId = req.params.id
         const data = await products.findOne({ _id: proId }).lean()
         const categorydata = await products.find({ category: data.category }).lean()
-        res.render("users/product-detail", { data, categorydata, admin: false })
+        const userId = req.session.user._id;
+        const cartCount = await cart.find({ userId: userId })
+        const cartcount = cartCount.length
+        req.session.cartcount = cartcount
+        res.render("users/product-detail", { data, categorydata, admin: false, cartcount })
     }
     catch (error) {
         console.log("error in product detail route", error)
@@ -311,20 +330,20 @@ const getcategory = async (req, res) => {
     try {
         console.log(req.params)
         if ("Laptop" === req.params.category) {
-            const data = await products.find({ category: req.params.category }).lean()
+            const productdata = await products.find({ category: req.params.category }).lean()
 
-            res.render("users/laptop", { data })
+            res.render("users/product", { productdata })
         }
 
         else if ("Mobile Phone" === req.params.category) {
-            const data = await products.find({ category: req.params.category }).lean()
+            const productdata = await products.find({ category: req.params.category }).lean()
 
-            res.render("users/mobile", { data })
+            res.render("users/product", { productdata })
         }
         else if ("Watch" === req.params.category) {
-            const data = await products.find({ category: req.params.category }).lean()
+            const productdata = await products.find({ category: req.params.category }).lean()
 
-            res.render("users/watch", { data })
+            res.render("users/product", { productdata })
         }
     }
     catch (e) {
@@ -333,67 +352,151 @@ const getcategory = async (req, res) => {
 }
 
 
-// filter
+// \filter
+// const filter = async (req, res) => {
+//     try {
+//         console.log("filter page");
+//         console.log(req.body, "filters");
+//         const filters = req.body;
+//         console.log(filters);
+//         let query = {};
+
+//         // Sorting
+//         if (filters.priceOption === 'low-to-high') {
+//             query.sort = { price: 1 }; // Sorting low to high
+//         } else if (filters.priceOption === 'high-to-low') {
+//             query.sort = { price: -1 }; // Sorting high to low
+//         }
+
+//         if (filters.alpha === 'a-z') {
+//             query.sort = { product: 1 }; // Sorting A-Z
+//         } else if (filters.alpha === 'z-a') {
+//             query.sort = { product: -1 }; // Sorting Z-A
+//         }
+
+//         // Category Filtering
+//         if (filters.category && filters.category.length > 0) {
+//             query.category = { $in: filters.category }; // Filtering based on selected categories
+//         } else {
+//             query.category = { $in: ["Mobile Phone", "Laptop", "Watch"] };
+//         }
+//         const sort=query.sort
+//         console.log(query.sort,"sort"); // Log the constructed query
+
+//         const productdata = await products.find({category:query.category}).sort(sort).lean();
+//         console.log(productData, "Product Data:"); // Log the fetched product data
+//         res.json(productData);
+//     } catch (error) {
+//         console.log("Error in filter route in user controller:", error);
+//         res.status(500).send("Internal Server Error");
+//     }
+// };
+
 const filter = async (req, res) => {
     try {
-      
+
         const filters = req.body;
         let query = {};
-       
+        const category = filters.category
+        console.log("category", category)
+
         // Checkboxes for sorting
-        if (filters['low-to-high']) {
+        if (filters.priceOption === 'low-to-high') {
             query.sort = { price: 1 }; // Sorting low to high
-        } else if (filters['high-to-low']) {
+        } else if (filters.priceOption === 'high-to-low') {
             query.sort = { price: -1 }; // Sorting high to low
-        } else if (filters['a-z']) {
+        }
+        if (filters.alpha === 'a-z') {
             query.sort = { product: 1 }; // Sorting A-Z
-        } else if (filters['z-a']) {
+        } else if (filters.alpha === 'z-a') {
             query.sort = { product: -1 }; // Sorting Z-A
         }
-        const sort=query.sort
-        console.log("sort",sort)
+        const sort = query.sort
+        console.log("sort", sort)
         // Checkbox for category filtering
         if (filters.category && filters.category.length > 0) {
             query.category = { $in: filters.category }; // Filtering based on selected categories
-        }
-        console.log("category",query.category)
-        console.log("Query:", query); // Log the constructed query
-
-        const productdata = await products.find({category:query.category}).sort(sort).lean();
-        console.log("Product Data:", productdata); // Log the fetched product data
-        res.render("users/home", { productdata });
-    } catch (error) {
-        console.log("Error in filter route in user controller:", error);
-        res.status(500).send("Internal Server Error");
+        
+    } else {
+        query.category = { $in: ["Mobile Phone", "Laptop", "Watch"] };
     }
+    console.log("category", query.category)
+    console.log("Query:", query); // Log the constructed query
+
+    const productdata = await products.find({ category: query.category }).sort(sort).lean();
+    // console.log("Product Data:", productdata); // Log the fetched product data
+    res.json(productdata);
+} catch (error) {
+    console.log("Error in filter route in user controller:", error);
+    res.status(500).send("Internal Server Error");
+}
 }
 
+
+// const filter = async (req, res) => {
+//     try {
+//         console.log("req.body filter", req.body);
+//         const filters = req.body;
+//         let query = {};
+
+//         // Construct query based on filters
+//         if (filters['low-to-high']) {
+//             query.sort = { price: 1 };
+//         } else if (filters['high-to-low']) {
+//             query.sort = { price: -1 };
+//         } else if (filters['a-z']) {
+//             query.sort = { product: 1 };
+//         } else if (filters['z-a']) {
+//             query.sort = { product: -1 };
+//         }
+
+//         // Filter based on selected categories
+//         if (filters.category && filters.category.length > 0) {
+//             query.category = { $in: filters.category };
+//         } else {
+//             query.category = { $in: ["Mobile Phone", "Laptop", "Watch"] };
+//         }
+
+//         // Fetch filtered data from the database
+//         const productdata = await products.find(query.category).sort(query.sort).lean();
+//         console.log("productdata", productdata);
+//         // Return filtered data to the frontend
+//         res.json(productdata);
+//     } catch (error) {
+//         console.error("Error in filter route:", error);
+//         res.status(500).send("Internal Server Error");
+//     }
+// }
 // get product page
-const getproduct=async(req,res)=>{
-    try{
-        const productdata=await products.find().lean()
-        res.render("users/product",{productdata})
+const getproduct = async (req, res) => {
+    try {
+        const productdata = await products.find().lean()
+        const userId = req.session.user._id;
+        const cartCount = await cart.find({ userId: userId })
+        const cartcount = cartCount.length
+        req.session.cartcount = cartcount
+        res.render("users/product", { productdata, cartcount })
     }
-    catch(error){
+    catch (error) {
         console.log("Error in get product page in user controller")
     }
 }
 // search products
-const searchProducts=async(req,res)=>{
-    try{
+const searchProducts = async (req, res) => {
+    try {
         console.log(req.body.search)
         const query = req.body.search; // Assuming the search query is provided as a query parameter
         const regex = new RegExp(query, 'i'); // 'i' flag for case-insensitive search
-        const productdata= await products.find({
+        const productdata = await products.find({
             $or: [
                 { product: regex },
                 { category: regex }
             ]
         }).lean();
-        console.log("productdata",productdata)
-        res.render("users/home",{productdata})
+        console.log("productdata", productdata)
+        res.render("users/product", { productdata })
     }
-    catch(error){
+    catch (error) {
         console.log("Error iin serach product route in user controlleer")
     }
 }
@@ -403,5 +506,5 @@ module.exports = {
     postSignup, otpSubmit, resendOtp,
     getProductDetail, userLogout, getForgot,
     getForgotOtp, forgotOtpVerify, changeForgotPassword,
-    filter,searchProducts,getproduct
+    filter, searchProducts, getproduct
 }

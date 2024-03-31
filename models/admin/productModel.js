@@ -39,8 +39,14 @@ const productSchema = new mongoose.Schema({
   categoryOffer:{
     type:Number
   },
-  subImage:[{type:String}]
-
+  isUnlist:{
+    type:Boolean,
+    default:false
+  },
+  productImage1: { type: String },
+  productImage2: { type: String },
+  productImage3: { type: String },
+  productImage4: { type: String }
   // Add more fields as needed
 });
 

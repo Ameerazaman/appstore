@@ -133,12 +133,13 @@
     }
 
     .dropbtn {
-      background-color: #313331;
+      background-color: #99b2e9;
       color: white;
-      padding: 10px;
+      padding: 6px;
       font-size: 16px;
       border: none;
       cursor: pointer;
+      border-radius: 10px;
     }
 
     .dropdown {
@@ -156,7 +157,7 @@
     }
 
     .dropdown-content a {
-      color: black;
+      color: rgb(78, 75, 75);
       padding: 8px 10px;
       text-decoration: none;
       display: block;
@@ -171,7 +172,7 @@
     }
 
     .dropdown:hover .dropbtn {
-      background-color: #3a3b3a;
+      background-color: #3a3b3b;
     }
   </style>
 
@@ -227,42 +228,13 @@
               <a href="/referaloffer"><h5> Offer</h5>
             </a>
           </div>
-
-          <div class="nav-option option6">
-            <img src="/images/transaction.png" class="nav-img" alt="settings">
-            <a href="/admin/transaction">
-              <h5>Transaction</h5>
-            </a>
-          </div>
-          <div style="background-color: rgb(47, 47, 189);" class="option1 nav-option">
-            <img src="/images/user management.png" class="nav-img" alt="dashboard">
-            <h5 style="color:white ;">User Management</h5>
-          </div>
-          <div class="nav-option option6">
-            <img src="/images/admin.jpeg" class="nav-img" alt="settings">
-            <h5>Manage Admin</h5>
-          </div>
-
           <div class="nav-option option6">
             <img src="/images/customers.png" class="nav-img" alt="settings">
             <a href="/admin/customers">
               <h5>Customers</h5>
             </a>
           </div>
-          <div style="background-color: rgb(47, 47, 189);" class="option1 nav-option">
-            <img src="/images/others.jpeg" class="nav-img" alt="dashboard">
-            <a href="/admin/others">
-              <h5 style="color:white ;">Others</h5>
-            </a>
-          </div>
-          <div class="nav-option logout">
-            <img src="/images/settings.png" class="nav-img" alt="logout">
-            <h5>Setting</h5>
-          </div>
-          <div class="nav-option logout">
-            <img src="/images/help.jpeg" class="nav-img" alt="logout">
-            <h5>Help</h5>
-          </div>
+          
           <div class="nav-option logout">
             <img src="/images/logout.png" class="nav-img" alt="logout">
             <a href="/admin/logout">
@@ -293,7 +265,6 @@
         {{#each data}}
         <div style="padding: 20px;margin-top: 30px;" class="card mb-3 ">
           <div style="display: flex;justify-content: space-evenly;">
-            <a href="/order/change-status/{{this._id}}/placed">Placed</a>
             <p class="text-success">
 
             <div class="dropdown">Status:
@@ -318,8 +289,13 @@
 
             <div class="product-info">
               <div>
+                {{#if this.product.image}}
                 <img src="/images/{{this.product.image}}" class="img-fluid rounded-3" alt="Shopping item"
                   style="width: 65px;">
+                  {{else}}
+                   <img src="/images/{{this.product.productImage1}}" class="img-fluid rounded-3" alt="Shopping item"
+                  style="width: 65px;">
+                  {{/if}}
               </div>
               <div class="product-details ms-3">
                 <h5>{{this.product.product}}</h5>
@@ -347,12 +323,73 @@
 
       </div>
       <br>
+     
       {{!-- /<a style="margin-left:90%;padding-top: 20px;" href="#"><button class="view">Download</button></a> --}}
+    <div class="pagination">
+        <button class="button-79"
+            style="width: auto;color: rgb(26, 25, 25);margin-left: 50%;background-color: rgb(240, 240, 240);"
+            id="prev">&laquo; Prev</button>
+
+        <button class="button-79" style="width: auto;color: rgb(27, 27, 27);margin-left: 5px;background-color: #e7e6e6;"
+            id="next">Next &raquo;</button>
+    </div>
     </div>
   </div>
 
   </div>
+  
   <script src="/javascript.js"></script>
+  <script>
+     document.addEventListener("DOMContentLoaded", function () {
+        const productCards = document.querySelectorAll('.card');
+        const prevButton = document.getElementById('prev');
+        const nextButton = document.getElementById('next');
+
+        let currentPage = 1;
+        const productsPerPage = 9;
+
+        function showPage(page) {
+            const startIndex = (page - 1) * productsPerPage;
+            const endIndex = startIndex + productsPerPage;
+
+            productCards.forEach((card, index) => {
+                if (index >= startIndex && index < endIndex) {
+                    card.style.display = 'block';
+                } else {
+                    card.style.display = 'none';
+                }
+            });
+        }
+
+        function updatePaginationButtons() {
+            prevButton.disabled = currentPage === 1;
+            nextButton.disabled = currentPage === Math.ceil(productCards.length / productsPerPage);
+        }
+
+        function goToPrevPage() {
+            if (currentPage > 1) {
+                currentPage--;
+                showPage(currentPage);
+                updatePaginationButtons();
+            }
+        }
+
+        function goToNextPage() {
+            if (currentPage < Math.ceil(productCards.length / productsPerPage)) {
+                currentPage++;
+                showPage(currentPage);
+                updatePaginationButtons();
+            }
+        }
+
+        prevButton.addEventListener('click', goToPrevPage);
+        nextButton.addEventListener('click', goToNextPage);
+
+        // Initially show the first page
+        showPage(currentPage);
+        updatePaginationButtons();
+    });
+  </script>
 </body>
 
 </html>

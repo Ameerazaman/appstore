@@ -255,18 +255,13 @@
 
 <body>
 
-
   <div class="main-container">
 
     <div class="navcontainer">
-      <nav class="nav">
+      <nav style="background-color: #f5f5f5;" class="nav">
 
         <div>
-          <div style="background-color: rgb(47, 47, 189);" class="option1 nav-option">
-          
-            <i class="fa fa-wheelchair"></i>
-            <h5 style="color:white;font-family: ;"> Account Accebility</h5>
-          </div>
+         
 
           <div class="option2 nav-option">
             
@@ -287,31 +282,9 @@
 
 
 
-          <div style="background-color: rgb(47, 47, 189);" class="option1 nav-option">
-           
-            <i class="fa fa-money"></i>
-            <h5 style="color:white ;">Payments</h5>
-          </div>
-          <div class="nav-option option6">
-            
-            <i class="fa fa-gift"></i>
-            <h5>Gift Card</h5>
-          </div>
-
-          <div class="nav-option option6">
-           
-            <i class="fa fa-credit-card"></i>
-            <a style="text-decoration: none;color: rgb(36, 32, 32);" href="/admin/customers">
-              <h5>Saved UpI</h5>
-            </a>
-          </div>
-          <div style="background-color: rgb(47, 47, 189);" class="option1 nav-option">
+         
+        
           
-            <i class="fa fa-folder"></i>
-            <a style="text-decoration: none;color: rgb(36, 32, 32);" href="/admin/others">
-              <h5 style="color:white ;">My Stuff</h5>
-            </a>
-          </div>
           <div class="nav-option logout">
             
             <i class="fa fa-tag"></i>
@@ -322,7 +295,7 @@
           <div class="nav-option logout">
            
             <i class="fa fa-heart"></i>
-            <a style="text-decoration: none;color: rgb(36, 32, 32);" href="/user-profile/wishlist">
+            <a style="text-decoration: none;color: rgb(36, 32, 32);" href="/wishlist">
               <h5>Wishlist</h5>
             </a>
           </div>
@@ -417,8 +390,13 @@
 
               <div class="product-info">
                 <div>
+                  {{#if this.product.image}}
                   <img src="/images/{{this.product.image}}" class="img-fluid rounded-3" alt="Shopping item"
                     style="width: 65px;">
+                 {{else}}
+                  <img src="/images/{{this.product.productImage1}}" class="img-fluid rounded-3" alt="Shopping item"
+                    style="width: 65px;">
+                   {{/if}} 
                 </div>
                 <div class="product-details ms-3">
                   <h5>{{this.product.product}}</h5>
@@ -446,13 +424,72 @@
         </section>
 
       </div>
+      <br>
+       <div class="pagination">
+        <button class="button-79"
+            style="width: auto;color: rgb(26, 25, 25);margin-left: 50%;background-color: rgb(240, 240, 240);"
+            id="prev">&laquo; Prev</button>
+
+        <button class="button-79" style="width: auto;color: rgb(27, 27, 27);margin-left: 5px;background-color: #e7e6e6;"
+            id="next">Next &raquo;</button>
+    </div>
     </div>
 
   </div>
+   
   </div>
 
 
   <script>
+     document.addEventListener("DOMContentLoaded", function () {
+        const productCards = document.querySelectorAll('.card');
+        const prevButton = document.getElementById('prev');
+        const nextButton = document.getElementById('next');
+
+        let currentPage = 1;
+        const productsPerPage = 9;
+
+        function showPage(page) {
+            const startIndex = (page - 1) * productsPerPage;
+            const endIndex = startIndex + productsPerPage;
+
+            productCards.forEach((card, index) => {
+                if (index >= startIndex && index < endIndex) {
+                    card.style.display = 'block';
+                } else {
+                    card.style.display = 'none';
+                }
+            });
+        }
+
+        function updatePaginationButtons() {
+            prevButton.disabled = currentPage === 1;
+            nextButton.disabled = currentPage === Math.ceil(productCards.length / productsPerPage);
+        }
+
+        function goToPrevPage() {
+            if (currentPage > 1) {
+                currentPage--;
+                showPage(currentPage);
+                updatePaginationButtons();
+            }
+        }
+
+        function goToNextPage() {
+            if (currentPage < Math.ceil(productCards.length / productsPerPage)) {
+                currentPage++;
+                showPage(currentPage);
+                updatePaginationButtons();
+            }
+        }
+
+        prevButton.addEventListener('click', goToPrevPage);
+        nextButton.addEventListener('click', goToNextPage);
+
+        // Initially show the first page
+        showPage(currentPage);
+        updatePaginationButtons();
+    });
 </script>
 
 </body >

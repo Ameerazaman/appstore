@@ -3,13 +3,13 @@ const mongoose = require('mongoose')
 const router = express.Router()
 const users = require('../../models/user/usermodel')
 const products = require('../../models/admin/productModel')
-const { getAddProduct, deleteProduct, getEditProduct, doAddProduct, postEditProduct, getEditImage, postEditImage, MultImage, getProduct, DeleteMultiImg, productDetailPage } = require('../../controllers/admin/productController')
+const { getAddProduct, deleteProduct, getEditProduct, doAddProduct, postEditProduct, getEditImage, postEditImage, MultImage, getProduct, DeleteMultiImg, productDetailPage, listProduct, unListProduct } = require('../../controllers/admin/productController')
 const { verifyAdmin, upload, ProductRules, productRes, editProductRes, categoryRules, categoryRes, editCategoryRes, EditCategoryRes, EditProductRes, verifyUser, cropImage } = require('../../middlewares/middleware')
 const{doLogin, postLogin, adminLogout}=require('../../controllers/admin/adminControllers')
 const fileUpload = require('express-fileupload')
 const multer = require('multer');
 const { getCustomers, blockCustomer, unblockCustomers, searchCustomer } = require('../../controllers/admin/customerController')
-const { getCategory, doAddcategory, deleteCategory, getEditcategory, postEditCategory, getAddcategory, getEditCategoryImg, postEditCategoryImg } = require('../../controllers/admin/catogaryController')
+const { getCategory, doAddcategory, deleteCategory, getEditcategory, postEditCategory, getAddcategory, getEditCategoryImg, postEditCategoryImg, unlistCategory, listCategory } = require('../../controllers/admin/catogaryController')
 const { getDashboard, getSales, customDate, salesReport, report, salesReportDashboard, ameera, getSalesReport, customDateReport, downloadSalesReport, downloadSalesReportPdf } = require('../../controllers/admin/dashboarController')
 
 
@@ -34,10 +34,10 @@ router.post('/login',postLogin)
 router.get("/customers",verifyAdmin,getCustomers)
 
 ///////     Block user///
-router.get("/block/:id",verifyAdmin,blockCustomer)
+router.post("/block/:id",verifyAdmin,blockCustomer)
   
 //////unblock user
-router.get('/unblock/:id',verifyAdmin,unblockCustomers)
+router.post('/unblock/:id',verifyAdmin,unblockCustomers)
   
 ///////// search a specific name///////
 router.post('/search',searchCustomer) 
@@ -70,29 +70,18 @@ router.get("/product",getProduct)
 router.get("/add-product", getAddProduct)
 //post add products//
 
-router.post('/add-product',verifyAdmin,
-// ProductRules,productRes,
-
-//  upload.array('image',4)
-upload.array('image',4),doAddProduct)
+router.post('/add-product',verifyAdmin,upload.any(),doAddProduct)
 //Delete product
-router.get('/delete/:id',verifyAdmin, deleteProduct)
+router.delete('/delete/:id',verifyAdmin, deleteProduct)
 //Get edit product
 router.get('/edit/:id',verifyAdmin, getEditProduct)
 //post edit product
-router.post('/edit-product/:id',verifyAdmin,postEditProduct)
-//get Edit image//
-router.get("/edit-proimage/:id", verifyAdmin,getEditImage)
-//post Edit image//
-router.post('/edit-proimage/:id',verifyAdmin, upload.single('image'),postEditImage)
-//post multiple images
-router.post('/multi-image/:id',verifyAdmin, upload.array('image',4),MultImage)
-
-// Delete multiple images in edit product page
-router.get("/deleteMultImg/:id/:imagefile",DeleteMultiImg)
-
+router.post('/edit-product/:id',verifyAdmin,upload.any(),postEditProduct)
+//get list product//
+router.post('/list/:id',verifyAdmin, listProduct)
+// unlist product
+router.post('/unList/:id',verifyAdmin,unListProduct)
 // get product detail apge
-
 router.get("/product-detail/:id",verifyAdmin,productDetailPage)
 
 ///**********************************Catogary *********************************/
@@ -104,7 +93,11 @@ router.get('/add-category',verifyAdmin,getAddcategory)
 //Post catogary in database
 router.post('/add-category',verifyAdmin,upload.single('image'),doAddcategory)
 //Delete category
-router.get('/deleteCategory/:id',verifyAdmin, deleteCategory)
+router.delete('/deleteCategory/:id',verifyAdmin, deleteCategory)
+// Unlist category
+router.post("/unListCategory/:id",verifyAdmin,unlistCategory)
+// list category
+router.post("/listCategory/:id",verifyAdmin,listCategory)
 //Get edit product
 router.get('/editCategory/:id',verifyAdmin, getEditcategory)
 //post edit product

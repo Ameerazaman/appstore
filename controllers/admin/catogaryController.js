@@ -6,7 +6,7 @@ const category = require('../../models/admin/categorymodel')
 /*********************************************CATOGARY************************************* */
 //Get Catogary Page
 const getCategory = async (req, res) => {
-    const data = await category.find().lean();
+  const data = await category.find().lean();
     console.log(data);
     res.render('admin/category', { admin: true, data })
 }
@@ -18,7 +18,9 @@ const getAddcategory = async (req, res) => {
 const doAddcategory = async (req, res) => {
     console.log(req.body)
     const filepath = req.file.filename
-    let existcategory = await category.findOne({ category: req.body.category });
+    let existcategory =  await category.findOne({
+        category: { $regex: new RegExp(req.body.category, "i") },
+      });
     if (existcategory) {
         let message = "Catogary is already exist"
         res.render("admin/add-category", { message ,admin:true})
@@ -31,6 +33,37 @@ const doAddcategory = async (req, res) => {
     }
 
 }
+// Unlist Category
+
+const unlistCategory= async (req, res) => {
+    try {
+        console.log("unlist")
+      await category.findOneAndUpdate(
+        { _id: req.params.id },
+        { $set: { isUnlist: false } }
+      );
+      res.status(200).json({success: true})
+    } catch (error) {
+      console.error(error);
+    }
+  }
+
+
+//   list category
+
+
+  const listCategory= async (req, res) => {
+    try {
+        console.log("list")
+      await category.findOneAndUpdate(
+        { _id: req.params.id },
+        { $set: { isUnlist: true } }
+      );
+      res.status(200).json({success: true})
+    } catch (error) {
+      console.error(error);
+    }
+  }
 //Delete category//
 const deleteCategory = async (req, res) => {
     console.log("delete category")
@@ -38,8 +71,8 @@ const deleteCategory = async (req, res) => {
 
     //await deleteUser(id)
     await category.findByIdAndDelete({ _id: id })
-
-    res.redirect('/admin/category')
+    res.status(200).json({success: true})
+  
 }
 // Get edit data//
 const getEditcategory = async (req, res) => {
@@ -101,5 +134,5 @@ const postEditCategoryImg = async (req, res) => {
 
 module.exports = {
     getCategory, doAddcategory, deleteCategory, getEditcategory, postEditCategory, getAddcategory,
-    getEditCategoryImg, postEditCategoryImg
+    getEditCategoryImg, postEditCategoryImg,unlistCategory,listCategory
 }

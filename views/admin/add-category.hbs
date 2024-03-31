@@ -1,6 +1,3 @@
-
-
-
 <!DOCTYPE html>
 <html lang="en">
 
@@ -205,11 +202,13 @@
       background: #6a64f1;
       border-radius: 8px;
     }
-   img{
-    width: 100px;
-    height: 100px;
-    padding: 20px;
-   }
+
+    img {
+      width: 100px;
+      height: 100px;
+      padding: 20px;
+    }
+
     @media (min-width: 540px) {
       .sm\:w-half {
         width: 50%;
@@ -235,25 +234,26 @@
           <span class="text-danger" id="category-name-error">{{this.message}}</span>
           <input type="text" name="category" id="category" placeholder="Enter your Category NAme"
             class="formbold-form-input" />
-             <label style="color: #262728;">Offer</label>
-       
-          <input type="text" name="offer" id="offer" placeholder="offer of category"
-            class="formbold-form-input" />
+          <label style="color: #262728;">Offer</label>
+
+          <input type="number" name="offer" id="offer" placeholder="offer of category" class="formbold-form-input" />
           <label style="color: #262728;">Description</label>
           <span class="text-danger" id="description-name-error"></span>
           <input type="text" name="description" id="description" placeholder="description of category"
             class="formbold-form-input" />
-            <label for="">Image</label><br>
-        <input  type="file"  id="gallery-photo-add" name="image" >
-        
-      
-<img id='imagepreview1'>
+          <label for="">Image</label><br>
+          <span class="text-danger" id="image-name-error"></span>
+
+          <input type="file" id="gallery-photo-add" name="image" id="image">
+
+
+          <img id='imagepreview1'>
         </div>
         <button style="width: auto;" type="submit" class="btn btn-secondary">Submit</button>
-        </form>
+      </form>
 
-      </div>
     </div>
+  </div>
   </div>
 
   </div>
@@ -277,11 +277,25 @@
       document.getElementById("description-name-error").innerHTML = "This field is required"
       e.preventDefault()
     }
+    else if (/^\s|\s$/.test(description)) {
+      document.getElementById("description-name-error").innerHTML = "space are not allowed"
+      e.preventDefault()
+    }
 
     var category = document.getElementById("category").value
     document.getElementById("category-name-error").innerHTML;
     if (category === '') {
       document.getElementById("category-name-error").innerHTML = "This field is required"
+      e.preventDefault()
+    }
+     else if (/^\s|\s$/.test(category)) {
+      document.getElementById("category-name-error").innerHTML = "space are not allowed"
+      e.preventDefault()
+    }
+     var image = document.getElementById("image").value
+    document.getElementById("image-name-error").innerHTML;
+    if (image === '') {
+      document.getElementById("image-name-error").innerHTML = "This field is required"
       e.preventDefault()
     }
   })
@@ -291,27 +305,27 @@
 
 
 
-  $(document).ready(function(){
+  $(document).ready(function () {
 
-    function readURL(input) {        
-        if (input.files && input.files[0]) {
-            var reader = new FileReader();        
-            reader.onload = function (e) {
-                $('#imagepreview1').prop('src', e.target.result).show();
-            }        
-            reader.readAsDataURL(input.files[0]);
+    function readURL(input) {
+      if (input.files && input.files[0]) {
+        var reader = new FileReader();
+        reader.onload = function (e) {
+          $('#imagepreview1').prop('src', e.target.result).show();
         }
+        reader.readAsDataURL(input.files[0]);
+      }
     }
 
     $("#gallery-photo-add").change(function () {
-        readURL(this);
-        $('#imagepreview1').show();
+      readURL(this);
+      $('#imagepreview1').show();
     });
 
-    $('#imagepreview1').click(function(){        
-        $('#gallery-photo-add').replaceWith($('#gallery-photo-add').clone(true));
-        $('#imagepreview1').hide();        
+    $('#imagepreview1').click(function () {
+      $('#gallery-photo-add').replaceWith($('#gallery-photo-add').clone(true));
+      $('#imagepreview1').hide();
     });
 
-});
+  });
 </script>

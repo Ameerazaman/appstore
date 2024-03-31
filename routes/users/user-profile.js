@@ -1,7 +1,7 @@
 const express = require('express')
 const mongoose = require('mongoose');
-const { verifyUser } = require('../../middlewares/middleware');
-const { getProfile, postPersonalProfile, getAddressMgt, postAddressMgt, deleteAddressMgt, getEditAddressmgt, postEditAddressmgt, getOrder, getOrderDetail, changePassword, orderCancel, deleteProfile, walletPage, returnOrder, getOffer, CreateReferalCode, sendReferalCode, redeemOffer, deleteAddressManagement } = require('../../controllers/user/userprofileController');
+const { verifyUser, blockMiddleware } = require('../../middlewares/middleware');
+const { getProfile, postPersonalProfile, getAddressMgt, postAddressMgt, deleteAddressMgt, getEditAddressmgt, postEditAddressmgt, getOrder, getOrderDetail, changePassword, orderCancel, deleteProfile, walletPage, returnOrder, getOffer, CreateReferalCode, sendReferalCode, redeemOffer, deleteAddressManagement, orderReturn } = require('../../controllers/user/userprofileController');
 const router = express.Router()
 
 
@@ -9,51 +9,52 @@ const router = express.Router()
 // get profile page
 router.get("/",verifyUser,getProfile)
 // post create personal profile
-router.post("/personal-information",verifyUser,postPersonalProfile)
+router.post("/personal-information",verifyUser,blockMiddleware,postPersonalProfile)
 // change password
-router.post("/change-password/:id",verifyUser,changePassword)
+router.post("/change-password/:id",verifyUser,blockMiddleware,changePassword)
 // delete profile
-router.get("/delete/:id",verifyUser,deleteProfile)
+router.get("/delete/:id",verifyUser,blockMiddleware,deleteProfile)
 
 // **************************Address Mangement***********************
 
 
 // get address mangment page
-router.get("/address-mgt",verifyUser,getAddressMgt)
+router.get("/address-mgt",verifyUser,blockMiddleware,getAddressMgt)
 // post address management page
-router.post("/address-mgt",verifyUser,postAddressMgt)
+router.post("/address-mgt",verifyUser,blockMiddleware,postAddressMgt)
 // delete address from address mgt 
-router.get("/delete-address/:id",verifyUser,deleteAddressManagement)
+router.get("/delete-address/:id",verifyUser,blockMiddleware,deleteAddressManagement)
 // edit address from address mgt
-router.get("/edit/:id",verifyUser,getEditAddressmgt)
+router.get("/edit/:id",verifyUser,blockMiddleware,getEditAddressmgt)
 // post edit Address
-router.post("/edit-addressmgt/:id",verifyUser,postEditAddressmgt)
+router.post("/edit-addressmgt/:id",verifyUser,blockMiddleware,postEditAddressmgt)
 
 // ****************************Order***********************************
 
 // get Order page
-router.get("/order",verifyUser,getOrder)
+router.get("/order",verifyUser,blockMiddleware,getOrder)
 // get order deatil page
-router.get("/order-detail/:id",verifyUser,getOrderDetail)
+router.get("/order-detail/:id",verifyUser,blockMiddleware,getOrderDetail)
 // cancel Order
-router.get("/order-cancel/:id",verifyUser,orderCancel)
+router.get("/order-cancel/:id",verifyUser,blockMiddleware,orderCancel)
 // return Order
-//    
+router.get("/order-return/:id",verifyUser,blockMiddleware,orderReturn)
+  
 // router.get("/order-return/:id",verifyUser,returnOrder)
 // ************************************Wallet***************************
 
 // get wallet page
-router.get("/wallet",verifyUser,walletPage)
+router.get("/wallet",verifyUser,blockMiddleware,walletPage)
 
 //*************************************offer************************** */
 // get offer
-router.get("/offer",verifyUser,getOffer)
+router.get("/offer",verifyUser,blockMiddleware,getOffer)
 // create referal code
-router.get("/create-referalcode",verifyUser,CreateReferalCode)
+router.get("/create-referalcode",verifyUser,blockMiddleware,CreateReferalCode)
 // send referal offer
-router.post("/referal-offers",verifyUser,sendReferalCode)
+router.post("/referal-offers",verifyUser,blockMiddleware,sendReferalCode)
 // redeem offer
-router.get("/redeem/:id",verifyUser,redeemOffer)
+router.get("/redeem/:id",verifyUser,blockMiddleware,redeemOffer)
 
 
 module.exports = router;

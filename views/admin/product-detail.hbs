@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+{{!-- <!DOCTYPE html>
 <html lang="en">
 
 <head>
@@ -95,4 +95,82 @@
     </div> <!-- /container -->
 </body>
 
+</html> --}}
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <br><br><br><br><br>b
+     <div style="padding-top: 150px;" class="container table-responsive py-5">
+          <table class="table table-bordered table-hover">
+            <thead class="thead-dark">
+              <tr>
+                <th scope="col">No</th>
+                <th scope="col">Product</th>
+                <th scope="col">Image</th>
+                <th scope="col">Quantity</th>
+                <th scope="col">Category</th>
+                <th scope="col">Price</th>
+                <th scope="col">Offer</th>
+                <th scope="col">status</th>
+                <th scope="col">Stock left</th>
+                <th scope="col">Discount</th>
+                <th scope="col">Discription</th>
+                <th scope="col">Subimages</th>
+              </tr>
+            </thead>
+            <tbody id="productBody">
+           
+              
+                <tr>
+                  <th scope="row">1</th>
+                  <td>{{datas.product}}</td>
+                  <td><img style="height: 20px;width: 20px;" src="/images/{{datas.image}}" alt="">
+                  </td>
+                  <td>{{datas.quantity}}</td>
+                  <td>{{datas.category}}</td>
+
+                  <td>{{datas.price}}</td>
+                  <td>{{datas.offer}}</td> 
+                  <td>{{datas.status}}</td> 
+                  <td>{{datas.stockLeft}}</td>                   
+                  <td>{{datas.discount}}</td>                   
+                  <td>{{datas.description}}</td>                   
+                  <td style="display: flex;">
+                    <img style="height: 30px;width: 30px;" src="/images/{{datas.productImage1}}" alt="">
+                    <img style="height: 30px;width: 30px;" src="/images/{{datas.productImage2}}" alt="">
+                    <img style="height: 30px;width: 30px;" src="/images/{{datas.productImage3}}" alt="">
+                    <img style="height: 30px;width: 30px;" src="/images/{{datas.productImage4}}" alt="">
+                    
+                  </td>                   
+                 
+                  
+                </tr>
+              </a>
+
+             
+            </tbody>
+          </table>
+        </div>
+</body>
 </html>
+<script>
+    function displayPage(page) {
+      const startIndex = (page - 1) * productsPerPage;
+      const endIndex = startIndex + productsPerPage;
+
+      rows.forEach((row, index) => {
+        if (index >= startIndex && index < endIndex) {
+          row.style.display = 'table-row';
+        } else {
+          row.style.display = 'none';
+        }
+      });
+    }
+</script>

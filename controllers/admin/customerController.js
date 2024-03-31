@@ -16,46 +16,36 @@ const getCustomers= async (req, res) => {
   
   };
 //   block user//
-const blockCustomer= async (req, res) => {
-    var _id = req.params.id
-    console.log("block id")
-    console.log(_id)
-    try {
-      const user = await User.findById(_id);
-  
-      if (!user) {
-        console.log({ message: 'User not found.' });
-      }
-  
-      user.isBlocked = true;
-      await user.save();
-  
-      console.log("user is succefully blocked");
-      res.redirect("/admin/customers")
-    } catch (error) {
-      console.error("user already block");
-    }
-  }
-//  Unblock user//
+
 const unblockCustomers= async (req, res) => {
-    const _id = req.params.id;
-  
-    try {
-      const user = await User.findById(_id);
-  
-      if (!user) {
-        console.log({ message: 'User not found.' });
-      }
-      user.isBlocked = false;
-      await user.save();
-  
-      console.log({ message: 'User unblocked successfully.' });
-      res.redirect("/admin/customers")
-    } catch (error) {
-      console.error("user already unblocked");
-     
-    }
+  try {
+      console.log("unlist")
+    await User.findOneAndUpdate(
+      { _id: req.params.id },
+      { $set: { isBlocked: false } }
+    );
+    res.status(200).json({success: true})
+  } catch (error) {
+    console.error(error);
   }
+}
+
+
+//   list category
+
+
+const blockCustomer= async (req, res) => {
+  try {
+      console.log("list")
+    await User.findOneAndUpdate(
+      { _id: req.params.id },
+      { $set: { isBlocked: true } }
+    );
+    res.status(200).json({success: true})
+  } catch (error) {
+    console.error(error);
+  }
+}
   //search user//
   const searchCustomer= async (req, res) => {
 

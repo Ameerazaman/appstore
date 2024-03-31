@@ -37,6 +37,7 @@
             text-decoration: none;
         }
     </style>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 </head>
 
 <body>
@@ -60,19 +61,31 @@
                                 <div>
                                     <span class="me-3">{{date}}</span>
 
-                                    <span class="badge rounded-pill bg-info">{{status}}</span>
+                                    <span class="btn bg-info">{{status}}</span>
+
                                     {{#if cancel}}
-                                        
-                                            <span style="text-align: center;color: red;">{{this.cancel}}</p>
-                                        
-                                        {{else}}
-                                        <span>
-                                            <a href="/user-profile/order-cancel/{{id}}"><button style="background-color: rgb(197, 91, 53);"
-                                                    class="badge rounded-pill ">Cancel</button></a>
-                                            <p style="text-align: center;color: red;">{{this.message
-                                                }}</p>
-                                        </span>
-                                        {{/if}}
+                                    <span style="text-align: center;color: red;">{{this.cancel}}</span>
+                                    {{else}}
+                                    {{#if deliver}}
+                                    <span>
+                                        <button
+                                                style="background-color: rgb(197, 91, 53);"
+                                                class="btn" onclick="confirmReturn('{{id}}')">Return</button>
+                                    </span>
+                                    {{else}}
+                                    {{#if Return}}
+                                    <span style="text-align: center;color: red;">{{this.Return}}</span>
+                                    {{else}}
+                                    <span>
+                                        <button
+                                                  onclick="confirmCancel('{{id}}')" style="background-color: rgb(197, 91, 53);"
+                                                class="bt">Cancel</button>
+                                        <p style="text-align: center;color: red;">{{this.message }}</p>
+                                    </span>
+                                    {{/if}}
+                                    {{/if}}
+                                    {{/if}}
+
                                 </div>
                                 <div class="d-flex">
                                     <button class="btn btn-link p-0 me-3 d-none d-lg-block btn-icon-text"><i
@@ -99,12 +112,13 @@
                                         <td>
                                             <div class="d-flex mb-2">
                                                 <div class="flex-shrink-0">
-                                                    <img src="/images/{{this.product.image}}"
-                                                        alt="" width="35" class="img-fluid">
+                                                    <img src="/images/{{this.product.productImage1}}" alt="" width="35"
+                                                        class="img-fluid">
                                                 </div>
                                                 <div class="flex-lg-grow-1 ms-3">
-                                                    <h3 class="small mb-0"><a href="#" class="text-reset">{{this.product.product}}</a></h3>
-                                                  
+                                                    <h3 class="small mb-0"><a href="#"
+                                                            class="text-reset">{{this.product.product}}</a></h3>
+
                                                 </div>
                                             </div>
                                         </td>
@@ -113,7 +127,7 @@
                                     </tr>
                                     {{/each}}
                                     {{/each}}
-                                   
+
                                 </tbody>
                                 <tfoot>
                                     <tr>
@@ -191,3 +205,42 @@
 </body>
 
 </html>
+
+        
+        <script>
+  function confirmReturn(id) {
+    Swal.fire({
+        title: 'Are you sure?',
+        text: "Once returned, the product will be removed from your order history!",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Yes, return it!'
+    }).then((result) => {
+        if (result.isConfirmed) {
+            // Redirect to return page
+            window.location.href = "/user-profile/order-return/" + id;
+        }
+    });
+}
+
+
+    function confirmCancel(id) {
+    Swal.fire({
+        title: 'Are you sure?',
+        text: "This action cannot be undone!",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Yes, cancel it!'
+    }).then((result) => {
+        if (result.isConfirmed) {
+            // Redirect to cancel page
+            window.location.href = "/user-profile/order-cancel/" + id;
+        }
+    });
+}
+
+    </script>

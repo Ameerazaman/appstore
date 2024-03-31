@@ -258,11 +258,11 @@
         {{#if check}}
         <div class="message">
 
-            <a href="/user">
-                <div>Login</div>
+            <a style="color: #333;text-decoration: none;font-weight:bold;" href="/user">
+                <i class="fa fa-sign-in" aria-hidden="true"></i> Login
             </a>
-            <a href="/user/signup">
-                <div>Signup</div>
+            <a style="color: #333;text-decoration: none;font-weight: bold;" href="/user/signup">
+              <i class="fa fa-user-plus" aria-hidden="true"></i> Signup
             </a>
 
         </div>
@@ -275,12 +275,12 @@
             </a>
             <a class="nav-link" href="/cart/cartpage">
 
-                <i style="color: black;" class="fa badge fa-lg" value=8>&#xf07a;</i>
+              <i class="fa fa-shopping-cart"></i>({{this.cartcount}})
 
 
             </a>
             <a class="nav-link" href="/wishlist">
-                <i class="fa fa-heart"></i> (0)
+                <i class="fa fa-heart"></i> 
             </a>
             <div class="dropdown">
                 <button class="dropbtn"><i class="fa fa-user">Account</i></button>
@@ -290,10 +290,10 @@
                         <i class="fa fa-user"></i> Profile
                     </a>
                     <a class="nav-link" href="/cart/cartpage">
-                        <i class="fa fa-shopping-cart"></i> Cart (0)
+                        <i class="fa fa-shopping-cart"></i> Cart
                     </a>
                     <a class="nav-link" href="/wishlist">
-                        <i class="fa fa-heart"></i> Wishlist (0)
+                        <i class="fa fa-heart"></i> Wishlist
                     </a>
                     <a class="nav-link" href="/user-profile/order">
                         <i class="fas fa-list-ul"></i> Order

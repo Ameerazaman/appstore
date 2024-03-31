@@ -36,7 +36,8 @@ app.use(bodyParser.urlencoded({ extended: false }))
 app.use(bodyParser.json())
 const cookieParser = require("cookie-parser");
 const session = require('express-session');
-const products = require('./models/admin/productModel')
+const products = require('./models/admin/productModel');
+const category = require('./models/admin/categorymodel');
 app.use(cookieParser());
 app.set('views', path.join(__dirname, 'views'));
 app.engine('hbs', hbs({ extname: 'hbs', defaultLayout: 'layout', layoutsDir: __dirname + '/views/layout/', partialsDir: __dirname + '/views/partials/' }))
@@ -65,8 +66,11 @@ app.use(session({
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.get('/', async (req, res) => {
-  const check = await products.find().lean()
-  res.render('users/landing-page', { check })
+  const check = await products.find().lean().limit(4)
+ 
+  const newdata=await products.find().limit(4).sort({_id:-1}).lean()
+  const categorydata = await category.find({ isUnlist: { $ne: true } }).lean()
+  res.render('users/landing-page', { check,categorydata,newdata })
 })
 // Admiin side
 

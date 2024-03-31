@@ -1094,7 +1094,7 @@
                     <img style="padding: 70px;" src="/images/{{this.image}}" alt="img" />
                     <div class="img-content">
                         <p>{{this.category}}</p>
-                        <button><a href="#sellers">SHOP NOW</a></button>
+                        <button><a href="/user/category/{{this.category}}">SHOP NOW</a></button>
                     </div>
                 </div>
                 {{/each}}
@@ -1108,7 +1108,7 @@
                     {{#each productdata}}
                     <div class="best-p1">
 
-                        <img style="background-color:rgb(204, 200, 200);" src="/images/{{this.image}}" alt="img">
+                        <img style="background-color:rgb(204, 200, 200);" src="/images/{{this.productImage1}}" alt="img">
                         <div class="best-p1-txt">
                             <div class="name-of-p">
                                 <p>{{this.product}}</p>
@@ -1147,7 +1147,7 @@
                 <div class="best-seller">
                     {{#each newdata}}
                     <div class="best-p1">
-                        <img src="/images/{{this.image}}" alt="img">
+                        <img src="/images/{{this.productImage1}}" alt="img">
                         <div class="best-p1-txt">
                             <div class="name-of-p">
                                 <p>{{this.product}}</p>

@@ -117,25 +117,37 @@ const checkoutPage = async (req, res) => {
         ]);
         // Calculate total price of all products in the cart
         // Const totalPrice = data.reduce((total, product) => total + product.subtotal, 0);
-   
+
         const usersId = req.session.user._id
-        const resultadd = await address.find({userId:userId}).lean()
+        const resultadd = await address.find({ userId: userId }).lean()
         const userdata = await User.findOne({ _id: usersId }).lean()
 
-        const totalPrice = req.session.totalAmount
+        const totalPrice = req.session.totalAmt
         req.session.userdata = userdata
         req.session.resultadd = resultadd
+        const shippingCharge = req.session.ship
+        console.log("ship", shippingCharge)
+        const coupondata = await Coupon.find({ users: { $ne: userId } }).lean();
+        if (coupondata.length == 0) {
 
-        if (totalPrice) {
-            req.session.totalAmount = totalPrice
-            res.render("users/checkout", { admin: false, data, result, resultadd, userdata, totalPrice })
         }
-        else {
-            const totalPrice = result[0].totalPriceAfterDiscount
-            req.session.totalAmount = totalPrice
-            res.render("users/checkout", { admin: false, data, result, resultadd, userdata, totalPrice })
-        }
+        for (let i = 0; i < data.length; i++) {
+            console.log(data[i].quantity, data[i].product.quantity, "quantity")
+            if (data[i].quantity > data[i].product.quantity) {
+                const Outofstock = "One product is out of stock"
+                const totalPrice = req.session.totalAmt
+                res.render("users/cart", { Outofstock, data, result, totalPrice, resultadd, userdata })
+            }
+            else {
+                if (req.session.categoryDiscount) {
+                    const categoryDiscount = req.session.categoryDiscount
+                    res.render("users/checkout", { admin: false, shippingCharge, coupondata, categoryDiscount, data, result, resultadd, userdata, totalPrice })
+                }
+                res.render("users/checkout", { admin: false, shippingCharge, coupondata, data, result, resultadd, userdata, totalPrice })
+            }
 
+
+        }
     }
     catch (error) {
         console.log("Error in checkOut page")
@@ -206,23 +218,22 @@ const selectAddress = async (req, res) => {
         // Now you can use the selectedAddress value as needed
         const data = await address.findOne({ _id: selectedAddress }).lean()
         const existData = await deliveryAddress.findOne().lean()
-        
-        if(existData){
+
+        if (existData) {
             const result = await deliveryAddress.findOneAndUpdate({ _id: existData._id }, {
                 fullname: data.fullname, address: data.address,
                 city: data.city, state: data.state,
-                postalcode: data.postalcode, payment: data.payment,userId:userId
-            }) 
+                postalcode: data.postalcode, payment: data.payment, userId: userId
+            })
         }
-        else{
+        else {
             const result = await deliveryAddress.create({
                 fullname: data.fullname, address: data.address,
                 city: data.city, state: data.state,
-                postalcode: data.postalcode, payment: data.payment,userId:userId,
-                phone:data.phone,email:data.email
-            }) 
+                postalcode: data.postalcode, payment: data.payment, userId: userId,
+                phone: data.phone, email: data.email
+            })
         }
-       
         res.redirect("/checkout")
     }
     catch (error) {
@@ -232,16 +243,25 @@ const selectAddress = async (req, res) => {
 // save address
 const postAddress = async (req, res) => {
     try {
-        const checkdata = req.body
+        console.log(req.body)
         const userId = req.session.user._id
-        console.log("userid address",userId)
-        const check = await address.findOne({ checkdata })
+        console.log("userid address", userId)
+        const check = await address.findOne({ fullname: req.body.fullname, address: req.body.address, email: req.body.email })
         if (check) {
             const message = "Address already exist."
-            res.render("users/checkout", { message })
+            const totalPrice = req.session.totalAmount
+            const resultadd = await address.find({ userId: userId }).lean()
+            const userdata = await User.findOne({ _id: userId }).lean()
+            const data = req.session.data
+            const result = req.session.result
+            console.log(data, result, "post address")
+            res.render("users/checkout", { admin: false, data, message, result, resultadd, userdata, totalPrice })
+
+
         }
         else {
-            const data = await address.create({userId:userId,
+            const data = await address.create({
+                userId: userId,
                 fullname: req.body.fullname, address: req.body.address, postalcode: req.body.postalcode,
                 city: req.body.city, payment: req.body.paymentMethod, state: req.body.state, phone: req.body.phone,
                 email: req.body.email,
@@ -250,7 +270,6 @@ const postAddress = async (req, res) => {
             res.redirect("/checkout")
         }
     }
-
     catch (error) {
         console.log("error in post address route in checkoutcontroller")
     }
@@ -271,7 +290,51 @@ const postPayment = async (req, res) => {
         console.log("Error in save payment address in checkout controller")
     }
 }
+// selsect coupon
+const selectCoupon = async (req, res) => {
+    try {
+        const id = req.params.id;
+        const userId = req.session.user._id;
 
+        // Fetch necessary data concurrently
+        const [coupondata, resultadd, userdata] = await Promise.all([
+            Coupon.findOne({ _id: id }),
+            address.find({ userId }).lean(),
+            User.findOne({ _id: userId }).lean()
+        ]);
+
+        if (coupondata) {
+            const total = req.session.result[0].totalPriceAfterDiscount;
+            const multipledData = total * coupondata.discount;
+            const couponDiscount = multipledData / 100;
+            const totalPrice = total - couponDiscount;
+
+            // Update session data
+            req.session.couponId = coupondata._id;
+            req.session.totalAmt = totalPrice;
+            req.session.couponDiscount = couponDiscount;
+
+            console.log("select coupon");
+            console.log("fast");
+            const couponMessage = "Only one coupon is used at one time"
+
+            // Render the view with optimized data
+            res.render("users/checkout", {
+                couponDiscount,
+                shippingCharge: req.session.ship,
+                data: req.session.data,
+                result: req.session.result,
+                resultadd,
+                userdata,
+                categoryDiscount: req.session.categoryDiscount,
+                totalPrice, couponMessage
+            });
+        }
+    } catch (error) {
+        console.error("Error in select coupon route in cart controller:", error);
+        res.status(500).send("Internal Server Error");
+    }
+};
 
 // order is successfull
 
@@ -281,293 +344,278 @@ const successOrder = async (req, res) => {
         const userId = req.session.user._id
         const productId = req.session.productId
         // referal offer
+        console.log(req.body.payment)
+        req.session.payment = req.body.payment
+        const data = req.session.data
+        const result = req.session.result
+        const usersId = req.session.user._id
+        const totalPrice = req.session.totalAmt
+        const resultadd = await address.find({ userId: userId }).lean()
+        const userdata = await User.findOne({ _id: usersId }).lean()
+        if (req.body.payment) {
+            for (let i = 0; i < data.length; i++) {
 
-        const data = await cart.aggregate([
-            { $match: { userId: userId } },
-            { $unwind: "$products" },
-            {
-                $project: {
-                    proId: "$products.proId",
-                    quantity: "$products.quantity",
+                if (data[i].quantity > data[i].product.quantity) {
+                    const Outofstock = "One product is out of stock"
+
+
+
+                    res.render("users/checkout", {
+                        admin: false, Outofstock, data, result, resultadd, userdata, totalPrice
+                    })
                 }
-            },
-            {
-                $lookup: {
-                    from: "products",
-                    let: { proId: { $toObjectId: "$proId" } },
-                    pipeline: [
-                        { $match: { $expr: { $eq: ["$_id", "$$proId"] } } }
-                    ],
-                    as: "productDetails"
-                }
-            },
-            {
-                $project: {
-                    proId: "$proId",
-                    quantity: "$quantity",
-                    product: { $arrayElemAt: ["$productDetails", 0] },
-                },
-            },
-            {
-                $project: {
-                    proId: 1,
-                    quantity: 1,
-                    image: 1,
-                    product: 1,
-                    subtotal: { $multiply: ["$quantity", "$product.price"] },
-                    discountProduct: { $multiply: ["$quantity", "$product.discount"] },
+                else {
+                    const DeliveryAd = await deliveryAddress.findOne().lean()
+                    const total = result[0]
 
-                },
-            }
-        ]);
-        const result = await cart.aggregate([
-            { $match: { userId: userId } },
-            { $unwind: "$products" },
-            {
-                $project: {
-                    proId: "$products.proId",
-                    quantity: "$products.quantity",
-                }
-            },
-            {
-                $lookup: {
-                    from: "products",
-                    let: { proId: { $toObjectId: "$proId" } },
-                    pipeline: [
-                        { $match: { $expr: { $eq: ["$_id", "$$proId"] } } }
-                    ],
-                    as: "productDetails"
-                }
-            },
-            {
-                $project: {
-                    proId: "$proId",
-                    quantity: "$quantity",
-                    product: { $arrayElemAt: ["$productDetails", 0] },
-                },
-            },
-            {
-                $project: {
-                    proId: "$product.proId",
-                    quantity: 1,
-                    image: "$product.image",
-                    product: "$product.product",
-                    subtotal: { $multiply: ["$quantity", "$product.price"] },
-                    discountProduct: { $multiply: ["$quantity", "$product.discount"] },
+                    if (req.body.payment == "cash-on-delivery") {
+                        if (req.session.couponId) {
+                            const couponData = await Coupon.findOne({ _id: req.session.couponId })
+                            console.log("coupondata", couponData)
+                            if (couponData) {
+                                const updateData = await Coupon.findByIdAndUpdate(
+                                    { _id: req.session.couponId },
+                                    { $push: { users: userId } },
+                                    { new: true } // To return the updated document
+                                )
+                                const saveOrder = await Order.create(
+                                    {
+                                        userId: userId,
+                                        address: DeliveryAd,
+                                        payment: req.body.payment,
+                                        products: data,
+                                        total: total.totalPrice,
+                                        discount: total.totalDiscount,
+                                        totalPrice: total.totalPriceAfterDiscount,
+                                        coupondiscount: req.session.couponDiscount
+                                    })
+                                console.log(saveOrder, "saveOrder")
+                                const orderdata = await Order.find().sort({ _id: -1 }).lean()
+                                var orderProduct = orderdata[0].products
 
-                },
-            },
-            {
-                $group: {
-                    _id: null,
-                    totalPrice: { $sum: "$subtotal" },
-                    totalDiscount: { $sum: "$discountProduct" }
-                }
-            },
-            {
-                $project: {
-                    totalPrice: 1,
-                    totalDiscount: 1,
-                    totalPriceAfterDiscount: { $subtract: ["$totalPrice", "$totalDiscount"] }
-                }
-            }
-        ]);
-        const DeliveryAd = await deliveryAddress.findOne().lean()
-        const total = result[0]
-        const saveOrder = await Order.create(
-            {
-                userId: userId,
-                address: DeliveryAd,
-                payment: DeliveryAd.payment,
-                products: data,
-                total: total.totalPrice,
-                discount: total.totalDiscount,
-                totalPrice: total.totalPriceAfterDiscount,
-                coupondiscount:req.session.referalofferdata
-            })
-        const orderdata = await Order.find().sort({ _id: -1 }).lean()
-        var orderProduct = orderdata[0].products
+                                for (let i = 0; i < orderProduct.length; i++) {
 
-        for (let i = 0; i < orderProduct.length; i++) {
+                                    var productdata = await products.findById({ _id: orderProduct[i].product._id })
+                                    if (productdata) {
+                                        var newProduct = await products.findOneAndUpdate(
+                                            { _id: orderProduct[i].product._id },
+                                            { $inc: { quantity: -orderProduct[i].quantity } }
+                                        );
+                                    }
+                                }
 
-            var productdata = await products.findById({ _id: orderProduct[i].product._id })
-            if (productdata) {
-                var newProduct = await products.findOneAndUpdate(
-                    { _id: orderProduct[i].product._id },
-                    { $inc: { quantity: -orderProduct[i].quantity } }
-                );
+                                if (req.session.referalofferdata) {
 
-                await products.findByIdAndUpdate(
-                    orderProduct[i].product._id,
-                    { $inc: { stockLeft: orderProduct[i].quantity } }
-                );
-            }
-        }
+                                    const amount = req.session.referalofferdata
 
-        const totalprice = total.totalPriceAfterDiscount
+                                    const referalData = {
+                                        userId: userId,
+                                        orderId: saveOrder._id,
+                                        amount: amount,
+                                        status: "pending"
+                                    }
+                                    console.log("referaldata", referalData)
+                                    const newreferdata = await referoffer.create(referalData)
 
-        if (saveOrder.payment == "cash-on-delivery") {
 
-            if (req.session.referalofferdata) {
-               
-                const amount=req.session.referalofferdata
-               
-                const referalData = {
-                    userId: userId,
-                    orderId: saveOrder._id,
-                    amount: amount,
-                    status:"pending"
-                }
-             console.log("referaldata",referalData)
-                const newreferdata = await referoffer.create(referalData)
-                
-               
-            }
-            else {
-                console.log("not use referal code")
-            }
+                                }
+                                else {
+                                    console.log("not use referal code")
+                                }
 
-            if(req.session.couponId){
-                const updateData = await Coupon.findByIdAndUpdate(
-                    { _id: req.session.couponId },
-                    { $push: { users: userId } },
-                    { new: true } // To return the updated document
-                )
-            }
-           
-           
-            await cart.deleteMany({ userId: userId })
-            res.render("users/success")
-
-        }
-
-        // online Paymenet
-        else if (saveOrder.payment == "online-payment") {
-
-            const createRazorpayOrder = async (totalAmountInPaisa) => {
-                try {
-                    const razorpayOrder = await raz.orders.create({
-                        amount: totalAmountInPaisa*100, // Amount in paisa
-                        currency: 'INR',
-                        receipt: 'order_receipt_123',
-                    });
-
-                    req.session.razorid = razorpayOrder.id;
-                    req.session.razorpayOrder = razorpayOrder;
-
-                    return razorpayOrder; // Return the created order object
-                } catch (error) {
-                    console.error('Error creating Razorpay order:', error);
-                    throw error; // Throw the error for handling
-                }
-            }
-            // req.session.razorid = razorpayOrder.id;
-            const totalAmount = totalprice; // Example: ₹500.00 (amount in paisa)
-            createRazorpayOrder(totalAmount)
-                .then(async (razorpayOrder) => {
-                    // Handle successful order creation
-                    const totalPrice = req.session.totalAmount
-                    // referal offer
-                    
-                    if (req.session.referalofferdata) {
-                        
-                        const amount=req.session.referalofferdata
-                        
-                        const referalData = {
-                            userId: userId,
-                            orderId: saveOrder._id,
-                            amount: amount,
-                            status:"pending"
+                                await cart.deleteMany({ userId: userId })
+                                res.render("users/success")
+                            }
+                            else {
+                                const invalidCoupon = "Coupon is Inavlid"
+                                res.render("users/checkout", { data, shippingCharge: req.session.ship, couponDiscount: req.session.couponDiscount, result, resultadd, userdata, totalPrice, invalidCoupon })
+                            }
                         }
-                      
-                        const newreferdata = await referoffer.create(referalData)
-                      
-                       
-                    }
-                    else {
-                        console.log("not use referal code")
-                    }
-                    // coupon saved
-                    if(req.session.couponId){
-                        const updateData = await Coupon.findByIdAndUpdate(
-                            { _id: req.session.couponId },
-                            { $push: { users: userId } },
-                            { new: true } // To return the updated document
-                        )
-                    }
-                   console.log("data")
-                    if (totalPrice) {
 
-                        res.render("users/razorpay", { DeliveryAd, data, result, razorpayOrder, keyId: process.env.RAZORPAY_KEY_ID, totalPrice })
-                    }
-                    else {
-                        const totalPrice = result.totalPriceAfterDiscount
 
-                        res.render("users/razorpay", { DeliveryAd, data, result, razorpayOrder, keyId: process.env.RAZORPAY_KEY_ID, totalPrice })
+
                     }
 
-                })
-                .catch((error) => {
-                    // Handle error
-                    console.error('Failed to create Razorpay order:', error);
-                });
+                    // online Paymenet
+                    else if (req.body.payment == "online-payment") {
+                        if (req.session.couponId) {
+                            const couponData = await Coupon.findOne({ _id: req.session.couponId })
+                            console.log("coupondata", couponData)
+                            if (couponData) {
+                                const updateData = await Coupon.findByIdAndUpdate(
+                                    { _id: req.session.couponId },
+                                    { $push: { users: userId } },
+                                    { new: true } // To return the updated document
+                                )
+                                const createRazorpayOrder = async (totalAmountInPaisa) => {
+                                    try {
+                                        const razorpayOrder = await raz.orders.create({
+                                            amount: totalAmountInPaisa * 100, // Amount in paisa
+                                            currency: 'INR',
+                                            receipt: 'order_receipt_123',
+                                        });
 
-        }
-        else if (saveOrder.payment == "wallet") {
+                                        req.session.razorid = razorpayOrder.id;
+                                        req.session.razorpayOrder = razorpayOrder;
 
-            const totalPrice = req.session.totalAmount
-            const id = saveOrder._id
-            const checkWallet = await wallet.find({ userId: userId })
-           
-            
-            const Amount = checkWallet[0].totalPrice - totalPrice
-            
-            
-            const walletData = {
-                userId: userId,
-                orderId: id,
-                totalPrice: totalprice,
-                transactiontype: "Debit",
-                reasontype: "Purchase",
-                price: Amount
-            }
-         
-            
-            const newdata = await wallet.create(walletData)
-           
-            
-            // coupon
-            if(req.session.couponId){
-                const updateData = await Coupon.findByIdAndUpdate(
-                    { _id: req.session.couponId },
-                    { $push: { users: userId } },
-                    { new: true } // To return the updated document
-                )
-            }
-            // referal offer
-            if (req.session.referalofferdata) {
-              
-                
-                const amount=req.session.referalofferdata
-                
-                
-                const referalData = {
-                    userId: userId,
-                    orderId: saveOrder._id,
-                    amount: amount,
-                    status:"pending"
-               
+                                        return razorpayOrder; // Return the created order object
+                                    } catch (error) {
+                                        console.error('Error creating Razorpay order:', error);
+                                        throw error; // Throw the error for handling
+                                    }
+                                }
+                                // req.session.razorid = razorpayOrder.id;
+                                var totalAmount = req.session.totalAmt
+                                console.log("totalAmoung", totalAmount)
+                                // Example: ₹500.00 (amount in paisa)
+
+                                createRazorpayOrder(totalAmount)
+                                    .then(async (razorpayOrder) => {
+                                        // Handle successful order creation
+                                        var totalPrice = req.session.totalAmt
+                                        // referal offer
+                                        console.log("online payment")
+                                        if (req.session.referalofferdata) {
+
+                                            const amount = req.session.referalofferdata
+
+                                            const referalData = {
+                                                userId: userId,
+                                                orderId: saveOrder._id,
+                                                amount: amount,
+                                                status: "pending"
+                                            }
+
+                                            const newreferdata = await referoffer.create(referalData)
+
+
+                                        }
+                                        else {
+                                            console.log("not use referal code")
+                                        }
+                                        // coupon saved
+                                        if (req.session.couponId) {
+                                            const updateData = await Coupon.findByIdAndUpdate(
+                                                { _id: req.session.couponId },
+                                                { $push: { users: userId } },
+                                                { new: true } // To return the updated document
+                                            )
+                                        }
+
+
+                                        res.render("users/razorpay", { DeliveryAd, data, result, razorpayOrder, keyId: process.env.RAZORPAY_KEY_ID, totalPrice })
+
+
+                                    })
+                            }
+
+                            else {
+                                const invalidCoupon = "Coupon is Inavlid"
+                                res.render("users/checkout", { data, shippingCharge: req.session.ship, couponDiscount: req.session.couponDiscount, result, resultadd, userdata, totalPrice, invalidCoupon })
+                            }
+                        }
+
+                    }
+                    else if (req.body.payment == "wallet") {
+                        console.log(req.session.couponId, "couponId")
+                        if (req.session.couponId) {
+                            const couponData = await Coupon.findOne({ _id: req.session.couponId })
+                            console.log("coupondata", couponData)
+                            if (couponData) {
+                                const updateData = await Coupon.findByIdAndUpdate(
+                                    { _id: req.session.couponId },
+                                    { $push: { users: userId } },
+                                    { new: true } // To return the updated document
+                                )
+                                const saveOrder = await Order.create(
+                                    {
+                                        userId: userId,
+                                        address: DeliveryAd,
+                                        payment: req.body.payment,
+                                        products: data,
+                                        total: total.totalPrice,
+                                        discount: total.totalDiscount,
+                                        totalPrice: total.totalPriceAfterDiscount,
+                                        coupondiscount: req.session.couponDiscount
+                                    })
+                                console.log(saveOrder, "saveOrder")
+                                const orderdata = await Order.find().sort({ _id: -1 }).lean()
+                                var orderProduct = orderdata[0].products
+
+                                for (let i = 0; i < orderProduct.length; i++) {
+
+                                    var productdata = await products.findById({ _id: orderProduct[i].product._id })
+                                    if (productdata) {
+                                        var newProduct = await products.findOneAndUpdate(
+                                            { _id: orderProduct[i].product._id },
+                                            { $inc: { quantity: -orderProduct[i].quantity } }
+                                        );
+                                    }
+                                }
+                                const totalPrice = req.session.totalAmt
+                                const id = saveOrder._id
+                                const checkWallet = await wallet.find({ userId: userId })
+
+
+                                const Amount = checkWallet[0].totalPrice - totalPrice
+
+
+                                const walletData = {
+                                    userId: userId,
+                                    orderId: id,
+                                    totalPrice: totalPrice,
+                                    transactiontype: "Debit",
+                                    reasontype: "Purchase",
+                                    price: req.session.totalAmt
+                                }
+
+
+                                const newdata = await wallet.create(walletData)
+                                console.log("wallet")
+
+                                // coupon
+
+                                // referal offer
+                                if (req.session.referalofferdata) {
+
+
+                                    const amount = req.session.referalofferdata
+
+
+                                    const referalData = {
+                                        userId: userId,
+                                        orderId: saveOrder._id,
+                                        amount: amount,
+                                        status: "pending"
+
+                                    }
+                                    const newreferdata = await referoffer.create(referalData)
+
+
+                                }
+
+                                console.log("not use referal code")
+                                await cart.deleteMany({ userId: userId })
+                                res.render("users/success")
+
+                            }
+                            else {
+                                const invalidCoupon = "Coupon is Inavlid"
+                                res.render("users/checkout", { data, shippingCharge: req.session.ship, couponDiscount: req.session.couponDiscount, result, resultadd, userdata, totalPrice, invalidCoupon })
+                            }
+                        }
+
+
+
+                    }
                 }
-                const newreferdata = await referoffer.create(referalData)
-              
-               
             }
-            else {
-                console.log("not use referal code")
-            }
-            await cart.deleteMany({ userId: userId })
-            res.render("users/success")
-
+        }
+        else {
+            const resultadd = await address.find({ userId: userId }).lean()
+            const userdata = await User.findOne({ _id: usersId }).lean()
+            const paymentMesage = "please select payment method"
+            res.render("users/checkout", { paymentMesage, resultadd, userdata, data, result })
         }
     }
     catch (error) {
@@ -587,7 +635,37 @@ const razorpayChecking = async (req, res) => {
 
         if (hmac == req.body.razorpay_signature) {
             const userId = req.session.user._id
+            const data = req.session.data
+            const result = req.session.result
+            const DeliveryAd = await deliveryAddress.findOne().lean()
+            const total = result[0]
             await cart.deleteMany({ userId: userId })
+            const saveOrder = await Order.create(
+                {
+                    userId: userId,
+                    address: DeliveryAd,
+                    payment: req.session.payment,
+                    products: data,
+                    total: total.totalPrice,
+                    discount: total.totalDiscount,
+                    totalPrice: total.totalPriceAfterDiscount,
+                    coupondiscount: req.session.couponDiscount
+                })
+            console.log(saveOrder, "saveOrder")
+            const orderdata = await Order.find().sort({ _id: -1 }).lean()
+            var orderProduct = orderdata[0].products
+
+            for (let i = 0; i < orderProduct.length; i++) {
+
+                var productdata = await products.findById({ _id: orderProduct[i].product._id })
+                if (productdata) {
+                    var newProduct = await products.findOneAndUpdate(
+                        { _id: orderProduct[i].product._id },
+                        { $inc: { quantity: -orderProduct[i].quantity } }
+                    );
+                }
+            }
+
             res.render("users/success")
         }
         else {
@@ -694,6 +772,6 @@ module.exports = {
     successOrder, selectAddress,
     deleteAddress, getEditAddress,
     postEditAddress, postPayment,
-    razorpayChecking, referalOffer
+    razorpayChecking, referalOffer, selectCoupon
 }
 

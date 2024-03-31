@@ -11,47 +11,42 @@
 
 <body>
     <form action="/user/signup" method="post" id="signup-form">
-        <div style="height: auto;" class="container">
+        <div style="height: auto;padding-top: 100px;" class="container">
             <div class="left-section"></div>
             <div class="right-section">
                 <div class="login-container">
                     <form class="login-form">
                         <h2 class="login-title"><i class="fas fa-user-circle"></i>Sign Up</h2>
 
-                        
-                        
-                        <div class="form-control">
+
+
+                        <div style="border: none;" class="form-control">
                             <i class="fas fa-user icon"></i>
                             <input type="text" placeholder="Username" id="username" name="username">
                         </div>
                         <p style="color: red; font-size: small;">{{this.message}}</p>
                         <span style="color: red;" id="username-error"></span>
-                        <div class="form-control">
-                            <i class="fas fa-user icon"></i>
+                        <div style="border: none;" class="form-control">
+                            <i class="fa fa-envelope"></i>
                             <input type="email" placeholder="email" id="email" name="email">
                         </div>
-                     <span style="color: red;" id="email-error"></span>
-                        <div class="form-control">
-                            <i class="fas fa-user icon"></i>
+                        <span style="color: red;" id="email-error"></span>
+                        <div style="border: none;" class="form-control">
+                            <i class="fa fa-phone"></i>
                             <input type="number" placeholder="Phone Number" id="mobile-number" name="mobile">
                         </div>
-                            <span style="color: red;" id="mobile-error"></span>
-                        <div class="form-control">
+                        <span style="color: red;" id="mobile-error"></span>
+                        <div style="border: none;" class="form-control">
                             <i class="fas fa-lock icon"></i>
                             <input type="password" placeholder="Password" id="password" name="password">
                         </div>
-                       <span style="color: red;" id="password-error"></span>
-                        <div class="form-control">
-                            <i class="fas fa-lock icon"></i>
+                        <span style="color: red;" id="password-error"></span>
+                        <div style="border: none;" class="form-control">
+                            <i class="fa fa-check-circle"></i>
                             <input type="password" placeholder="Confirm Password" id="confirm-password" name="confirm">
                         </div>
-                         <span style="color: red;" id="confirm-password-error"></span>
-                        <div class="remember-me">
-                            <input type="checkbox" id="rememberMe" class="checkbox-input">
-                            <span class="checkbox-custom"></span>
-                            <label for="rememberMe">I agree to terms and conditions </label>
+                        <span style="color: red;" id="confirm-password-error"></span>
 
-                        </div>
                         <button type="submit">Sign Up</button>
                         <br>
                     </form>
@@ -59,6 +54,7 @@
             </div>
         </div>
     </form>
+    <br><br>
 </body>
 
 </html>
@@ -74,12 +70,15 @@
             document.getElementById("username-error").innerHTML = 'This field is required'
             e.preventDefault()
         }
-      
+        else if (/^\s|\s$/.test(username)) {
+            document.getElementById("username-error").innerHTML = 'Space are not allwed in begining and ending'
+            e.preventDefault()
+        }
         else if (!/^[a-zA-Z0-9]+$/.test(username)) {
             document.getElementById('username-error').innerText = 'Username must contain only letters and numbers';
             e.preventDefault()
         }
-     
+
 
 
         var email = document.getElementById("email").value
@@ -103,7 +102,7 @@
             document.getElementById('password-error').innerText = 'Password cannot contain spaces';
             e.preventDefault()
         }
-        
+
 
         var mobile = document.getElementById("mobile-number").value
         document.getElementById("mobile-error").innerHTML;
@@ -115,12 +114,12 @@
             document.getElementById('mobile-error').innerText = 'Mobile number cannot contain spaces';
             e.preventDefault()
         }
-        
-         else if (mobile.length !== 10) {
+
+        else if (mobile.length !== 10) {
             document.getElementById('mobile-error').innerText = 'Mobile number contain 10 digits';
             e.preventDefault()
         }
-        
+
 
         var confirm = document.getElementById("confirm-password").value
         document.getElementById("confirm-password-error").innerHTML;
@@ -131,6 +130,10 @@
         else if (password != confirm) {
             document.getElementById('confirm-password-error').innerText = 'Password is not match';
             e.preventDefault()
-        } 
+        }
+        else if (/\s/.test(confirm)) {
+            document.getElementById('confirm-password-error').innerText = 'Mobile number cannot contain spaces';
+            e.preventDefault()
+        }
     })
 </script>

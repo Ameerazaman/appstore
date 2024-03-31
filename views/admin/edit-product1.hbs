@@ -1,0 +1,712 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+    }
+
+    label {
+      font-size: large;
+      color: #262728;
+      padding-top: 20px;
+      padding-bottom: 5px;
+
+    }
+
+    .formbold-mb-5 {
+      margin-bottom: 20px;
+    }
+
+    .formbold-pt-3 {
+      padding-top: 12px;
+    }
+
+    .formbold-main-wrapper {
+      padding: 48px;
+    }
+
+    .formbold-form-wrapper {
+      margin: 0 auto;
+      max-width: 550px;
+      width: 100%;
+      background: white;
+      padding: 40px;
+    }
+
+    .formbold-form-label {
+      display: block;
+      font-weight: 500;
+      font-size: 16px;
+      color: #07074d;
+      margin-bottom: 12px;
+    }
+
+    .formbold-form-label-2 {
+      font-weight: 600;
+      font-size: 20px;
+      margin-bottom: 20px;
+    }
+
+    .formbold-form-input {
+      width: 100%;
+      padding: 12px 24px;
+      border-radius: 6px;
+      border: 1px solid #e0e0e0;
+      background: white;
+      font-weight: 500;
+      font-size: 16px;
+      color: #6b7280;
+      outline: none;
+      resize: none;
+    }
+
+    .formbold-form-input:focus {
+      border-color: #6a64f1;
+      box-shadow: 0px 3px 8px rgba(0, 0, 0, 0.05);
+    }
+
+    .formbold-btn {
+      text-align: center;
+      font-size: 16px;
+      border-radius: 6px;
+      padding: 14px 32px;
+      border: none;
+      font-weight: 600;
+      background-color: #6a64f1;
+      color: white;
+      cursor: pointer;
+    }
+
+    .formbold-btn:hover {
+      box-shadow: 0px 3px 8px rgba(0, 0, 0, 0.05);
+    }
+
+    .formbold--mx-3 {
+      margin-left: -12px;
+      margin-right: -12px;
+    }
+
+    .formbold-px-3 {
+      padding-left: 12px;
+      padding-right: 12px;
+    }
+
+   
+    
+
+    .w-full {
+      width: 100%;
+    }
+
+    .formbold-file-input input {
+      opacity: 0;
+      position: absolute;
+      width: 100%;
+      padding: 20px;
+      height: 100%;
+    }
+
+    .formbold-file-input label {
+      position: relative;
+      border: 1px dashed #e0e0e0;
+      border-radius: 6px;
+      min-height: 50px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 25px;
+      text-align: center;
+    }
+
+    .formbold-drop-file {
+      display: block;
+      font-weight: 600;
+      color: #07074d;
+      font-size: 20px;
+      margin-bottom: 8px;
+    }
+
+    .formbold-or {
+      font-weight: 500;
+      font-size: 16px;
+      color: #6b7280;
+      display: block;
+      margin-bottom: 8px;
+    }
+
+    .formbold-browse {
+      font-weight: 500;
+      font-size: 16px;
+      color: #07074d;
+      display: inline-block;
+      padding: 8px 28px;
+      border: 1px solid #e0e0e0;
+      border-radius: 4px;
+    }
+
+    .formbold-file-list {
+      border-radius: 6px;
+      background: #f5f7fb;
+      padding: 16px 32px;
+    }
+
+    .formbold-file-item {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .formbold-file-item button {
+      color: #07074d;
+      border: none;
+      background: transparent;
+      cursor: pointer;
+    }
+
+    .formbold-file-name {
+      font-weight: 500;
+      font-size: 16px;
+      color: #07074d;
+      padding-right: 12px;
+      padding: 20px;
+    }
+
+    .formbold-progress-bar {
+      margin-top: 20px;
+      position: relative;
+      width: 100%;
+      height: 6px;
+      border-radius: 8px;
+      background: #e2e5ef;
+    }
+
+    .formbold-progress {
+      position: absolute;
+      width: 75%;
+      height: 100%;
+      left: 0;
+      top: 0;
+      background: #6a64f1;
+      border-radius: 8px;
+    }
+
+    @media (min-width: 540px) {
+      .sm\:w-half {
+        width: 50%;
+      }
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    :root {
+      --clr-white: rgb(255, 255, 255);
+      --clr-black: rgb(0, 0, 0);
+      --clr-light: rgb(245, 248, 255);
+      --clr-light-gray: rgb(196, 195, 196);
+      --clr-blue: rgb(63, 134, 255);
+      --clr-light-blue: rgb(171, 202, 255);
+    }
+
+      {
+        {
+        !-- body {
+          margin: 0;
+          padding: 0;
+          background-color: var(--clr-light);
+          color: var(--clr-black);
+          font-family: 'Poppins', sans-serif;
+          font-size: 1.125rem;
+          min-height: 100vh;
+          display: flex;
+          justify-content: center;
+          align-items: center;
+        }
+
+        --
+      }
+    }
+
+    /* End General Styles */
+    .page {
+      margin: 1em auto;
+      max-width: 768px;
+      display: flex;
+      align-items: flex-start;
+      flex-wrap: wrap;
+      height: 100%;
+    }
+
+    .box {
+      padding: 0.5em;
+      width: 100%;
+      margin: 0.5em;
+    }
+
+    .box-2 {
+      padding: 0.5em;
+      width: calc(100%/2 - 1em);
+    }
+
+    .options label,
+    .options input {
+      width: 4em;
+      padding: 0.5em 1em;
+    }
+
+    .btn {
+      background: rgb(44, 104, 208);
+      color: rgb(247, 248, 252);
+      border: 1px solid black;
+      padding: 0.5em 1em;
+      text-decoration: none;
+      margin: 0.8em 0.3em;
+      display: inline-block;
+      cursor: pointer;
+    }
+
+    .hide {
+      display: none;
+    }
+
+    img {
+      img {
+        width: 100px;
+        height: 100px;
+        padding: 20px;
+      }
+    }
+  </style>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/5.0.0/normalize.min.css">
+  <link rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/cropper/2.3.4/cropper.min.css'>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+  {{!-- multiple image preview --}}
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+</head>
+
+<body>
+
+  <div style="padding-top: 150px;" class="formbold-main-wrapper">
+    <!-- Author: FormBold Team -->
+    <!-- Learn More: https://formbold.com -->
+    <div style="height: auto;" class="formbold-form-wrapper">
+
+      <form action="/admin/edit-product/{{data._id}}" method="POST" id="add-product-form">
+        <h4 style="text-align: center;">Edit Products</h4>
+        <div class="formbold-mb-5">
+          <label style="color: #262728;">Name of Product</label>
+          <span class="text-danger" id="product-name-error">{{this.message}}</span><br>
+          <input value="{{data.product}}" type="text" name="product" id="product" placeholder="Enter your Product"
+            class="formbold-form-input" />
+
+          <label style="color: #262728;">Category</label>
+          <br>
+          <span class="text-danger" id="category-name-error"></span>
+          <select name="category" id="category" >
+          
+            {{#each categorydata}}
+            <option value="{{this.category}}">{{this.category}}</option>
+            {{/each}}
+          </select>
+
+          <br>
+          <label style="color: #262728;">Description</label><br>
+          <span class="text-danger" id="description-name-error"></span>
+          <input value="{{data.description}}" type="text" name="description" id="description"
+            placeholder="description of product" class="formbold-form-input" />
+
+          <label style="color: #262728;">Price</label><br>
+          <span class="text-danger" id="price-name-error"></span>
+          <input value="{{data.price}}" type="number" name="price" id="price" placeholder="Price of Product"
+            class="formbold-form-input" />
+          <label style="color: #262728;">Quantity</label><br>
+          <span class="text-danger" id="quantity-name-error"></span>
+          <input value="{{data.quantity}}" type="number" name="quantity" id="quantity" placeholder="Price of Product"
+            class="formbold-form-input" />
+          <br>
+
+          <label style="color: #262728;">Discount</label><br>
+          <span class="text-danger" id="discount-name-error"></span>
+          <input value="{{data.discount}}" type="number" name="discount" id="discount" placeholder="Discount of product"
+            class="formbold-form-input" /><br>
+
+          {{!-- <label style="color: #262728;">Product Offer</label>
+
+          <input type="number" name="offer" id="offer" placeholder="Product offer" class="formbold-form-input" />
+          <label for="">Multipple Images</label><br> --}}
+          <br>
+          <button style="background-color: #c5c6ca;" class="btn" type="submit">submit</button>
+      </form>
+
+      <form action="/admin/edit-proimage/{{data._id}}" method="POST" enctype="multipart/form-data" id="edit">
+        <label for="">Edit Image</label><br>
+
+        <img style="height: 50px;width: 50px;" src="/images/{{data.image}}" alt=""><br>
+        {{!-- <input type="file" id="gallery-photo-add" name="image"> --}}
+        <main class="page">
+
+          <!-- input file -->
+          <div>
+            <input type="file" id="file-input" name="image">
+          </div>
+          <!-- leftbox -->
+          <div class="box-2">
+            <div class="result"></div>
+          </div>
+          <!--rightbox-->
+          <div class="box-2 img-result hide">
+            <!-- result of crop -->
+            <img class="cropped" src="" alt="">
+          </div>
+          <!-- input file -->
+          <div>
+            <div class="options hide">
+              {{!-- <label> Width</label>
+              <input type="number" class="img-w" value="300" min="100" max="1200" /> --}}
+            </div>
+            <!-- save btn -->
+            <button class="btn save hide">Save</button>
+            <!-- download btn -->
+          </div>
+        </main>
+
+        {{!-- <img style="height: 50px;width: 50px;" id='imagepreview1'> --}}
+        <button class="btn" type="submit">submit</button>
+      </form>
+      <label style="text-decoration:underline;" for="">Edit Multipple Images</label>
+      <br>
+      {{#each data.subImage}}
+
+      <a href="/admin/deleteMultImg/{{../data._id}}/{{this}}">
+        <img src="/images/{{this}}" alt="" style="width: 50px;height: 50px;">
+      </a>
+      {{/each}}
+      <form action="/admin/Multi-image/{{data._id}}" method="POST" enctype="multipart/form-data">
+        <br>
+        <br><label style="text-decoration:underline;" for="">Multipple Images</label><br>
+        <input name="image" type="file" multiple class="form-control-file" onchange="loadFile(event)">
+        <div id="cont"></div>
+        <button class="btn" type="submit">submit</button>
+      </form>
+    </div>
+  </div>
+  </div>
+  <script src='https://cdnjs.cloudflare.com/ajax/libs/cropperjs/0.8.1/cropper.min.js'></script>
+
+</body>
+
+</html>
+
+<script>
+  
+
+  document.getElementById("add-product-form").addEventListener('submit', (e) => {
+    var product = document.getElementById("product").value;
+    document.getElementById("product-name-error").innerHTML;
+    if (product ==='') {
+      document.getElementById("product-name-error").innerHTML = 'This field is required'
+      e.preventDefault()
+    }
+    else if (/^\s|\s$/.test(product)) {
+      document.getElementById("product-name-error").innerHTML = 'Space is not allowed'
+      e.preventDefault()
+    }
+
+
+    var category = document.getElementById("category").value
+    document.getElementById("category-name-error").innerHTML;
+    if (category ==='') {
+      document.getElementById("category-name-error").innerHTML = "This field is required"
+      e.preventDefault()
+    }
+    else if (/^\s|\s$/.test(category)) {
+      document.getElementById("category-name-error").innerHTML = 'Space is not allowed'
+      e.preventDefault()
+    }
+
+
+    var description = document.getElementById("description").value
+    document.getElementById("description-name-error").innerHTML;
+    if (description ==='') {
+      document.getElementById("description-name-error").innerHTML = "This field is required"
+      e.preventDefault()
+    }
+    else if (/^\s|\s$/.test(description)) {
+      document.getElementById("description-name-error").innerHTML = 'Space is not allowed'
+      e.preventDefault()
+    }
+
+
+    var price = document.getElementById("price").value
+    document.getElementById("price-name-error").innerHTML;
+    if (price ==='') {
+      document.getElementById("price-name-error").innerHTML = "This field is required"
+      e.preventDefault()
+    }
+    else if (price <= 0) {
+      document.getElementById("price-name-error").innerHTML = "price should not be negative"
+      e.preventDefault()
+    }
+    else if (/^\s|\s$/.test(price)) {
+      document.getElementById("price-name-error").innerHTML = 'Space is not allowed'
+      e.preventDefault()
+    }
+
+
+    var discount = document.getElementById("discount").value
+    document.getElementById("discount-name-error").innerHTML;
+    if (discount ==='') {
+      document.getElementById("discount-name-error").innerHTML = "This field is required"
+      e.preventDefault()
+    }
+    else if (discount <= 0) {
+      document.getElementById("discount-name-error").innerHTML = "price should not be negative"
+      e.preventDefault()
+    }
+    else if (discount >= price) {
+      document.getElementById("discount-name-error").innerHTML = "Discount greaterthan price "
+      e.preventDefault()
+    }
+    else if (/^\s|\s$/.test(discount)) {
+      document.getElementById("discount-name-error").innerHTML = 'Space is not allowed'
+      e.preventDefault()
+    }
+
+    var quantity = document.getElementById("quantity").value
+    document.getElementById("quantity").innerHTML;
+    if (quantity ==='') {
+      document.getElementById("quantity-name-error").innerHTML = "This field is required"
+      e.preventDefault()
+    }
+    else if (quantity < 0) {
+      document.getElementById("quantity-name-error").innerHTML = "quantity lessthan zero "
+      e.preventDefault()
+    }
+    else if (/^\s|\s$/.test(quantity)) {
+      document.getElementById("quantity-name-error").innerHTML = 'Space is not allowed'
+      e.preventDefault()
+    }
+
+
+    var status = document.getElementById("status").value
+    document.getElementById("status-name-error").innerHTML;
+    if (status ==='') {
+      document.getElementById("status-name-error").innerHTML = "This field is required"
+      e.preventDefault()
+    }
+    else if (/^\s|\s$/.test(status)) {
+      document.getElementById("status-name-error").innerHTML = 'Space is not allowed'
+      e.preventDefault()
+    }
+
+  })
+
+
+
+
+
+  $(function () {
+    // Multiple images preview in browser
+    var imagesPreview = function (input, placeToInsertImagePreview) {
+
+      if (input.files) {
+        var filesAmount = input.files.length;
+
+        for (i = 0; i < filesAmount; i++) {
+          var reader = new FileReader();
+
+          reader.onload = function (event) {
+            $($.parseHTML('<img>')).attr('src', event.target.result).appendTo(placeToInsertImagePreview);
+          }
+
+          reader.readAsDataURL(input.files[i]);
+        }
+      }
+
+    };
+
+    $('#gallery-photo-add').on('change', function () {
+      imagesPreview(this, 'div.gallery');
+    });
+  });
+
+
+
+
+  {
+    {
+      !--$(document).ready(function () {
+
+        function readURL(input) {
+          if (input.files && input.files[0]) {
+            var reader = new FileReader();
+            reader.onload = function (e) {
+              $('#imagepreview1').prop('src', e.target.result).show();
+            }
+            reader.readAsDataURL(input.files[0]);
+          }
+        }
+
+        $("#gallery-photo-add").change(function () {
+          readURL(this);
+          $('#imagepreview1').show();
+        });
+
+        $('#imagepreview1').click(function () {
+          $('#gallery-photo-add').replaceWith($('#gallery-photo-add').clone(true));
+          $('#imagepreview1').hide();
+        });
+
+      }); --}
+  }
+
+
+  var loadFile = function (event) {
+    var imgCont = document.getElementById("cont");
+    for (let i = 0; i < event.target.files.length; i++) {
+      var divElm = document.createElement('div');
+      divElm.id = "rowdiv" + i;
+      var spanElm = document.createElement('span');
+      var image = document.createElement('img');
+      image.src = URL.createObjectURL(event.target.files[i]);
+      image.id = "output" + i;
+      image.width = "200";
+      spanElm.appendChild(image);
+      var deleteImg = document.createElement('p');
+      deleteImg.innerHTML = "x";
+      deleteImg.onclick = function () { this.parentNode.remove() };
+      divElm.appendChild(spanElm);
+      divElm.appendChild(deleteImg);
+      imgCont.appendChild(divElm);
+    }
+  };
+
+
+  // vars
+  let result = document.querySelector('.result'),
+    img_result = document.querySelector('.img-result'),
+    img_w = document.querySelector('.img-w'),
+    img_h = document.querySelector('.img-h'),
+    options = document.querySelector('.options'),
+    save = document.querySelector('.save'),
+    cropped = document.querySelector('.cropped'),
+    dwn = document.querySelector('.download'),
+    upload = document.querySelector('#file-input'),
+    cropper = '';
+
+  // on change show image with crop options
+  upload.addEventListener('change', e => {
+    if (e.target.files.length) {
+      // start file reader
+      const reader = new FileReader();
+      reader.onload = e => {
+        if (e.target.result) {
+          // create new image
+          let img = document.createElement('img');
+          img.id = 'image';
+          img.src = e.target.result;
+          // clean result before
+          result.innerHTML = '';
+          // append new image
+          result.appendChild(img);
+          // show save btn and options
+          save.classList.remove('hide');
+          options.classList.remove('hide');
+          // init cropper
+          cropper = new Cropper(img);
+        }
+      };
+      reader.readAsDataURL(e.target.files[0]);
+    }
+  });
+
+  // save on click
+  save.addEventListener('click', e => {
+    e.preventDefault();
+    // get result to data uri
+    let imgSrc = cropper.getCroppedCanvas({
+      width: img_w.value // input value
+    }).toDataURL();
+    // remove hide class of img
+    cropped.classList.remove('hide');
+    img_result.classList.remove('hide');
+    // show image cropped
+    cropped.src = imgSrc;
+    dwn.classList.remove('hide');
+    dwn.download = 'imagename.png';
+    dwn.setAttribute('href', imgSrc);
+  });
+</script>
+
+
+
+
+    console.log("passed to post page")
+    const proId = req.params.id;
+    console.log(req.body)
+    // const output = await products.findByIdAndUpdate({ _id: proId }, { product: req.body.product, category: req.body.category, offer: req.body.offer, description: req.body.description, discount: req.body.discount, price: req.body.price, status: req.body.status, quantity: req.body.quantity })
+
+    // if (req.files[0]) {
+    //     updateFields.$set.productImage1 = req.files[0].filename;
+    //   }
+
+    //   if (req.files[1]) {
+    //     updateFields.$set.productImage2 = req.files[1].filename;
+    //   }
+
+    //   if (req.files[2]) {
+    //     updateFields.$set.productImage3 = req.files[2].filename;
+    //   }
+
+    const updateFields = {
+        $set: {
+          product: req.body.product,
+          category: req.body.category,
+          price: req.body.price,
+          quantity: req.body.quantity,
+          description: req.body.description,
+          descount: req.body.descount,
+        },
+      };
+
+      // Check and add image to the query
+      if (req.files[0]) {
+        updateFields.$set.productImage1 = req.files[0].filename;
+      }
+
+      if (req.files[1]) {
+        updateFields.$set.productImage2 = req.files[1].filename;
+      }
+
+      if (req.files[2]) {
+        updateFields.$set.productImage3 = req.files[2].filename;
+      }
+      if (req.files[3]) {
+        updateFields.$set.productImage3 = req.files[3].filename;
+      }
+      if (req.files[4]) {
+        updateFields.$set.productImage3 = req.files[4].filename;
+      }
+      if (req.files[5]) {
+        updateFields.$set.image = req.files[5].filename;
+      }
+      
+      
+      const updatedata=await products.findOneAndUpdate(
+        { _id: req.params.id },
+        updateFields
+      );
+      console.log(updatedata,"updatedata")
+      res.redirect("/admin/product");

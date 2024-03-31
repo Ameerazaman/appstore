@@ -21,16 +21,16 @@ const getProfile = async (req, res) => {
 
         const userId = req.session.user._id
         const result = await personalprofile.findOne({userId:userId}).lean()
-
+        const cartcount= req.session.cartcount
         const existuser = await User.findOne({ _id: userId }).lean()
 
         // const password = existuser.password
-        console.log("hai")
+        console.log("existuser",existuser)
         if (result) {
             res.render("users/user-profile", { result, existuser })
         }
         else {
-            res.render("users/user-profile")
+            res.render("users/user-profile",{existuser,cartcount})
         }
     }
     catch (error) {
@@ -111,12 +111,13 @@ const getAddressMgt = async (req, res) => {
     try {
         const userId = req.session.user._id
         const resultadd = await address.find({userId:userId}).lean()
+        const cartcount= req.session.cartcount
         if (resultadd) {
-            res.render("users/manage-address", { resultadd })
+            res.render("users/manage-address", { resultadd,cartcount })
         }
         else {
             const message = "Please add your Address"
-            res.render("users/manage-address", { message })
+            res.render("users/manage-address", { message,cartcount })
         }
     }
     catch (error) {
@@ -129,7 +130,6 @@ const getAddressMgt = async (req, res) => {
 const postAddressMgt = async (req, res) => {
     try {
         const userId = req.session.user._id
-        console.log(req.body)
         const data = await address.findOne({
             fullname: req.body.fullname, address: req.body.address,
             city: req.body.city, postalcode: req.body.postalcode,
@@ -139,7 +139,7 @@ const postAddressMgt = async (req, res) => {
         if (data) {
 
             const message = "Address Already Exist"
-            const resultadd = await address.find().lean()
+            const resultadd = await address.find({userId:userId}).lean()
             res.render("users/manage-address", { message, resultadd })
         }
         else {
@@ -203,10 +203,11 @@ const postEditAddressmgt = async (req, res) => {
 // get order page
 const getOrder = async (req, res) => {
     try {
+        const cartcount= req.session.cartcount
         const userId = req.session.user._id
-        const data = await Order.find({ userId: userId }).lean()
+        const data = await Order.find({ userId: userId }).sort({_id:-1}).lean()
 
-        res.render("users/order", { data })
+        res.render("users/order", { data ,cartcount})
     }
     catch (error) {
         console.log("Error in get Order route in userprofile controller")
@@ -217,6 +218,7 @@ const getOrder = async (req, res) => {
 // getOrder deatil apge
 const getOrderDetail = async (req, res) => {
     try {
+        const cartcount= req.session.cartcount
         console.log(req.params.id)
         const data = await Order.findOne({ _id: req.params.id })
         const addressdata = data.address
@@ -230,10 +232,19 @@ const getOrderDetail = async (req, res) => {
 
         if (data.status == "canceled") {
             var cancel = "Order is Canceled";
-            res.render("users/order-detail", { data, addressdata, payment, total, discount, status, date, totalprice, id, cancel })
+            res.render("users/order-detail", { cartcount,data, addressdata, payment, total, discount, status, date, totalprice, id, cancel })
         }
-        else {
-            res.render("users/order-detail", { data, addressdata, payment, total, discount, status, date, totalprice, id })
+        else if(data.status=="delivered"){
+            const deliver="order delivered";
+            res.render("users/order-detail", {cartcount, data, addressdata, payment, total, discount, status, date, totalprice, id ,deliver})
+        }
+        else if(data.status=="Return"){
+            var Return="Order is Returened"
+            res.render("users/order-detail", {cartcount, data, addressdata, payment, total, discount, status, date, totalprice, id, Return })
+
+        }
+        else{
+            res.render("users/order-detail", { cartcount,data, addressdata, payment, total, discount, status, date, totalprice, id })
         }
     }
     catch (error) {
@@ -308,18 +319,86 @@ const orderCancel = async (req, res) => {
         console.log("error in cancel order route in userprofile controller")
     }
 }
+// return order
 
+const orderReturn = async (req, res) => {
+    try {
+        const userId = req.session.user._id
+        console.log(req.params.id)
+        const datas = await Order.findByIdAndUpdate({ _id: req.params.id }, { status: "Return" })
+        console.log(req.params.id)
+
+        const data = await Order.findOne({ _id: req.params.id })
+        const addressdata = data.address
+        const payment = data.payment
+        const total = data.total
+        const discount = data.discount
+        const status = data.status
+        const totalprice = data.totalPrice
+        const date = data.orderedAt
+        const id = data._id
+        console.log(data.payment)
+        const Return="order Returned"
+        
+        //   quatity update at the time of cancel the ordder
+        const orderdata = await Order.find({ _id: req.params.id }).lean();
+
+        var orderProduct = orderdata[0].products;
+
+        for (let i = 0; i < orderProduct.length; i++) {
+
+            var productdata = await products.findById(orderProduct[i].product._id);
+
+            if (productdata) {
+                console.log("quantity", orderProduct[i].quantity);
+                await products.findByIdAndUpdate(
+                    orderProduct[i].product._id,
+                    { $inc: { quantity: orderProduct[i].quantity } }
+                );
+                // 
+                var newProduct = await products.findOneAndUpdate(
+                    { _id: orderProduct[i].product._id },
+                    { $inc: { stockLeft: -orderProduct[i].quantity } }
+                );
+            }
+        }
+        let totalPrice = 0;
+
+
+        data.products.forEach(product => {
+
+            totalPrice += product.product.price;
+        });
+        console.log("total price", totalPrice)
+        // create wallet
+        const walletData = {
+            userId,
+            orderId: id,
+            totalPrice: totalprice,
+            transactiontype: "credit",
+            reasontype: "refund",
+            price: totalPrice
+        }
+
+        const newdata = await wallet.create(walletData)
+        res.render("users/order-detail", { Return,data, addressdata, payment, total, discount, status, date, totalprice, id })
+    }
+    catch (error) {
+        console.log("error in cancel order route in userprofile controller")
+    }
+}
 // ***************************************Wallet*************************************
 const walletPage = async (req, res) => {
     try {
+        const cartcount= req.session.cartcount
         const userId = req.session.user._id
-        const data = await wallet.find({userId:userId}).lean()
+        const data = await wallet.find({userId:userId}).sort({_id:-1}).lean()
         var total = 0;
         for (let i = 0; i < data.length; i++) {
             total = total + data[i].totalPrice;
         }
         console.log(total)
-        res.render("users/wallet", { data, total });
+        res.render("users/wallet", { data, total,cartcount });
     }
     catch (error) {
         console.log("Error in wallet page route in userprofile controller")
@@ -330,13 +409,13 @@ const walletPage = async (req, res) => {
 const getOffer = async (req, res) => {
     try {
         const userId = req.session.user._id
-
+        const cartcount= req.session.cartcount
         const data = await User.findById({ _id: userId })
         const referal = data.referalcode
         if (referal) {
             // const referal=await referaloffer.find({userId:userId})
             const referaldata = await referoffer.find({ userId: userId }).lean()
-            res.render("users/offers", { referal, referaldata })
+            res.render("users/offers", { referal, referaldata,cartcount })
         }
         else {
             res.render("users/offers")
@@ -444,7 +523,7 @@ module.exports = {
     orderCancel, deleteProfile,
     walletPage, getOffer,
     CreateReferalCode, sendReferalCode,
-    redeemOffer
+    redeemOffer,orderReturn
 
 }
 

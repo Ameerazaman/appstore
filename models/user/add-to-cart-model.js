@@ -4,6 +4,9 @@ const cartSchema = new mongoose.Schema({
     userId:{
         type:String
     },
+    count:{
+        type:Number
+    },
     products:[
         {
             proId:{
