@@ -1,7 +1,7 @@
 const express = require('express')
 const mongoose = require('mongoose');
 const { verifyUser, blockMiddleware } = require('../../middlewares/middleware');
-const { getProfile, postPersonalProfile, getAddressMgt, postAddressMgt, deleteAddressMgt, getEditAddressmgt, postEditAddressmgt, getOrder, getOrderDetail, changePassword, orderCancel, deleteProfile, walletPage, returnOrder, getOffer, CreateReferalCode, sendReferalCode, redeemOffer, deleteAddressManagement, orderReturn } = require('../../controllers/user/userprofileController');
+const { getProfile, postPersonalProfile, getAddressMgt, postAddressMgt, deleteAddressMgt, getEditAddressmgt, postEditAddressmgt, getOrder, getOrderDetail, changePassword, orderCancel, deleteProfile, walletPage, returnOrder, getOffer, CreateReferalCode, sendReferalCode, redeemOffer, deleteAddressManagement, orderReturn, getInvoice } = require('../../controllers/user/userprofileController');
 const router = express.Router()
 
 
@@ -39,7 +39,8 @@ router.get("/order-detail/:id",verifyUser,blockMiddleware,getOrderDetail)
 router.get("/order-cancel/:id",verifyUser,blockMiddleware,orderCancel)
 // return Order
 router.get("/order-return/:id",verifyUser,blockMiddleware,orderReturn)
-  
+//  get invoice
+router.get("/invoice/:id",verifyUser,blockMiddleware,getInvoice) 
 // router.get("/order-return/:id",verifyUser,returnOrder)
 // ************************************Wallet***************************
 

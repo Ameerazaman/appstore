@@ -439,11 +439,7 @@
         document.getElementById("description-name-error").innerHTML = "This field is required"
         e.preventDefault()
       }
-      else if (/^\s|\s$/.test(description)) {
-        document.getElementById("description-name-error").innerHTML = 'Space is not allowed'
-        e.preventDefault()
-      }
-
+      
 
       var price = document.getElementById("price").value
       document.getElementById("price-name-error").innerHTML;

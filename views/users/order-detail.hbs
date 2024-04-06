@@ -5,6 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
+    <script src="https://unpkg.com/easyinvoice/dist/easyinvoice.min.js"></script>
     <style>
         body {
             background: #cccbcb;
@@ -48,7 +49,7 @@
         <div class="container">
             <!-- Title -->
             <div class="d-flex justify-content-between align-items-center py-3">
-                <h2 class="h5 mb-0"><a href="#" class="text-muted"></a>My Order {{data._id}}</h2>
+                <h2 class="h5 mb-0"><a href="#" class="text-muted"></a>My Order {{id}}</h2>
             </div>
 
             <!-- Main content -->
@@ -79,7 +80,7 @@
                                     <span>
                                         <button
                                                   onclick="confirmCancel('{{id}}')" style="background-color: rgb(197, 91, 53);"
-                                                class="bt">Cancel</button>
+                                                class="btn">Cancel</button>
                                         <p style="text-align: center;color: red;">{{this.message }}</p>
                                     </span>
                                     {{/if}}
@@ -89,7 +90,7 @@
                                 </div>
                                 <div class="d-flex">
                                     <button class="btn btn-link p-0 me-3 d-none d-lg-block btn-icon-text"><i
-                                            class="bi bi-download"></i> <span class="text">Invoice</span></button>
+                                            class="bi bi-download"></i> <a href="/user-profile/invoice/{{id}}"><span class="text">Invoice</span></a></button>
                                     <div class="dropdown">
                                         <button class="btn btn-link p-0 text-muted" type="button"
                                             data-bs-toggle="dropdown">
@@ -136,12 +137,25 @@
                                     </tr>
                                     <tr>
                                         <td colspan="2">Shipping</td>
-                                        <td class="text-end">Free</td>
+                                        <td class="text-end">{{this.ship}}</td>
                                     </tr>
                                     <tr>
                                         <td colspan="2">Discount</td>
                                         <td class="text-danger text-end">{{discount}}</td>
                                     </tr>
+                                    {{#if categoryDiscount}}
+                                    <tr>
+                                        <td colspan="2">Category Discount</td>
+                                        <td class="text-danger text-end">{{this.categoryDiscount}}</td>
+                                    </tr>
+                                    {{/if}}
+                                    {{#if couponDiscount}}
+                                    <tr>
+                                        <td colspan="2">Coupon Discount</td>
+                                        <td class="text-danger text-end">{{discount}}</td>
+                                    </tr>
+                                    {{/if}}
+                                   
                                     <tr class="fw-bold">
                                         <td colspan="2">TOTAL</td>
                                         <td class="text-end">{{totalprice}}</td>
@@ -206,7 +220,7 @@
 
 </html>
 
-        
+  
         <script>
   function confirmReturn(id) {
     Swal.fire({
@@ -242,5 +256,27 @@
         }
     });
 }
-
     </script>
+    <script>
+    // Create your invoice! Easy!
+    var data = {
+        apiKey: "free", // Please register to receive a production apiKey: https://app.budgetinvoice.com/register
+        mode: "development", // Production or development, defaults to production
+        products: [
+            {
+                quantity: 2,
+                description: "Test product",
+                taxRate: 6,
+                price: 33.87
+            }
+        ]
+    };
+
+    easyinvoice.createInvoice(data, function (result) {
+        // The response will contain a base64 encoded PDF file
+        console.log('PDF base64 string: ', result.pdf);
+
+        // Now this result can be used to save, download or render your invoice
+        // Please review the documentation below on how to do this
+    });
+</script>

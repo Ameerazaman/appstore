@@ -232,9 +232,27 @@
 
 
         <br><br>
-        <h4 style="text-align: center;">{{this.header}}</h4><br>
-        <div style="width: 50%;margin-left: 25%;"><canvas id="myChart" width="300" height="300"></canvas></div>
-
+        {{#if Message}}
+        <h4 style="text-align: center;text-decoration: underline;">{{this.header}}</h4><br>  
+       
+        <h4 style="text-align: center;color: red;">{{this.Message}}</h4><br> 
+       {{else}}
+       <div style="width: 40%; display: flex; justify-content: space-between; margin-left: 10%;">
+    <div >
+        <!-- Bar chart canvas -->
+        <h5>Bar Chart({{this.header}})</h5>
+       
+        <canvas id="myChart" width="400" height="400"></canvas>
+        
+    </div>
+    <div style="margin-left: 20%;">
+        <!-- Pie chart canvas -->
+        <h5>Pie Chart (category Sales)</h5>
+        <canvas style="padding: 30px;" id="myPieChart"></canvas>
+        
+    </div>
+    {{/if}}
+</div>
       </div>
     </div>
   </div>
@@ -293,6 +311,65 @@
   });
   </script>
 
+  {{!-- <script>
+        // JavaScript code to create the pie chart
+        // Get the canvas element
+        var ctx = document.getElementById('myPieChart').getContext('2d');
+        
+        // Define data for the chart
+        var data = {
+            labels: ['Red', 'Blue', 'Yellow', 'Green', 'Purple', 'Orange'],
+            datasets: [{
+                label: 'My First Dataset',
+                data: [12, 19, 3, 5, 2, 3],
+                backgroundColor: [
+                    'red',
+                    'blue',
+                    'yellow',
+                    'green',
+                    'purple',
+                    'orange'
+                ],
+                hoverOffset: 4
+            }]
+        };
+        
+        // Create a new pie chart
+        var myPieChart = new Chart(ctx, {
+            type: 'pie',
+            data: data,
+        });
+    </script> --}}
+    
+<script>
+        // JavaScript code to create the pie chart
+        // Get the canvas element
+        var ctx = document.getElementById('myPieChart').getContext('2d');
+        
+        // Define data for the chart
+        var data = {
+            labels: {{{chartLabels}}},
+            datasets: [{
+                label: 'My First Dataset',
+                data: {{{chartData}}},
+                backgroundColor: [
+                    'red',
+                    'purple',
+                    'blue',
+                    'yellow',
+                    'green',
+                    'orange'
+                ],
+                hoverOffset: 4
+            }]
+        };
+        
+        // Create a new pie chart
+        var myPieChart = new Chart(ctx, {
+            type: 'pie',
+            data: data,
+        });
+    </script> 
 
 </body>
 

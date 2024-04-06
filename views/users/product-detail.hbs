@@ -368,12 +368,14 @@ section {
     <section id="services" class="services section-bg margin:10px">
    <div class="container-fluid">
      <div class="col-sm-12 text-center mb-4">
-       <h4>{{data.product}}</h4>
+       <h4 style="font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;">  
+        
+       </h4>
      </div>
-      <div class="row row-sm">
-         <div style="padding-left: 80px;" class="col-md-6 _boxzoom">
-            <div class="zoom-thumb">
-               <ul class="piclist">
+      <div  class="row row-sm">
+         <div  style="padding-left: 80px;" class="col-md-6 _boxzoom">
+            <div style="box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.4);" class="zoom-thumb">
+               <ul  class="piclist">
                   
                   <li><img src="/images/{{data.productImage1}}" alt=""></li>
                   <li><img src="/images/{{data.productImage2}}" alt=""></li>
@@ -384,16 +386,19 @@ section {
                </ul>
             </div>
             <div style="border-color: rgb(60, 150, 235);border-width: 2px;" class="_product-images">
-               <div  class="picZoomer">
+               <div style="box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.4);" class="picZoomer">
                   <img class="my_img" src="/images/{{data.productImage1}}" alt="">
                </div>
             </div>
          </div>
-         <div class="col-md-6">
-            <div class="_product-detail-content">
-               <p class="_p-name"> CATEGORY:{{data.category}}</p>
+         <div style="box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.4); border: none;" class="box1 col-md-6">
+            <div style="border: none;padding: 30px;" class="_product-detail-content">
+              
+             
+               <p class="_p-name"> Product Name:{{data.category}}</p>
                <div class="_p-price-box">
                   <div class="p-list">
+                    <h6>Category:{{data.category}}</h6>
                      <span> M.R.P. : <i class="fa fa-inr"></i> {{data.discount}}off   </span>
                      <span class="price"> {{data.price}}</span>
                   </div>
@@ -401,15 +406,24 @@ section {
                      <span> Description About this product:- </span>
                     {{data.description}}                    
                   </div>
+                  <div class="_p-features">
+                     <span> Status:- </span>
+                    {{data.status}}                    
+                  </div>
+                  
+                  <div class="_p-features">
+                     <span> Reviews </span>
+                    highly review on this product and 4 star ,diffrent colors are available in this product. Are you want to purchase more product you wil;l click this button                   
+                  </div>
                  
                      <ul class="spe_ul"></ul>
                      <div class="_p-qty-and-cart">
                         <div class="_p-add-cart">
-                           <a href="/wishlist"><button class="btn-theme btn buy-btn" tabindex="0">
-                           <i class="fa fa-heart"></i>wishlist
+                           <a href="/user/product"><button class="btn-theme btn buy-btn" tabindex="0">
+                           <i class="fa fa-heart"></i>Shopping
                            </button></a>
                            <button class="btn-theme btn btn-success" tabindex="0">
-                           <a style="text-decoration: none;color: white;" href="/cart/add-to-cart/{{data._id}}"><i class="fa fa-shopping-cart"></i> Add to Cart</a>
+                           <a style="text-decoration: none;color: white;" href="/cart/add-to-cart/{{data._id}}"><i class="fa fa-shopping-cart"></i> Add to Cart and purchase more</a>
                            </button>
                            <input type="hidden" name="pid" value="18" />
                            <input type="hidden" name="price" value="850" />
@@ -435,25 +449,25 @@ section {
       <div class="col-md-12 list-slider mt-4">
         <div class="owl-carousel common_wd owl-theme" id="recent_post" style="display: flex;justify-content: space-evenly;">
           {{#each categorydata}}
-          <div style="margin-left: 20px;padding-top: 40px;" class="item">
+          <div style="padding:10px;padding-top: 40px;" class="item">
             <div class="sq_box shadow">
               <div  class="pdis_img"> 
                 <span class="wishlist">
                   <a alt="Add to Wish List" title="Add to Wish List" href="javascript:void(0);"><i class="fa fa-heart"></i></a>
                 </span>
-                <a href="#">
+                <a href="/user/product-detail/{{this._id}}">
                   <img style="width: auto;height: auto;margin: 20px;" src="/images/{{this.productImage1}}"> 
                 </a>
               </div>
               <h4 class="mb-1"><a href="details.php">{{this.product}}</a></h4>
               <div class="price-box mb-2">
                 
-                <span class="price">Price <i class="fa fa-inr"></i>{{this.price}}</span>
-                <span class="offer-price">Off  <i class="fa fa-inr"></i> {{this.discount}}</span>
+                <span class="price">Price<i class="fa fa-inr"></i>{{this.price}}</span>
+                <span class="offer-price"><i class="fa fa-inr"></i> {{this.discount}}off</span>
               </div>
               <div class="btn-box text-center">
-                <a class="btn btn-sm" href="javascript:void(0);"><i class="fa fa-shopping-cart"></i> Add to Cart</a>
-             <a href="/user/product-detail/{{this._id}}" class="btn btn1"> View </a>
+
+             <a href="/user/product" class="btn btn1">shop</a>
               </div>
             </div>
           </div>

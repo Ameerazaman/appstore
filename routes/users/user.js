@@ -3,7 +3,7 @@ const mongoose = require('mongoose')
 const router = express.Router()
 const users = require('../../models/user/usermodel')
 const nodemailer = require('nodemailer')
-const { doSignup, getLogin, postLogin, getSignup, otpSubmit, postSignup, resendOtp, getProductDetail, userLogout, getcategory, homePage, getForgot, getForgotOtp, forgotOtpVerify, changeForgotPassword, filter, search, searchProducts, getproduct } = require('../../controllers/user/userControllers')
+const { doSignup, getLogin, postLogin, getSignup, otpSubmit, postSignup, resendOtp, getProductDetail, userLogout, getcategory, homePage, getForgot, getForgotOtp, forgotOtpVerify, changeForgotPassword, filter, search, searchProducts, getproduct, getMobile, getFilterCategory, categorySort } = require('../../controllers/user/userControllers')
 const products = require('../../models/admin/productModel')
 const category = require('../../models/admin/categorymodel')
 const { verifyUser, blockMiddleware, } = require('../../middlewares/middleware')
@@ -53,8 +53,11 @@ router.post("/forgototpverify",forgotOtpVerify)
 router.post("/change-forgot-password",changeForgotPassword)
 
 //*********************************filter*********************************
-
+router.get("/filter/:category", verifyUser, blockMiddleware, getFilterCategory);
+// filter
 router.post("/filter",verifyUser,blockMiddleware,filter)
+// filter based on category
+router.post("/filter/:filterCategory",verifyUser,blockMiddleware,categorySort)
 
 //***********************************Search products********************************
 

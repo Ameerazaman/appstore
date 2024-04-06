@@ -185,7 +185,7 @@
               {{#each data}}
               <a href="/admin/product-detail/{{this._id}}">
                 <tr>
-                  <th scope="row">{{@index}}</th>
+                  <th id="row" scope="row">{{@index}}</th>
                   <td>{{this.product}}</td>
                   <td><img style="height: 20px;width: 20px;" src="/images/{{this.productImage1}}" alt="">
                   </td>
@@ -390,6 +390,19 @@
     }
 
   </script>
+<script>
+  // Loop through each data item and update the corresponding table row number
+  document.addEventListener('DOMContentLoaded', function() {
+    const dataRows = document.querySelectorAll('#productBody tr');
+    dataRows.forEach((row, index) => {
+      const rowNumberCell = row.querySelector('th[scope="row"]');
+      if (rowNumberCell) {
+        rowNumberCell.textContent = index + 1;
+      }
+    });
+  });
+</script>
+
 </body>
 
 </html>

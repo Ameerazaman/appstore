@@ -27,7 +27,7 @@ const getDashboard = async (req, res) => {
 
             const totalProductsCount = await Order.aggregate([
                 {
-                    $match: { status: { $ne: "Canceled" } } // Match orders with status not equal to "Canceled"
+                    $match: { status: { $eq: "delivered" } } // Match orders with status not equal to "Canceled"
                 },
                 {
                     $project: {
@@ -36,7 +36,7 @@ const getDashboard = async (req, res) => {
                                 $filter: {
                                     input: "$products",
                                     as: "product",
-                                    cond: { $ne: ["$$product.status", "Canceled"] } // Exclude products with status "Canceled"
+                                    cond: { $ne: ["$$product.status", "delivered"] } // Exclude products with status "Canceled"
                                 }
                             }
                         }
@@ -54,9 +54,13 @@ const getDashboard = async (req, res) => {
                     }
                 }
             ]);
+
+            // total category result         
+
             const sales = totalProductsCount[0].totalProductsCount
             const totalSales = JSON.stringify([totalrevenue])
             const label = JSON.stringify(["totalrevenue"])
+            console.log("label", label, "totalsales", totalSales)
             const type = "Total"
 
             // totalProductsCount.length > 0 ? totalProductsCount[0].totalProductsCount : 0;
@@ -69,11 +73,43 @@ const getDashboard = async (req, res) => {
             req.session.sales = sales
             req.session.totalSales = totalSales
             const header = "Total Sales"
+            const categoryWiseRevenue = await Order.aggregate([
+                {
+                    $match: { status: { $eq: "delivered" } } // Match orders with status "delivered"
+                },
+                {
+                    $unwind: "$products" // Unwind the products array
+                },
+                {
+                    $group: {
+                        _id: "$products.product.category", // Group by product category
+                        totalAmount: { $sum: "$totalPrice" } // Calculate total amount for each category
+                    }
+                },
+                {
+                    $project: {
+                        _id: 0, // Exclude _id field
+                        category: "$_id", // Rename _id field as category
+                        totalAmount: 1 // Include totalAmount field
+                    }
+                }
+            ]);
 
-            res.render('admin/dashboard', { admin: true, header, totalrevenue, totalUsers, sales, totalSales, type, label });
+            var pieChartLabels = [];
+            var pieChartData = [];
+
+            // Iterate over the revenue data to extract labels and data
+            categoryWiseRevenue.forEach(item => {
+                pieChartLabels.push(item.category);
+                pieChartData.push(item.totalAmount);
+            });
+            var chartLabels = JSON.stringify(pieChartLabels)
+            var chartData = JSON.stringify(pieChartData)
+
+            res.render('admin/dashboard', { admin: true, header, chartData, chartLabels, totalrevenue, totalUsers, sales, totalSales, type, label });
 
         }
-        else{
+        else {
             res.redirect("/admin")
         }
     }
@@ -89,69 +125,105 @@ const getSales = async (req, res) => {
     try {
 
         const today = new Date().toDateString();
-
+        const header = "Daily Sales"
         // daily sales
         if (req.params.sale === "daily") {
 
-            const nonCanceledOrders = await Order.find({ orderedAt: today, status: { $ne: 'Canceled' } });
+            const nonCanceledOrders = await Order.find({ orderedAt: today, status: { $eq: 'delivered' } });
             // Calculate total price
             let total = 0;
             nonCanceledOrders.forEach(order => {
                 total += order.totalPrice;
             });
             const totalrevenue = ((total * 30) / 100)
+            console.log("total revenue", totalrevenue)
+            if (totalrevenue == 0) {
+                const Message = "Today not Sale anything"
+                res.render("admin/dashboard", { admin: true, Message, header })
+            } else {
+                ////////////////////////////////////
+                // *************************find total sales****************
 
-            ////////////////////////////////////
-            // *************************find total sales****************
-
-            const totalProductsCount = await Order.aggregate([
-                {
-                    $match: { status: { $ne: "Canceled" }, orderedAt: today } // Match orders with status not equal to "Canceled"
-                },
-                {
-                    $project: {
-                        productsCount: {
-                            $size: {
-                                $filter: {
-                                    input: "$products",
-                                    as: "product",
-                                    cond: { $ne: ["$$product.status", "Canceled"] } // Exclude products with status "Canceled"
+                const totalProductsCount = await Order.aggregate([
+                    {
+                        $match: { status: { $ne: "Canceled" }, orderedAt: today } // Match orders with status not equal to "Canceled"
+                    },
+                    {
+                        $project: {
+                            productsCount: {
+                                $size: {
+                                    $filter: {
+                                        input: "$products",
+                                        as: "product",
+                                        cond: { $ne: ["$$product.status", "Canceled"] } // Exclude products with status "Canceled"
+                                    }
                                 }
                             }
                         }
+                    },
+                    {
+                        $group: {
+                            _id: null,
+                            totalProductsCount: { $sum: "$productsCount" } // Sum up the products count for all orders
+                        }
+                    },
+                    {
+                        $project: {
+                            totalProductsCount: 1
+                        }
                     }
-                },
-                {
-                    $group: {
-                        _id: null,
-                        totalProductsCount: { $sum: "$productsCount" } // Sum up the products count for all orders
+                ]);
+
+                const sales = totalProductsCount[0].totalProductsCount
+                const totalSales = JSON.stringify([totalrevenue])
+                const label = JSON.stringify(["totalrevenue"])
+                const type = "Total"
+
+                // totalProductsCount.length > 0 ? totalProductsCount[0].totalProductsCount : 0;
+
+                // *******************count Total users**************
+                const totalUsers = await Users.countDocuments({ orderedAt: today });
+
+
+                req.session.Users = totalUsers
+                req.session.sales = sales
+                req.session.totalSales = totalSales
+
+
+                const categoryWiseRevenue = await Order.aggregate([
+                    {
+                        $match: { status: { $eq: "delivered" }, orderedAt: today } // Match orders with status "delivered"
+                    },
+                    {
+                        $unwind: "$products" // Unwind the products array
+                    },
+                    {
+                        $group: {
+                            _id: "$products.product.category", // Group by product category
+                            totalAmount: { $sum: "$totalPrice" } // Calculate total amount for each category
+                        }
+                    },
+                    {
+                        $project: {
+                            _id: 0, // Exclude _id field
+                            category: "$_id", // Rename _id field as category
+                            totalAmount: 1 // Include totalAmount field
+                        }
                     }
-                },
-                {
-                    $project: {
-                        totalProductsCount: 1
-                    }
-                }
-            ]);
+                ]);
+                var pieChartLabels = [];
+                var pieChartData = [];
 
-            const sales = totalProductsCount[0].totalProductsCount
-            const totalSales = JSON.stringify([totalrevenue])
-            const label = JSON.stringify(["totalrevenue"])
-            const type = "Total"
-
-            // totalProductsCount.length > 0 ? totalProductsCount[0].totalProductsCount : 0;
-
-            // *******************count Total users**************
-            const totalUsers = await Users.countDocuments({ orderedAt: today });
+                categoryWiseRevenue.forEach(item => {
+                    pieChartLabels.push(item.category);
+                    pieChartData.push(item.totalAmount);
+                });
+                var chartLabels = JSON.stringify(pieChartLabels)
+                var chartData = JSON.stringify(pieChartData)
 
 
-            req.session.Users = totalUsers
-            req.session.sales = sales
-            req.session.totalSales = totalSales
-            const header = "Daily Sales"
-
-            res.render('admin/dashboard', { admin: true, header, totalUsers, sales, totalrevenue, totalSales, type, label });
-
+                res.render('admin/dashboard', { admin: true, header, chartData, chartLabels, totalUsers, sales, totalrevenue, totalSales, type, label });
+            }
         }
         //    monthly Sales
 
@@ -245,7 +317,63 @@ const getSales = async (req, res) => {
                 total += order.totalPrice;
             });
             const totalrevenue = ((total * 30) / 100)
-            res.render('admin/dashboard', { admin: true, totalrevenue, header, totalUsers, totalSales, type, label });
+
+
+            const categoryWiseRevenue = await Order.aggregate([
+                {
+                    $match: { status: { $eq: "delivered" }, orderedAt: today } // Match orders with status "delivered"
+                },
+                {
+                    $unwind: "$products" // Unwind the products array
+                },
+                {
+                    $group: {
+                        _id: {
+                            category: "$products.product.category",
+                            month: { $month: { $dateFromString: { dateString: "$orderedAt" } } }
+                        }, // Group by product category and month
+                        totalAmount: { $sum: "$totalPrice" } // Calculate total amount for each category and month
+                    }
+                },
+                {
+                    $project: {
+                        month: {
+                            $switch: {
+                                branches: [
+                                    { case: { $eq: ["$_id.month", 1] }, then: "January" },
+                                    { case: { $eq: ["$_id.month", 2] }, then: "February" },
+                                    { case: { $eq: ["$_id.month", 3] }, then: "March" },
+                                    { case: { $eq: ["$_id.month", 4] }, then: "April" },
+                                    { case: { $eq: ["$_id.month", 5] }, then: "May" },
+                                    { case: { $eq: ["$_id.month", 6] }, then: "June" },
+                                    { case: { $eq: ["$_id.month", 7] }, then: "July" },
+                                    { case: { $eq: ["$_id.month", 8] }, then: "August" },
+                                    { case: { $eq: ["$_id.month", 9] }, then: "September" },
+                                    { case: { $eq: ["$_id.month", 10] }, then: "October" },
+                                    { case: { $eq: ["$_id.month", 11] }, then: "November" },
+                                    { case: { $eq: ["$_id.month", 12] }, then: "December" },
+                                ],
+                                default: "Invalid Month",
+                            },
+                        },
+                        category: "$_id.category", // Rename _id field as category
+                        totalAmount: 1
+                    },
+                }
+            ]);
+
+            var pieChartLabels = [];
+            var pieChartData = [];
+            console.log("revenue", categoryWiseRevenue)
+            categoryWiseRevenue.forEach(item => {
+                pieChartLabels.push(item.category);
+                pieChartData.push(item.totalAmount);
+            });
+            var chartLabels = JSON.stringify(pieChartLabels)
+            var chartData = JSON.stringify(pieChartData)
+            console.log(chartData, "data", chartLabels, "labels")
+
+            res.render('admin/dashboard', { admin: true, chartData, chartLabels, totalrevenue, header, totalUsers, totalSales, type, label });
 
         }
         else if (req.params.sale === "weekly") {
@@ -269,6 +397,48 @@ const getSales = async (req, res) => {
                 totalsales.push(e.totalSales);
                 labels.push(e._id);
             });
+            const Today = new Date(); // Get the current date as a Date object
+            const endDate = new Date(Today.getTime() - (7 * 24 * 60 * 60 * 1000));
+            console.log("today", today)
+
+            console.log("enddata", endDate)
+            var startDate=Today.toDateString()
+            var lastDate=endDate.toDateString()
+            console.log("start",startDate,"end",lastDate,"today",today)
+            const categoryWiseRevenue = await Order.aggregate([
+                {
+                    $match: { status: { $eq: "delivered" }, orderedAt:{ $lt:lastDate, $gt: startDate} } // Match orders with status "delivered"
+                },
+                {
+                    $unwind: "$products" // Unwind the products array
+                },
+                {
+                    $group: {
+                        _id: "$products.product.category", // Group by product category
+                        totalAmount: { $sum: "$totalPrice" } // Calculate total amount for each category
+                    }
+                },
+                {
+                    $project: {
+                        _id: 0, // Exclude _id field
+                        category: "$_id", // Rename _id field as category
+                        totalAmount: 1 // Include totalAmount field
+                    }
+                }
+            ]);
+          
+            console.log("category", categoryWiseRevenue);
+
+           
+                    var pieChartLabels = [];
+                    var pieChartData = [];
+
+                    categoryWiseRevenue.forEach(item => {
+                        pieChartLabels.push(item.category);
+                        pieChartData.push(item.totalAmount);
+                    });
+                    var chartLabels=JSON.stringify(pieChartLabels)
+                    var chartData=JSON.stringify(pieChartData)
 
             const total = await Order.aggregate([
                 {
@@ -323,7 +493,7 @@ const getSales = async (req, res) => {
 
             const totalUsers = await Users.countDocuments({})
 
-            res.render("admin/dashboard", { admin: true, sales, totalrevenue, type, header, totalSales, label })
+            res.render("admin/dashboard", { admin: true,chartLabels,chartData, sales, totalrevenue, type, header, totalSales, label })
 
         }
         if (req.params.sale === "total") {
@@ -377,8 +547,42 @@ const getSales = async (req, res) => {
             const totalUsers = await Users.countDocuments({});
 
             const header = "Total Sales"
+            const categoryWiseRevenue = await Order.aggregate([
+                {
+                    $match: { status: { $eq: "delivered" } } // Match orders with status "delivered"
+                },
+                {
+                    $unwind: "$products" // Unwind the products array
+                },
+                {
+                    $group: {
+                        _id: "$products.product.category", // Group by product category
+                        totalAmount: { $sum: "$totalPrice" } // Calculate total amount for each category
+                    }
+                },
+                {
+                    $project: {
+                        _id: 0, // Exclude _id field
+                        category: "$_id", // Rename _id field as category
+                        totalAmount: 1 // Include totalAmount field
+                    }
+                }
+            ]);
 
-            res.render('admin/dashboard', { admin: true, header, totalrevenue, totalUsers, sales, totalSales, type, label });
+            var pieChartLabels = [];
+            var pieChartData = [];
+
+            // Iterate over the revenue data to extract labels and data
+            categoryWiseRevenue.forEach(item => {
+                pieChartLabels.push(item.category);
+                pieChartData.push(item.totalAmount);
+            });
+            var chartLabels = JSON.stringify(pieChartLabels)
+            var chartData = JSON.stringify(pieChartData)
+            res.render('admin/dashboard', {
+                admin: true, chartData, chartLabels,
+                header, totalrevenue, totalUsers, sales, totalSales, type, label
+            });
 
         }
     }

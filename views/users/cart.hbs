@@ -406,6 +406,15 @@
                   <p><span id="shipping_charge">{{this.shippingCharge}}</span></p>
 
                 </div>
+                
+                <div class="total-amt d-flex justify-content-between font-weight-bold">
+
+                  <p id="category_discount">Category Discount</p>
+
+                  <p><span id="total_category_discount">{{this.categoryOffer}}</span></p>
+
+                </div>
+               
 
                 <hr />
 
@@ -428,15 +437,7 @@
 
                 </div>
                 {{/if}}
-                {{#if categoryDiscount}}
-                <div class="total-amt d-flex justify-content-between font-weight-bold">
 
-                  <p>Category Discount</p>
-
-                  <p><span id="total_category_discount">{{this.categoryDiscount}}</span></p>
-
-                </div>
-                {{/if}}
 
                 {{#if totalAmount}}
                 <div class="total-amt d-flex justify-content-between font-weight-bold">
@@ -458,44 +459,7 @@
 
               <!-- discount code ends -->
 
-              <div class="discount_code mt-3 shadow">
-                <span style="color: red;">{{this.categoryMessage}}</span>
-                <div class="card">
 
-                  <div class="card-body">
-
-                    <a class="d-flex justify-content-between" data-toggle="collaps" href="#collapsExample"
-                      aria-expanded="false" aria-controls="collapsExample">
-
-                      Add a Category discount(optional)
-
-                      <span><i class="fas fa-chevron-down pt-1"></i></span>
-
-                    </a>
-
-                    <div class="collaps" id="collapsExample">
-
-                      <div class="mt-3">
-                        {{#each categoryOffer}}
-                        <div style="display: flex;padding: 10px;">
-                          <input style="width: 70%;" type="text" name="" value="{{this.category}}, {{this.offer}}%"
-                            id="discount_code1" class="form-control font-weight-bold"
-                            placeholder="Enter the discount code">
-                          <button style="margin-left: 10px;" class="btn btn-primary btn-sm mt-3"><a
-                              style="text-decoration: none;color: white;"
-                              href="/cart/categoryOffer/{{this._id}}">Apply</a></button>
-                        </div>
-                        {{/each}}
-                      </div>
-
-
-                    </div>
-
-                  </div>
-
-                </div>
-
-              </div>
 
 
             </div>
@@ -530,7 +494,8 @@
 
   function incQty(prodId) {
     var quantity = document.getElementById("qtyNo" + prodId)
-
+    var categoryOffer = document.getElementById("total_category_discount").innerText
+    console.log(categoryOffer,"offer")
     var productPrice = parseInt(document.getElementById("product_price" + prodId).innerText)
     var checkOutAmount = document.getElementById("total_cart_amt").innerText
     var deliveryFee = document.getElementById("shipping_charge")
@@ -562,6 +527,8 @@
           })
           .then((newData) => {
             console.log("newdata")
+          
+            console.log(categoryOffer, "offer")
             var subTotal = 0;
             console.log("fetch", quantity.value)
             var productprice = (quantity.value * productPrice)
@@ -591,12 +558,14 @@
             console.log(subDiscount, "discountprice")
             document.getElementById("product_total_amt").innerHTML = subTotal
             document.getElementById("total_discount").innerHTML = subDiscount
-            var checkOutPrice = (subTotal - subDiscount)
-            document.getElementById("total_cart_amt").innerHTML = checkOutPrice
-            console.log("checkoutprice", checkOutPrice)
+            var checkOutPrice = (subTotal - subDiscount)-categoryOffer
+             console.log("checkoutprice", checkOutPrice)
+            
+           
             if (checkOutPrice >= 3000) {
               deliveryFee.innerHTML = "Rs.90"
-              document.getElementById("total_cart_amt").innerHTML = checkOutPrice + 90;
+              document.getElementById("total_cart_amt").innerHTML = (checkOutPrice + 90)
+
 
             }
             else {
@@ -604,6 +573,7 @@
               deliveryFee.innerHTML = "Free"
               document.getElementById("total_cart_amt").innerHTML = checkOutPrice
             }
+            console.log("price",checkOutPrice)
           })
           .catch((error) => {
 
@@ -625,7 +595,7 @@
   function decQty(prodId) {
     console.log("deccrement")
     var quantity = document.getElementById("qtyNo" + prodId)
-
+   var categoryOffer = document.getElementById("total_category_discount").innerHTML
     var productPrice = parseInt(document.getElementById("product_price" + prodId).innerText)
     var checkOutAmount = document.getElementById("total_cart_amt").innerText
     var deliveryFee = document.getElementById("shipping_charge")
@@ -658,7 +628,7 @@
           })
           .then((newData) => {
 
-            console.log("newdata")
+           
             var subTotal = 0;
             console.log("fetch", quantity.value)
             var productprice = (quantity.value * productPrice)
@@ -689,11 +659,11 @@
             document.getElementById("product_total_amt").innerHTML = subTotal
             document.getElementById("total_discount").innerHTML = subDiscount
             var checkOutPrice = (subTotal - subDiscount)
-            document.getElementById("total_cart_amt").innerHTML = checkOutPrice
+            document.getElementById("total_cart_amt").innerHTML = checkOutPrice-categoryOffer
             console.log("checkoutprice", checkOutPrice)
             if (checkOutPrice >= 3000) {
               deliveryFee.innerHTML = "Rs.90"
-              document.getElementById("total_cart_amt").innerHTML = checkOutPrice + 90;
+              document.getElementById("total_cart_amt").innerHTML = (checkOutPrice + 90)-categoryOffer;
 
             }
             else {
@@ -736,6 +706,7 @@
           .then(response => {
             if (response.ok) {
               // Successful deletion, show success message
+
               return response.json(); // Assuming your server returns JSON data
             } else {
               // Error occurred, show error message

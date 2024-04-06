@@ -41,6 +41,13 @@ const orderschema = mongoose.Schema({
     },
     coupondiscount:{
         type:Number
+    },
+    categoryDiscount:{
+        type:Number
+    },
+    
+    ship:{
+        type:String
     }
 })
 const Order = mongoose.model("Order", orderschema)

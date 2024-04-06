@@ -112,69 +112,70 @@
     <div class="main-container">
 
         <div class="navcontainer">
-          <nav class="nav">
-        <div>
-          <div style="background-color: rgb(47, 47, 189);" class="option1 nav-option">
-            <img src="/images/download.png" class="nav-img" alt="dashboard">
-            <h5 style="color:white;background-color:  ;"> Main Menu</h5>
-          </div>
+            <nav class="nav">
+                <div>
+                    <div style="background-color: rgb(47, 47, 189);" class="option1 nav-option">
+                        <img src="/images/download.png" class="nav-img" alt="dashboard">
+                        <h5 style="color:white;background-color:  ;"> Main Menu</h5>
+                    </div>
 
-          <div class="option2 nav-option">
-            <img src="/images/dashboard.png" class="nav-img" alt="dashboard">
-            <a href="/admin/dashboard">
-              <h5> Dashboard</h5>
-            </a>
-          </div>
+                    <div class="option2 nav-option">
+                        <img src="/images/dashboard.png" class="nav-img" alt="dashboard">
+                        <a href="/admin/dashboard">
+                            <h5> Dashboard</h5>
+                        </a>
+                    </div>
 
-          <div class="option2 nav-option">
-            <img src="/images/products.png" class="nav-img" alt="articles">
-            <a href="/admin/product">
-              <h5>Products</h5>
-            </a>
-          </div>
+                    <div class="option2 nav-option">
+                        <img src="/images/products.png" class="nav-img" alt="articles">
+                        <a href="/admin/product">
+                            <h5>Products</h5>
+                        </a>
+                    </div>
 
-          <div class="nav-option option3">
-            <img src="/images/catogary.png" class="nav-img" alt="report">
-            <a href="/admin/category">
-              <h5>Category</h5>
-            </a>
-          </div>
+                    <div class="nav-option option3">
+                        <img src="/images/catogary.png" class="nav-img" alt="report">
+                        <a href="/admin/category">
+                            <h5>Category</h5>
+                        </a>
+                    </div>
 
-          <div class="nav-option option4">
-            <img src="/images/order.png" class="nav-img" alt="institution">
-            <a href="/order">
-              <h5>Orders</h5>
-            </a>
-          </div>
+                    <div class="nav-option option4">
+                        <img src="/images/order.png" class="nav-img" alt="institution">
+                        <a href="/order">
+                            <h5>Orders</h5>
+                        </a>
+                    </div>
 
-          <div class="nav-option option5">
-            <img src="/images/new coupon.png" class="nav-img" alt="blog">
-            <a href="/coupon">
-              <h5>Coupon</h5>
-            </a>
-          </div>
+                    <div class="nav-option option5">
+                        <img src="/images/new coupon.png" class="nav-img" alt="blog">
+                        <a href="/coupon">
+                            <h5>Coupon</h5>
+                        </a>
+                    </div>
 
-          <div class="nav-option option6">
-            <img src="/images/coupon.png" class="nav-img" alt="settings">
-              <a href="/referaloffer"><h5> Offer</h5>
-            </a>
-          </div>
-          <div class="nav-option option6">
-            <img src="/images/customers.png" class="nav-img" alt="settings">
-            <a href="/admin/customers">
-              <h5>Customers</h5>
-            </a>
-          </div>
-          
-          <div class="nav-option logout">
-            <img src="/images/logout.png" class="nav-img" alt="logout">
-            <a href="/admin/logout">
-              <h5>Logout</h5>
-            </a>
-          </div>
+                    <div class="nav-option option6">
+                        <img src="/images/coupon.png" class="nav-img" alt="settings">
+                        <a href="/referaloffer">
+                            <h5> Offer</h5>
+                        </a>
+                    </div>
+                    <div class="nav-option option6">
+                        <img src="/images/customers.png" class="nav-img" alt="settings">
+                        <a href="/admin/customers">
+                            <h5>Customers</h5>
+                        </a>
+                    </div>
 
-        </div>
-      </nav>
+                    <div class="nav-option logout">
+                        <img src="/images/logout.png" class="nav-img" alt="logout">
+                        <a href="/admin/logout">
+                            <h5>Logout</h5>
+                        </a>
+                    </div>
+
+                </div>
+            </nav>
         </div>
         <div class="main">
 
@@ -243,8 +244,8 @@
                         </div>
 
                     </form>
-                    
-                      <div class="dropdown">
+
+                    <div class="dropdown">
                         <button class="btn dropdown-toggle view"
                             style="width: auto;background-color: white;color: blueviolet;border-color: blueviolet;"
                             type="button" id="dropdownMenu2" data-bs-toggle="dropdown" aria-expanded="false">
@@ -508,14 +509,16 @@
                         </tbody>
                     </table>
                     {{/each}}
-                      <a style="margin-left: auto;" href="/admin/dash/csv-report/{{header}}"><button style="width: auto;" class="view">Download csv</button></a>
-                    <a href="/admin/dash/pdf-report/{{header}}"><button style="width: auto;" class="view">Download pdf</button></a>
-         
+                    <a style="margin-left: auto;" href="/admin/dash/csv-report/{{header}}"><button style="width: auto;"
+                            class="view">Download csv</button></a>
+                    <a href="/admin/dash/pdf-report/{{header}}"><button style="width: auto;" class="view">Download
+                            pdf</button></a>
+
                 </div>
                 <div id="pagination" class="pagination">
                     <button style="margin-left: 45%;" id="prevButton">Prev</button>
                     <button id="nextButton">Next</button>
-                           
+
                 </div>
             </div>
         </div>
@@ -565,7 +568,19 @@
 
 
         //pdf download
-     
+
+    </script>
+        <script>
+            document.addEventListener('DOMContentLoaded', function() {
+    const dataRows = document.querySelectorAll('#productBody tr');
+    dataRows.forEach((row, index) => {
+      const rowNumberCell = row.querySelector('th[scope="row"]');
+            if (rowNumberCell) {
+                rowNumberCell.textContent = index + 1;
+      }
+    });
+  });
+    </script>
     </script>
 </body>
 

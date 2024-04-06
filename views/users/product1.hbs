@@ -865,95 +865,64 @@
                         </div>
                     </div>
                 </form>
-                <br>
 
                 <!-- Filter -->
 
-                <div style="display: flex;">
-                    <h5 class="headline">
-                        <span>Category</span>
-                    </h5> <a style="margin-left: 40%;" href="/user/product">
-                        <i class="fa fa-refresh"> Refresh</i>
-                    </a>
-                </div>
+
+                <!-- Price -->
+
+                <br>
+                <h5 class="headline">
+                    <span>Category</span>
+                </h5>
                 <hr>
-                {{#each categorydata}}
                 <div>
-
-                    <a style="color: #333333;" href="/user/filter/{{this.category}}"><label
-                            for="shop-filter-checkbox_1">{{this.category}}</label></a>
+                    <input type="checkbox" id="shop-filter-checkbox_1" name="category" value="Mobile Phone">
+                    <a href="/user/filter/Mobile Phone" onclick="mobiles()"><label for="shop-filter-checkbox_1">Mobile
+                            Phone</label></a>
                 </div>
+                <div>
+                    <input type="checkbox" id="shop-filter-checkbox_2" name="category" value="Laptop">
+                    <a href="/user/filter/laptop"><label for="shop-filter-checkbox_2">Laptop</label></a>
+                </div>
+                <div>
+                    <input type="checkbox" id="shop-filter-checkbox_3" name="category" value="Watch">
+                    <a href="/user/filter/watch"><label for="shop-filter-checkbox_3">Watch</label></a>
+                </div>
+                <br>
+                <form class="shop__filter">
+                    <h5 class="headline">
+                        <span>Price</span>
+                    </h5>
+                    <hr>
+                    <div>
+                        <input type="checkbox" name="low-to-high" id="shop-filter-price_1" value="low-to-high">
+                        <label for="shop-filter-price_1">Low to High</label>
+                    </div>
+                    <div>
+                        <input type="checkbox" name="high-to-low" id="shop-filter-price_2" value="high-to-low">
+                        <label for="shop-filter-price_2">High to Low</label>
+                    </div>
 
-                {{/each}}
-                {{#if filterCategory}}
-                <form class="shop__filter" action="/user/filter/{{this.filterCategory}}" method="post">
-                    {{else}}
-                    <form class="shop__filter" action="/user/filter" method="post">
-                        {{/if}}
-                        <!-- Price -->
-                        <br>
-                        <!-- Price Sorting -->
-                        <h5 class="headline">
-                            <span>Price</span>
-                        </h5>
-                        <hr>
-                        {{#if priceLowToHigh}}
-                        <div>
-                            <input checked type="radio" name="sort-product" id="low-to-high" value="low-to-high">
-                            <label for="low-to-high">Low to High</label>
-                        </div>
-                        {{else}}
-                        <div>
-                            <input type="radio" name="sort-product" id="low-to-high" value="low-to-high">
-                            <label for="low-to-high">Low to High</label>
-                        </div>
-                        {{/if}}
-                        {{#if priceHighToLow}}
-                        <div>
-                            <input checked type="radio" name="sort-product" id="high-to-low" value="high-to-low">
-                            <label for="high-to-low">High to Low</label>
-                        </div>
-                        {{else}}
-                        <div>
-                            <input type="radio" name="sort-product" id="high-to-low" value="high-to-low">
-                            <label for="high-to-low">High to Low</label>
-                        </div>
-                        {{/if}}
-                        <!-- Alphabetical Sorting -->
-                        <br>
-                        
-                        <h5 class="headline">
-                            <span>Alphabetical</span>
-                        </h5>
-                        <hr>
-                        {{#if alphaAtoZ}}
-                        <div>
-                            <input checked type="radio" name="sort-product" id="a-to-z" value="a-z">
-                            <label for="a-to-z">A to Z</label>
-                        </div>
-                        {{else}}
-                        <div>
-                            <input type="radio" name="sort-product" id="a-to-z" value="a-z">
-                            <label for="a-to-z">A to Z</label>
-                        </div>
-                        {{/if}}
-                        {{#if alphaZtoA}}
-                        <div>
-                            <input checked type="radio" name="sort-product" id="z-to-a" value="z-a">
-                            <label for="z-to-a">Z to A</label>
-                        </div>
-                        {{else}}
-                        <div>
-                            <input type="radio" name="sort-product" id="z-to-a" value="z-a">
-                            <label for="z-to-a">Z to A</label>
-                        </div>
-                        {{/if}}
-
-                        <button type="submit" class="btn btn-primary">Apply</button>
+                    <!-- Checkboxes -->
+                    <br>
 
 
-                    </form>
+                    <!-- Radios -->
+                    <h5 class="headline">
+                        <span>Alphabetical</span>
+                    </h5>
+                    <div>
+                        <input type="checkbox" name="a-z" id="shop-filter-radio_1" value="a-z">
+                        <label for="shop-filter-radio_1">A to Z</label>
+                    </div>
+                    <div>
+                        <input type="checkbox" name="z-a" id="shop-filter-radio_2" value="z-a">
+                        <label for="shop-filter-radio_2">Z to A</label>
+                    </div>
+                    <div class="btn btn-primary" onclick="applyFilters()">Apply</div>
 
+                </form>
 
             </div>
 
@@ -964,15 +933,6 @@
                 </ul>
 
                 <div class="row">
-                    {{#if noFound}}
-                    <div class="box"
-                        style="box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); background-color: white; padding: 20px;">
-                        <i class="fas fa-exclamation-circle"> <!-- Font Awesome icon -->
-                            <span style="color: red;">{{this.noFound}}</span></i>
-                    </div>
-                    {{/if}}
-
-
                     {{#each productdata}}
                     <div class="col-sm-6 col-md-4">
                         <div style="border-bottom: #2185e3;" class="shop__thumb">
@@ -1153,6 +1113,88 @@
             .then(data => {
                 console.log("productdata", data);
                 // Render the filtered product data
+                const filteredData=document.querySelector(".container").innerHTML=""
+                const filtered=`<div class="row">
+            <div class="col-sm-4 col-md-3">
+                <form action="/user/search" method="post">
+                    <div class="well">
+                        <div class="row">
+                            <div class="col-sm-12">
+                                <div class="input-group">
+                                    <input type="text" class="form-control" placeholder="Search products..."
+                                        name="search">
+                                    <span class="input-group-btn">
+
+                                        <button class="btn btn-primary" type="submit">
+                                            <i class="fa fa-search"></i>
+                                        </button>
+
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+
+                <!-- Filter -->
+
+
+                <!-- Price -->
+
+                <br>
+                <h5 class="headline">
+                    <span>Category</span>
+                </h5>
+                <hr>
+                <div>
+                    <input type="checkbox" id="shop-filter-checkbox_1" name="category" value="Mobile Phone">
+                    <a href="/user/filter/Mobile Phone" onclick="mobiles()"><label for="shop-filter-checkbox_1">Mobile
+                            Phone</label></a>
+                </div>
+                <div>
+                    <input type="checkbox" id="shop-filter-checkbox_2" name="category" value="Laptop">
+                    <a href="/user/filter/laptop"><label for="shop-filter-checkbox_2">Laptop</label></a>
+                </div>
+                <div>
+                    <input type="checkbox" id="shop-filter-checkbox_3" name="category" value="Watch">
+                    <a href="/user/filter/watch"><label for="shop-filter-checkbox_3">Watch</label></a>
+                </div>
+                <br>
+                <form class="shop__filter">
+                    <h5 class="headline">
+                        <span>Price</span>
+                    </h5>
+                    <hr>
+                    <div>
+                        <input type="checkbox" name="low-to-high" id="shop-filter-price_1" value="low-to-high">
+                        <label for="shop-filter-price_1">Low to High</label>
+                    </div>
+                    <div>
+                        <input type="checkbox" name="high-to-low" id="shop-filter-price_2" value="high-to-low">
+                        <label for="shop-filter-price_2">High to Low</label>
+                    </div>
+
+                    <!-- Checkboxes -->
+                    <br>
+
+
+                    <!-- Radios -->
+                    <h5 class="headline">
+                        <span>Alphabetical</span>
+                    </h5>
+                    <div>
+                        <input type="checkbox" name="a-z" id="shop-filter-radio_1" value="a-z">
+                        <label for="shop-filter-radio_1">A to Z</label>
+                    </div>
+                    <div>
+                        <input type="checkbox" name="z-a" id="shop-filter-radio_2" value="z-a">
+                        <label for="shop-filter-radio_2">Z to A</label>
+                    </div>
+                    <div class="btn btn-primary" onclick="applyFilters()">Apply</div>
+
+                </form>
+
+            </div>`
                 const productContainer = document.querySelector('.row'); // Assuming this is the container for product cards
                 productContainer.innerHTML = ''; // Clear the existing product cards
 
@@ -1197,33 +1239,32 @@
     }
 </script>
 <script>
-    async function sortDropdownFn() {
-        try {
-            console.log(sortDropdown.value)
-            if (sortDropdown.value == 'default') {
-                return window.location.href = '/shop'
-            }
-            const response = await fetch('/shop/sort/' + sortDropdown.value, { method: 'GET' })
-            const data = await response.json()
-            let sortDropdownElement = document.getElementById(`${sortDropdown.value}`)
-            sortDropdownElement.setAttribute('selected', true)
-            if (data.success) {
-                localStorage.setItem('selectedDropdownOption', sortDropdown.value)
-                window.location.href = '/shop'
-            }
-        } catch (error) {
-            console.error(error)
-        }
-    }
-</script>
+    
+    function mobiles() {
+        console.log("mobiles")
+        fetch(`/user/filter/Mobile Phone`, {
+            method: 'GET' // Specify the method as a string 'GET'
+        })
+            .then(response => response.json()) // Parse the JSON response
+            .then(data => {
+                console.log("productdata", data);
+                const productContainer = document.querySelector('.row'); // Assuming this is the container for product cards
+                productContainer.innerHTML = '';
+                data.forEach(product => {
+                    var productCard =
+                    document.getElementsByClassName("img-responsive").innerHTML=product.image;
+                    document.getElementById("quantity").innerHTML=product.quantity;
+                    productContainer.insertAdjacentHTML('beforeend', productCard);
+                });
 
-<script>
-    document.addEventListener('DOMContentLoaded', function () {
-        const selectedDropdownOption = localStorage.getItem('selectedDropdownOption')
-        if (selectedDropdownOption) {
-            document.getElementById('sortDropdown').value = selectedDropdownOption
-        }
-    })
+                // Further processing of the data can be done here
+            })
+            .catch(error => {
+                console.error('Error fetching mobiles:', error);
+                // Handle errors if any
+            });
+    }
+
 </script>
 
 </script>

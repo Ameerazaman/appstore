@@ -185,7 +185,7 @@ const otpSubmit = async (req, res) => {
         else {
             let message = "OTP is incorrect"
 
-            res.render('users/verification', { message, admin: true })
+            res.render('users/failOtp')
         }
     }
     catch (error) {
@@ -196,8 +196,6 @@ const otpSubmit = async (req, res) => {
 
 //Ressend otp//
 const resendOtp = function (req, res) {
-
-
     req.session.otp = generateOTP(6)
     async function main() {
         const transport = nodemailer.createTransport({
@@ -217,10 +215,12 @@ const resendOtp = function (req, res) {
         })
         console.log("Resend message send " + info.messageId)
         console.log(req.session.otp)
+
     }
     main();
+    res.render("users/verification")
 
-    res.render('users/verification')
+
 }
 // get gforgot password page
 const getForgot = async (req, res) => {
@@ -305,7 +305,7 @@ const getProductDetail = async (req, res) => {
     try {
         const proId = req.params.id
         const data = await products.findOne({ _id: proId }).lean()
-        const categorydata = await products.find({ category: data.category }).lean()
+        const categorydata = await products.find({ category: data.category }).limit(5).lean()
         const userId = req.session.user._id;
         const cartCount = await cart.find({ userId: userId })
         const cartcount = cartCount.length
@@ -351,122 +351,160 @@ const getcategory = async (req, res) => {
     }
 }
 
-
-// \filter
-// const filter = async (req, res) => {
-//     try {
-//         console.log("filter page");
-//         console.log(req.body, "filters");
-//         const filters = req.body;
-//         console.log(filters);
-//         let query = {};
-
-//         // Sorting
-//         if (filters.priceOption === 'low-to-high') {
-//             query.sort = { price: 1 }; // Sorting low to high
-//         } else if (filters.priceOption === 'high-to-low') {
-//             query.sort = { price: -1 }; // Sorting high to low
-//         }
-
-//         if (filters.alpha === 'a-z') {
-//             query.sort = { product: 1 }; // Sorting A-Z
-//         } else if (filters.alpha === 'z-a') {
-//             query.sort = { product: -1 }; // Sorting Z-A
-//         }
-
-//         // Category Filtering
-//         if (filters.category && filters.category.length > 0) {
-//             query.category = { $in: filters.category }; // Filtering based on selected categories
-//         } else {
-//             query.category = { $in: ["Mobile Phone", "Laptop", "Watch"] };
-//         }
-//         const sort=query.sort
-//         console.log(query.sort,"sort"); // Log the constructed query
-
-//         const productdata = await products.find({category:query.category}).sort(sort).lean();
-//         console.log(productData, "Product Data:"); // Log the fetched product data
-//         res.json(productData);
-//     } catch (error) {
-//         console.log("Error in filter route in user controller:", error);
-//         res.status(500).send("Internal Server Error");
-//     }
-// };
-
-const filter = async (req, res) => {
+// get mobile category
+const getFilterCategory = async (req, res) => {
+    // console.log(req.params)
     try {
 
+        const filterCategory = req.params.category
+        const productdata = await products.find({ category: req.params.category }).lean()
+        const categorydata = await category.find({ isUnlist: false }).lean()
+        res.render("users/product", { filterCategory, productdata, categorydata })
+    }
+    catch (e) {
+        console.log("categorypage error.(mobile,laptop and watch)")
+    }
+}
+
+// filter based on category
+const categorySort = async (req, res) => {
+    try {
+        console.log("sorting category sort")
+        const filterCategory = req.params.filterCategory
+        console.log("req.body filter", req.body);
         const filters = req.body;
         let query = {};
-        const category = filters.category
-        console.log("category", category)
 
-        // Checkboxes for sorting
-        if (filters.priceOption === 'low-to-high') {
-            query.sort = { price: 1 }; // Sorting low to high
-        } else if (filters.priceOption === 'high-to-low') {
-            query.sort = { price: -1 }; // Sorting high to low
+        // Construct query based on filters
+        if (filters['sort-product'] === 'low-to-high') {
+            var priceLowToHigh = "low-to-high"
+            query.sort = { price: 1 }; // Sort by price ascending
+        } else if (filters['sort-product'] === 'high-to-low') {
+            var priceHighToLow = "high-to-low"
+            query.sort = { price: -1 }; // Sort by price descending
+        } else if (filters['sort-product'] === 'a-z') {
+            var alphaAtoZ = "a-z"
+            query.sort = { product: 1 }; // Sort alphabetically A to Z
+        } else if (filters['sort-product'] === 'z-a') {
+            var alphaZtoA = "z-a"
+            query.sort = { product: -1 }; // Sort alphabetically Z to A
         }
-        if (filters.alpha === 'a-z') {
-            query.sort = { product: 1 }; // Sorting A-Z
-        } else if (filters.alpha === 'z-a') {
-            query.sort = { product: -1 }; // Sorting Z-A
+        console.log("price", priceHighToLow)
+
+        // Filter based on selected categories
+
+        query.category = { $in: req.params.filterCategory };
+
+        // Fetch filtered data from the database
+        const sort = query.sort
+        console.log("sort", sort)
+
+        console.log("category", query.category)
+        console.log("Query:", query, "sort", sort); // Log the constructed query
+
+        const productdata = await products.find({ category: query.category }).sort(sort).lean();
+        const categorydata = await category.find().lean()
+        console.log("Product Data:", productdata);
+        if (priceLowToHigh) {// Log the fetched product data
+            res.render("users/product", {
+                productdata, categorydata, filterCategory, priceLowToHigh
+            });
         }
+        else if (priceHighToLow) {
+            res.render("users/product", {
+                productdata, categorydata, filterCategory, priceHighToLow
+            });
+        }
+        else if (alphaAtoZ) {
+            res.render("users/product", {
+                productdata, categorydata, filterCategory, alphaAtoZ
+            })
+        }
+        else if (alphaZtoA) {
+            res.render("users/product", {
+                productdata, categorydata, filterCategory, alphaZtoA
+            })
+        }
+
+    }
+    catch (error) {
+        console.log("error in category sort in user controller")
+    }
+}
+
+// filter
+const filter = async (req, res) => {
+    try {
+        console.log("req.body filter", req.body);
+        const filters = req.body;
+        console.log(filters, "filters")
+        let query = {};
+
+        // Construct query based on filters
+       
+        if (filters['sort-product'] === 'low-to-high') {
+            var priceLowToHigh = "low-to-high"
+            query.sort = { price: 1 }; // Sort by price ascending
+        } else if (filters['sort-product'] === 'high-to-low') {
+            var priceHighToLow = "high-to-low"
+            query.sort = { price: -1 }; // Sort by price descending
+        } else if (filters['sort-product'] === 'a-z') {
+            var alphaAtoZ = "a-z"
+            query.sort = { product: 1 }; // Sort alphabetically A to Z
+        } else if (filters['sort-product'] === 'z-a') {
+            var alphaZtoA = "z-a"
+            query.sort = { product: -1 }; // Sort alphabetically Z to A
+        }
+
+        // Filter based on selected categories
+        if (filters.category && filters.category.length > 0) {
+            query.category = { $in: filters.category };
+        } else {
+            query.category = { $in: ["Mobile Phone", "Laptop", "Watch"] };
+        }
+
+        // Fetch filtered data from the database
         const sort = query.sort
         console.log("sort", sort)
         // Checkbox for category filtering
         if (filters.category && filters.category.length > 0) {
             query.category = { $in: filters.category }; // Filtering based on selected categories
-        
-    } else {
-        query.category = { $in: ["Mobile Phone", "Laptop", "Watch"] };
+
+        } else {
+            query.category = { $in: ["Mobile Phone", "Laptop", "Watch"] };
+        }
+        console.log("category", query.category)
+        console.log("Query:", query, "sort", sort); // Log the constructed query
+
+        const productdata = await products.find({ category: query.category }).sort(sort).lean();
+        const categorydata = await category.find().lean()
+        console.log("Product Data:", productdata); // Log the fetched product data
+       
+        if (priceLowToHigh) {// Log the fetched product data
+            res.render("users/product", {
+                productdata, categorydata, priceLowToHigh
+            });
+        }
+        else if (priceHighToLow) {
+            res.render("users/product", {
+                productdata, categorydata, priceHighToLow
+            });
+        }
+        else if (alphaAtoZ) {
+            res.render("users/product", {
+                productdata, categorydata, alphaAtoZ
+            })
+        }
+        else if (alphaZtoA) {
+            res.render("users/product", {
+                productdata, categorydata, alphaZtoA
+            })
+        }
+    } catch (error) {
+        console.error("Error in filter route:", error);
+        res.status(500).send("Internal Server Error");
     }
-    console.log("category", query.category)
-    console.log("Query:", query); // Log the constructed query
-
-    const productdata = await products.find({ category: query.category }).sort(sort).lean();
-    // console.log("Product Data:", productdata); // Log the fetched product data
-    res.json(productdata);
-} catch (error) {
-    console.log("Error in filter route in user controller:", error);
-    res.status(500).send("Internal Server Error");
 }
-}
-
-
-// const filter = async (req, res) => {
-//     try {
-//         console.log("req.body filter", req.body);
-//         const filters = req.body;
-//         let query = {};
-
-//         // Construct query based on filters
-//         if (filters['low-to-high']) {
-//             query.sort = { price: 1 };
-//         } else if (filters['high-to-low']) {
-//             query.sort = { price: -1 };
-//         } else if (filters['a-z']) {
-//             query.sort = { product: 1 };
-//         } else if (filters['z-a']) {
-//             query.sort = { product: -1 };
-//         }
-
-//         // Filter based on selected categories
-//         if (filters.category && filters.category.length > 0) {
-//             query.category = { $in: filters.category };
-//         } else {
-//             query.category = { $in: ["Mobile Phone", "Laptop", "Watch"] };
-//         }
-
-//         // Fetch filtered data from the database
-//         const productdata = await products.find(query.category).sort(query.sort).lean();
-//         console.log("productdata", productdata);
-//         // Return filtered data to the frontend
-//         res.json(productdata);
-//     } catch (error) {
-//         console.error("Error in filter route:", error);
-//         res.status(500).send("Internal Server Error");
-//     }
-// }
 // get product page
 const getproduct = async (req, res) => {
     try {
@@ -475,7 +513,8 @@ const getproduct = async (req, res) => {
         const cartCount = await cart.find({ userId: userId })
         const cartcount = cartCount.length
         req.session.cartcount = cartcount
-        res.render("users/product", { productdata, cartcount })
+        const categorydata = await category.find().lean()
+        res.render("users/product", { productdata, cartcount, categorydata })
     }
     catch (error) {
         console.log("Error in get product page in user controller")
@@ -493,8 +532,16 @@ const searchProducts = async (req, res) => {
                 { category: regex }
             ]
         }).lean();
-        console.log("productdata", productdata)
-        res.render("users/product", { productdata })
+        console.log("productdata", productdata.length)
+        const categorydata = await category.find().lean()
+        if (productdata.length == 0) {
+            const noFound = `No results for "${query}" try checking your splelling or use more general items`
+            res.render("users/product", { categorydata, noFound })
+        }
+        else {
+            res.render("users/product", { productdata, categorydata })
+
+        }
     }
     catch (error) {
         console.log("Error iin serach product route in user controlleer")
@@ -506,5 +553,6 @@ module.exports = {
     postSignup, otpSubmit, resendOtp,
     getProductDetail, userLogout, getForgot,
     getForgotOtp, forgotOtpVerify, changeForgotPassword,
-    filter, searchProducts, getproduct
+    filter, searchProducts, getproduct,
+    getFilterCategory, categorySort
 }

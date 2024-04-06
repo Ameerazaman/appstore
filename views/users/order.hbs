@@ -384,6 +384,7 @@
                <i class="fa fa-eye black"></i> 
               </a>
               <p>Date:{{this.orderedAt}}</p>
+              <p style="color: red;">Total Amount:{{this.totalPrice}}</p>
             </div>
             {{#each this.products}}
             <div class="card-body">
@@ -405,7 +406,7 @@
               </div>
               <div class="quantity-controls">
                 <div style="width: 80px; margin-left: 30px;">
-                  <p class="mb-0">{{this.subtotal}}</p>
+                  <p class="mb-0">Price:{{this.subtotal}}</p>
                 </div>
 
                 <div style="width: 80px; margin-left: 30px;">

@@ -381,7 +381,25 @@
     }
 
   </script>
+<script>
+  // Loop through each data item and update the corresponding table row number
+  document.addEventListener('DOMContentLoaded', function() {
+    const dataRows = document.querySelectorAll('#categoryBody tr');
+    dataRows.forEach((row, index) => {
+      const rowNumberCell = row.querySelector('th[scope="row"]');
+      if (rowNumberCell) {
+        rowNumberCell.textContent = index + 1;
+      }
+    });
+  });
+</script>
+
+
+
   <script src="/javascript.js"></script>
+
+    
+
 
 </body>
 

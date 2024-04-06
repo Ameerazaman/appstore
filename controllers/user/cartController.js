@@ -76,6 +76,7 @@ const getCart = async (req, res) => {
         const checkCart = await cart.findOne({ userId: userId })
         const cartCount = await cart.find({ userId: userId })
         const cartcount = cartCount.length
+
         req.session.cartcount = cartcount
         if (checkCart) {
             const productId = req.session.productId
@@ -174,7 +175,8 @@ const getCart = async (req, res) => {
             req.session.data = data
             req.session.result = result
             req.session.cartId = data._id
-            const total = result[0].totalPriceAfterDiscount
+            const totalAmount = result[0].totalPriceAfterDiscount
+            console.log("total", totalAmount)
             req.session.discount = result[0].totalDiscount
             console.log("discount", req.session.discount)
             const coupondata = await Coupon.find({ users: { $ne: userId } }).lean();
@@ -182,13 +184,25 @@ const getCart = async (req, res) => {
             req.session.coupondata = coupondata
 
 
-            const categoryOffer = await category.find({ isUnlist: false }).lean()
-            console.log(result[0].totalPriceAfterDiscount)
-            if (total > 3000) {
+            const categoryData = await category.find({ isUnlist: false }).lean()
+
+            console.log(data, "data")
+            var categoryOffer = 0
+            for (let i = 0; i < data.length; i++) {
+                const productCategory = data[i].product.category
+                const result = await category.findOne({ category: productCategory })
+                const offer = (data[i].product.price * result.offer) / 100
+                categoryOffer = categoryOffer + offer
+            }
+            console.log("cattegory offer", categoryOffer)
+            req.session.categoryOffer = categoryOffer
+            var totalAmt = totalAmount - categoryOffer
+            console.log("total", totalAmt)
+            if (totalAmt > 10000) {
                 console.log("hai")
                 var shippingCharge = 90
                 console.log("shipping", shippingCharge)
-                var totalAmt = (total + shippingCharge)
+                totalAmt = (totalAmt + shippingCharge)
                 console.log("total", totalAmt)
 
             }
@@ -201,7 +215,8 @@ const getCart = async (req, res) => {
 
             console.log("totalc", totalAmt)
             req.session.ship = shippingCharge
-            req.session.totalAmt=totalAmt
+            req.session.totalAmt = totalAmt
+           
             res.render("users/cart", { cartcount, shippingCharge, data, totalAmt, result, coupondata, categoryOffer })
 
 
@@ -228,25 +243,26 @@ const categoryOffer = async (req, res) => {
 
         const result = req.session.result
         const shippingCharge = req.session.ship
-        const totalAmt =req.session.totalAmt
+        var totalAmt = req.session.total
 
         //const categorydiscount = function () {
         var categoryDiscount = 0
         for (let i = 0; i < data.length; i++) {
 
             if (data[i].product.category == categoryData.category) {
-                console.log("category", data[i].product.category, categoryData.category)
+
                 var categoryDiscount = ((data[i].product.price * categoryData.offer) / 100) + categoryDiscount
-                console.log("discount", categoryDiscount)
+
                 const totalAmount = totalAmt - categoryDiscount;
+
                 req.session.categoryDiscount = categoryDiscount
-                req.session.totalAmt=totalAmount
+                req.session.checkoutTotal = totalAmount
                 res.render("users/cart", { result, shippingCharge, data, totalAmount, categoryDiscount })
 
 
             }
             else {
-                
+
                 const categoryMessage = "Match categories are not exist"
                 res.render("users/cart", { result, categoryMessage, shippingCharge, data, totalAmt, categoryDiscount, })
 
@@ -297,6 +313,7 @@ const incrementQuantity = async (req, res) => {
                     { userId, 'products.proId': productId },
                     { $inc: { 'products.$.quantity': 1 } }
                 );
+               
                 res.status(200).json(data)
 
             } else {
@@ -325,9 +342,10 @@ const decrementQuantity = async (req, res) => {
         if (currentQuantity > 1) {
             const data = await cart.updateOne(
                 { userId, 'products.proId': productId },
-                { $inc: { 'products.$.quantity': -1 } } // Use negative value to decrement
-            );
+                { $inc: { 'products.$.quantity': -1 } }
+                // Use negative value to decrement
 
+            );
             res.status(200).json(data)
 
         } else {
