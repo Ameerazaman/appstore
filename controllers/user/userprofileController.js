@@ -168,19 +168,19 @@ const getInvoice = async (req, res) => {
         const orderId = req.params.id;
         const orderdata = await Order.findOne({ _id: orderId }).lean();
         console.log("orderdata", orderdata);
-const productName=orderdata.products[0].product.product
-const total=orderdata.totalPrice
-  
+        const productName = orderdata.products[0].product.product
+        const total = orderdata.totalPrice
+
         if (!orderdata) {
             return res.status(404).send('Order not found');
         }
 
- 
+
         const products = orderdata.products.map(product => ({
             quantity: product.quantity,
             description: productName,
-  
-            price:total
+
+            price: total
         }));
 
         var data = {
@@ -289,7 +289,7 @@ const getOrderDetail = async (req, res) => {
         const cartcount = req.session.cartcount
         console.log(req.params.id)
         const data = await Order.findOne({ _id: req.params.id })
-        console.log(data,"data")
+        console.log(data, "data")
         const addressdata = data.address
         const payment = data.payment
         const total = data.total
@@ -298,24 +298,53 @@ const getOrderDetail = async (req, res) => {
         const totalprice = data.totalPrice
         const date = data.orderedAt
         const id = data._id
-        const ship=data.ship
-        const categoryDiscount=data.categoryDiscount
+        const ship = data.ship
+        const categoryDiscount = data.categoryDiscount
+        const success = data.success
+        const coupondiscount=data.coupondiscount
+        
+        if (success === "failed") {
+            var failed="Retry"
+           
+            if (data.status == "canceled") {
+               
+                var cancel = "Order is Canceled";
+                res.render("users/order-detail", { failed,success,coupondiscount,  cartcount, categoryDiscount, ship, data, addressdata, payment, total, discount, status, date, totalprice, id, cancel })
+            }
+            else if (data.status == "delivered") {
+             
+                const deliver = "order delivered";
+                res.render("users/order-detail", { failed,success,coupondiscount,  cartcount, categoryDiscount, ship, data, addressdata, payment, total, discount, status, date, totalprice, id, deliver })
+            }
+            else if (data.status == "Return") {
+              
+                var Return = "Order is Returened"
+                res.render("users/order-detail", { failed,success,coupondiscount,  cartcount, categoryDiscount, ship, data, addressdata, payment, total, discount, status, date, totalprice, id, Return })
 
-        if (data.status == "canceled") {
-            var cancel = "Order is Canceled";
-            res.render("users/order-detail", { cartcount,categoryDiscount,ship, data, addressdata, payment, total, discount, status, date, totalprice, id, cancel })
-        }
-        else if (data.status == "delivered") {
-            const deliver = "order delivered";
-            res.render("users/order-detail", { cartcount,categoryDiscount,ship, data, addressdata, payment, total, discount, status, date, totalprice, id, deliver })
-        }
-        else if (data.status == "Return") {
-            var Return = "Order is Returened"
-            res.render("users/order-detail", { cartcount,categoryDiscount,ship, data, addressdata, payment, total, discount, status, date, totalprice, id, Return })
+            }
+            else {
+               
+                res.render("users/order-detail", { failed,success,coupondiscount,  cartcount, categoryDiscount, ship, data, addressdata, payment, total, discount, status, date, totalprice, id })
+            }
 
         }
         else {
-            res.render("users/order-detail", { cartcount,categoryDiscount,ship, data, addressdata, payment, total, discount, status, date, totalprice, id })
+            if (data.status == "canceled") {
+                var cancel = "Order is Canceled";
+                res.render("users/order-detail", { success, cartcount, categoryDiscount, ship, data, addressdata, payment, total, discount, status, date, totalprice, id, cancel })
+            }
+            else if (data.status == "delivered") {
+                const deliver = "order delivered";
+                res.render("users/order-detail", { success, cartcount, categoryDiscount, ship, data, addressdata, payment, total, discount, status, date, totalprice, id, deliver })
+            }
+            else if (data.status == "Return") {
+                var Return = "Order is Returened"
+                res.render("users/order-detail", { success, cartcount, categoryDiscount, ship, data, addressdata, payment, total, discount, status, date, totalprice, id, Return })
+
+            }
+            else {
+                res.render("users/order-detail", { success, cartcount, categoryDiscount, ship, data, addressdata, payment, total, discount, status, date, totalprice, id })
+            }
         }
     }
     catch (error) {
@@ -398,7 +427,7 @@ const orderReturn = async (req, res) => {
         console.log(req.params.id)
         const datas = await Order.findByIdAndUpdate({ _id: req.params.id }, { status: "Return" })
         console.log(req.params.id)
-
+       
         const data = await Order.findOne({ _id: req.params.id })
         const addressdata = data.address
         const payment = data.payment
@@ -464,12 +493,51 @@ const walletPage = async (req, res) => {
         const cartcount = req.session.cartcount
         const userId = req.session.user._id
         const data = await wallet.find({ userId: userId }).sort({ _id: -1 }).lean()
-        var total = 0;
-        for (let i = 0; i < data.length; i++) {
-            total = total + data[i].totalPrice;
-        }
-        console.log(total)
+        console.log(data,"wallet")
+        if(data.length>0){
+        const creditTotal = await wallet.aggregate([
+            {
+                $match: {
+                    transactiontype: "credit",
+                    userId:userId
+                }
+            },
+            {
+                $group: {
+                    _id: null,
+                    totalCredit: {
+                        $sum: "$totalPrice"
+                    }
+                }
+            }
+        ]);
+        console.log("creditTotal",creditTotal)
+        
+        // Second stage of aggregation to calculate the total debit amount
+        const debitTotal = await wallet.aggregate([
+            {
+                $match: {
+                    transactiontype: "Debit",
+                    userId:userId
+                }
+            },
+            {
+                $group: {
+                    _id: null,
+                    totalDebit: {
+                        $sum: "$totalPrice"
+                    }
+                }
+            }
+        ]);
+        const total=creditTotal[0].totalCredit-debitTotal[0].totalDebit
+        
         res.render("users/wallet", { data, total, cartcount });
+    }
+    else{
+        var empty="your wallet is empty"
+        res.render("users/wallet", {empty});  
+    }
     }
     catch (error) {
         console.log("Error in wallet page route in userprofile controller")
@@ -485,7 +553,7 @@ const getOffer = async (req, res) => {
         const referal = data.referalcode
         if (referal) {
             // const referal=await referaloffer.find({userId:userId})
-            const referaldata = await referoffer.find({ userId: userId }).sort({_id:-1}).lean()
+            const referaldata = await referoffer.find({ userId: userId }).sort({ _id: -1 }).lean()
             res.render("users/offers", { referal, referaldata, cartcount })
         }
         else {

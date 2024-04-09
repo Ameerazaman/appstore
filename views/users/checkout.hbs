@@ -529,7 +529,7 @@
             <div class="maincheckout">
                 <h5 style="color: red;">{{this.Outofstock}}</h5>
                 <div class="main-box">
-                    <div class="order-summary">
+                    <div style="box-shadow: 0 4px 8px rgba(0, 0, 0, 0.4);" class="order-summary">
                         <div class="order-smry">
                             <h3>Order Summary </h3>
                         </div>
@@ -555,12 +555,12 @@
 
 
                     </div>
-                    <div style="width: 45%;margin-left: 75%;color: orangered;" class="div-button"
+                    <div style="width: 45%;margin-left: 75%;color: rgb(8, 0, 255);" class="div-button"
                         onclick="NewAddress()">+Add New Address</div><br>
                     <span style="color: red;">{{this.message}}</span>
                     <form action="/checkout/save-address" method="post" id="checkout-form">
                         <section id="Address" style="display: none;">
-                            <h3>Shipping address</h3>
+                            <h3>Shipping address</h3><br>
                             <div class="form-group">
                                 <label for="fullname">Full name</label>
                                 <div>
@@ -621,30 +621,31 @@
                                     </div>
                                 </div>
                             </div>
-                            <button type="submit">Save</button>
+                            <button class="btn btn bg-primary" type="submit">Save</button>
                         </section>
                     </form>
-                    <div class="delivery-info">
+                    <div style="box-shadow: 0 4px 8px rgba(89, 103, 188, 0.3);" class="delivery-info">
                         <div class="head-box">
                             <h3>Delivery Information</h3>
                         </div>
                         {{#each resultadd}}
 
                         <a href="/checkout/edit/{{this._id}}"><svg width="70" height="20"
-                                style="margin-left: 75%;text-align: end;" viewBox="0 0 70 20" fill="none"
+                                style="margin-left: 75%;text-align: end; color: blue;" viewBox="0 0 70 20" fill="none"
                                 xmlns="http://www.w3.org/2000/svg">
                                 <path fill-rule="evenodd" clip-rule="evenodd"
                                     d="M24.6634 2.42499C23.5412 1.30284 21.7218 1.30283 20.5997 2.42499L13.4951 9.52955C12.9851 10.0395 12.6543 10.7012 12.5523 11.4152L12.3464 12.8563C12.1893 13.9563 13.1321 14.8991 14.2321 14.7419L15.6732 14.536C16.3872 14.434 17.0488 14.1032 17.5588 13.5932L24.6634 6.48868C25.7855 5.36653 25.7855 3.54715 24.6634 2.42499ZM21.9528 3.45876C22.4225 3.13854 23.0681 3.18679 23.4849 3.6035C23.9016 4.02022 23.9498 4.66588 23.6296 5.13561L21.9528 3.45876ZM20.7593 4.62236L22.466 6.32903L16.3803 12.4147C16.1253 12.6697 15.7945 12.8351 15.4375 12.8861L13.9964 13.092L14.2022 11.6509C14.2532 11.2939 14.4186 10.9631 14.6736 10.7081L20.7593 4.62236Z"
-                                    fill="#F56630" />
+                                    fill="blue" />
                                 <path
                                     d="M12.5 1.66667C10.6591 1.66667 9.16667 3.15905 9.16667 5V15C9.16667 16.841 10.6591 18.3333 12.5 18.3333H22.5C24.341 18.3333 25.8333 16.841 25.8333 15V10C25.8333 9.53977 25.4602 9.16667 25 9.16667C24.5398 9.16667 24.1667 9.53977 24.1667 10V15C24.1667 15.9205 23.4205 16.6667 22.5 16.6667H12.5C11.5795 16.6667 10.8333 15.9205 10.8333 15V5C10.8333 4.07953 11.5795 3.33334 12.5 3.33334H14.7368C15.1971 3.33334 15.5702 2.96024 15.5702 2.5C15.5702 2.03977 15.1971 1.66667 14.7368 1.66667H12.5Z"
-                                    fill="#F56630" />
+                                    fill="blue" />
                                 <path
                                     d="M36.8588 15V4.81818H43.4809V6.36435H38.7032V9.12855H43.1379V10.6747H38.7032V13.4538H43.5207V15H36.8588ZM48.1169 15.1342C47.517 15.1342 46.9801 14.9801 46.5061 14.6719C46.0322 14.3636 45.6576 13.9162 45.3825 13.3295C45.1075 12.7429 44.9699 12.0303 44.9699 11.1918C44.9699 10.3433 45.1091 9.62737 45.3875 9.04403C45.6692 8.45739 46.0487 8.01491 46.526 7.71662C47.0033 7.41501 47.5352 7.2642 48.1219 7.2642C48.5693 7.2642 48.9372 7.34044 49.2256 7.4929C49.5139 7.64205 49.7426 7.82268 49.9117 8.0348C50.0807 8.24361 50.2116 8.44081 50.3044 8.62642H50.379V4.81818H52.1837V15H50.4138V13.7969H50.3044C50.2116 13.9825 50.0774 14.1797 49.9017 14.3885C49.7261 14.594 49.4941 14.7696 49.2057 14.9155C48.9173 15.0613 48.5544 15.1342 48.1169 15.1342ZM48.6191 13.6577C49.0002 13.6577 49.325 13.5549 49.5935 13.3494C49.8619 13.1406 50.0658 12.8506 50.205 12.4794C50.3442 12.1082 50.4138 11.6757 50.4138 11.1818C50.4138 10.688 50.3442 10.2588 50.205 9.89418C50.0691 9.52959 49.8669 9.24621 49.5985 9.04403C49.3333 8.84186 49.0068 8.74077 48.6191 8.74077C48.218 8.74077 47.8833 8.84517 47.6148 9.05398C47.3463 9.26278 47.1441 9.55114 47.0083 9.91903C46.8724 10.2869 46.8044 10.7079 46.8044 11.1818C46.8044 11.6591 46.8724 12.085 47.0083 12.4595C47.1475 12.8307 47.3513 13.1241 47.6198 13.3395C47.8915 13.5516 48.2246 13.6577 48.6191 13.6577ZM54.1015 15V7.36364H55.9012V15H54.1015ZM55.0063 6.27983C54.7213 6.27983 54.476 6.18537 54.2705 5.99645C54.065 5.80421 53.9623 5.57386 53.9623 5.3054C53.9623 5.03362 54.065 4.80327 54.2705 4.61435C54.476 4.42211 54.7213 4.32599 55.0063 4.32599C55.2947 4.32599 55.5399 4.42211 55.7421 4.61435C55.9476 4.80327 56.0503 5.03362 56.0503 5.3054C56.0503 5.57386 55.9476 5.80421 55.7421 5.99645C55.5399 6.18537 55.2947 6.27983 55.0063 6.27983ZM61.5651 7.36364V8.75568H57.1752V7.36364H61.5651ZM58.259 5.53409H60.0587V12.7031C60.0587 12.9451 60.0951 13.1307 60.1681 13.2599C60.2443 13.3859 60.3437 13.4721 60.4664 13.5185C60.589 13.5649 60.7249 13.5881 60.874 13.5881C60.9867 13.5881 61.0895 13.5798 61.1823 13.5632C61.2784 13.5466 61.3513 13.5317 61.401 13.5185L61.7043 14.9254C61.6082 14.9586 61.4706 14.995 61.2916 15.0348C61.116 15.0746 60.9005 15.0978 60.6453 15.1044C60.1946 15.1177 59.7886 15.0497 59.4273 14.9006C59.066 14.7481 58.7793 14.5128 58.5672 14.1946C58.3584 13.8764 58.2557 13.4787 58.259 13.0014V5.53409Z"
-                                    fill="#EB5017" />
+                                    fill="blue" />
                             </svg>
+
                             <a style="text-decoration: none;" href="/checkout/delete/{{this._id}}"><small
-                                    style="color: rgb(232, 83, 29);font-weight:700;">Delete</small></a>
+                                    style="color: blue;font-weight:700;">Delete</small></a>
                             {{!-- <a style="text-decoration: none;" href="/checkout/select-Address/{{this._id}}"> --}}
 
                                 <form action="/checkout/create-order" method="post"
@@ -697,7 +698,7 @@
             </div>
 
 
-            <div class="aside">
+            <div style="box-shadow: 0 4px 8px rgba(0, 0, 0, 0.4);" class="aside">
                 <span style="color: red;">{{this.CODmessage}}</span>
                 {{!-- <form action="/checkout/create-order" method="post" onsubmit="return checkPaymentOption()"> --}}
                     <div class="pay-with">
@@ -716,11 +717,11 @@
                             Wallet</a><br /> --}}
 
                         <input aria-label="cash on delivery option" type="radio" id="cash_on_delivery"
-                            aria-required="true" name="payment" value="cash-on-delivery" />Cash on delivery<br />
+                            aria-required="true" name="payment" value="cash-on-delivery" /> Cash on delivery<br />
                         <input aria-label="debit card option" type="radio" id="Delivery" name="payment"
-                            value="online-payment" />Online-payment<br />
+                            value="online-payment" /> Online-payment<br />
                         <input aria-label="debit card option" type="radio" id="Delivery" name="payment"
-                            value="wallet" />Wallet<br />
+                            value="wallet" /> Wallet<br />
                     </div>
                     <hr>
 
@@ -746,7 +747,7 @@
                     </div>
                     <input type="number" value="{{this.couponDiscount}}" style="display: none;" name="coupon_dis">
                     <div class="cost">
-                        <span>Coupon discount</span> <span>-{{this.couponDiscount}}</span>
+                        <span>Coupon discount</span> <span id="coupon_dis">-{{this.couponDiscount}}</span>
                     </div>
 
                     <input type="number" value="{{this.categoryOffer}}" name="category_off" style="display: none;">
@@ -758,13 +759,8 @@
                     <div class="cost" id="total">
                         <span>Total</span>
                         <h4 id="total_amt">{{this.totalPrice}}</h4>
-                    </div>
 
-                    {{!-- <form action="/checkout/create-order">
-                        <button type="submit" class="pay-button">
-                            Pay {{this.totalPrice}}Rs
-                        </button>
-                    </form> --}}
+                    </div>
 
                     <button style="width: 100%;" type="submit" class="pay-button"
                         onclick="return checkPaymentOption()">Continue</button>
@@ -773,7 +769,8 @@
 
                 <br>
                 <h6>Select Coupon</h6>
-                <div class="discount_code mt-3 shadow">
+                
+                <div style="box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);" class="discount_code mt-3 shadow">
 
                     <div class="card">
 
@@ -801,7 +798,7 @@
                                         <input style="width: 70%;" type="text" name="" value="{{this.code}}"
                                             id="discount_code1" class="form-control font-weight-bold"
                                             placeholder="Enter the discount code">
-                                        <button style="margin-left: 10px;" class="btn btn-primary btn-sm mt-3"><a
+                                        <button  style="margin-left: 10px;" class="btn btn-primary btn-sm mt-3"><a
                                                 style="text-decoration: none;color: white;"
                                                 href="/checkout/select-coupon/{{this._id}}">Apply</a></button>
                                     </div>
@@ -951,6 +948,25 @@
         }
     }
 </script>
+<script>
+    async function applyCoupon(couponId) {
+        try {
+            const response = await fetch(`/checkout/select-coupon/${couponId}`, {
+                method: 'GET', // or 'POST' if your endpoint requires a POST request
+                // You can add headers, body, etc. as needed
+            });
+            
+            .then((data))// Handle the response as needed
+            const total=document.getElementById("total_amt").innerHTML
+            var coupondiscount=total-data
+            total.innerHTML=coupondiscount
+            document.getElementById("coupon_dis").innerHTML=data
 
+            console.log('Coupon applied successfully');
+        } catch (error) {
+            console.error('Error applying coupon:', error);
+        }
+    }
+</script>
 
 </script>

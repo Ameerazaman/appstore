@@ -117,6 +117,7 @@
     label {
       padding: auto;
       font-size: larger;
+      margin: 5px;
     }
 
     .formbold-file-input input {
@@ -124,6 +125,7 @@
       position: absolute;
       width: 100%;
       height: 100%;
+      margin: 20px;
     }
 
     .formbold-file-input label {
@@ -332,8 +334,8 @@
                 <label style="color: #262728;">Name of Product</label>
                 <span class="text-danger" id="product-name-error"></span><br>
                 <input value="{{data.product}}" type="text" name="product" id="product" placeholder="Enter your Product"
-                  class="formbold-form-input" />
-
+                  class="formbold-form-input" /><br>
+                <br>
                 <label style="color: #262728;">Category</label>
                 <br>
                 <span class="text-danger" id="category-name-error"></span>
@@ -343,28 +345,28 @@
                   <option value="{{this.category}}">{{this.category}}</option>
                   {{/each}}
                 </select>
-
+                <br>
                 <br>
                 <label style="color: #262728;">Description</label><br>
                 <span class="text-danger" id="description-name-error"></span>
                 <input value="{{data.description}}" type="text" name="description" id="description"
                   placeholder="description of product" class="formbold-form-input" />
-
+                <br><br>
                 <label style="color: #262728;">Price</label><br>
                 <span class="text-danger" id="price-name-error"></span>
                 <input value="{{data.price}}" type="number" name="price" id="price" placeholder="Price of Product"
-                  class="formbold-form-input" />
+                  class="formbold-form-input" /><br><br>
                 <label style="color: #262728;">Quantity</label><br>
                 <span class="text-danger" id="quantity-name-error"></span>
                 <input value="{{data.quantity}}" type="number" name="quantity" id="quantity"
                   placeholder="Price of Product" class="formbold-form-input" />
                 <br>
-
+                <br>
                 <label style="color: #262728;">Discount</label><br>
                 <span class="text-danger" id="discount-name-error"></span>
                 <input value="{{data.discount}}" type="number" name="discount" id="discount"
                   placeholder="Discount of product" class="formbold-form-input" /><br>
-
+                <br>
                 <br>
                 <label for="">Image</label>
 
@@ -393,9 +395,6 @@
                     <input name="productImage4" type="file" class="form-control">
                   </div>
                 </div>
-
-
-
                 <button class="view" type="submit">submit</button>
             </form>
           </div>

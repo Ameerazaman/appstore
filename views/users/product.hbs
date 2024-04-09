@@ -1032,7 +1032,6 @@
 
 </html>
 <script>
-
     document.addEventListener("DOMContentLoaded", function () {
         const productCards = document.querySelectorAll('.shop__thumb');
         const prevButton = document.getElementById('prev');
@@ -1105,7 +1104,7 @@
 
 </script>
 <script>
-    function addToCart(id, quantity) {
+    {{!-- function addToCart(id, quantity) {
         var stock = parseInt(quantity, 10); // Parse the stock quantity as an integer
 
         if (stock < 1) {
@@ -1119,102 +1118,49 @@
         } else {
             window.location.href = "/cart/add-to-cart/" + id;
         }
-    }
-</script>
-<script>
-    function applyFilters() {
-        console.log("hai");
-        // Extract selected options from form elements
-        const selectedPriceOption = document.querySelector('input[name="low-to-high"]:checked') ? 'low-to-high' :
-            document.querySelector('input[name="high-to-low"]:checked') ? 'high-to-low' : null;
-        const selectedCategories = Array.from(document.querySelectorAll('input[name="category"]:checked')).map(input => input.value);
-        const selectedAlphabeticalOption = document.querySelector('input[name="a-z"]:checked') ? 'a-z' :
-            document.querySelector('input[name="z-a"]:checked') ? 'z-a' : null;
-        console.log("price", selectedPriceOption, "category", selectedCategories, "alpha", selectedAlphabeticalOption)
-        // Construct request body
-        const requestBody = {
-            priceOption: selectedPriceOption,
-            category: selectedCategories,
-            alpha: selectedAlphabeticalOption // Corrected property name
-        };
+    } --}}
 
-        const requestOptions = {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json', // Adjust content type if needed
-                // Add any other headers if required
-            },
-            body: JSON.stringify(requestBody),
-        };
+    function addToCart(id, quantity) {
+    var stock = parseInt(quantity, 10); // Parse the stock quantity as an integer
 
-        console.log(requestOptions, "options")
-        fetch(`/user/filter`, requestOptions)
-            .then(response => response.json()) // Parse the JSON response
+    if (stock < 1) {
+        Swal.fire({
+            title: 'Out of Stock',
+            text: 'This product is out of stock',
+            icon: 'error',
+            confirmButtonColor: '#3085d6',
+            confirmButtonText: 'OK'
+        });
+    } else {
+        fetch("/cart/add-to-cart/" + id)
+           .then(response => {
+                if (response.ok) {
+                    return response.json(); // Extract JSON content from response
+                } else {
+                    // Handle error response from server
+                    return response.text().then(errorMessage => {
+                        throw new Error(errorMessage);
+                    });
+                }
+            })
             .then(data => {
-                console.log("productdata", data);
-                // Render the filtered product data
-                const productContainer = document.querySelector('.row'); // Assuming this is the container for product cards
-                productContainer.innerHTML = ''; // Clear the existing product cards
-
-                data.forEach(product => {
-                    var productCard = `
-        <div class="col-sm-6 col-md-4">
-            <div style="border-bottom: #2185e3;" class="shop__thumb">
-                <a href="/user/product-detail/${product._id}">
-                    <div style="width:100%;height:70%;" class="shop-thumb__img">
-                        <img style="width:200px;height: 200px;" src="/images/${product.productImage1}"
-                            class="img-responsive" alt="...">
-                    </div>
-                    <h5>${product.product}</h5>
-                    <h5 style="display: none;" id="quantity${product._id}">
-                        ${product.quantity}
-                    </h5>
-                </a>
-                <div class="shop-thumb__price">
-                    <span class="price"><i class="fa fa-inr"></i>Price ${product.price}</span>
-                    <span style="color: green;" class="offer-price">Off <i class="fa fa-inr"></i>
-                        ${product.discount}</span><br>
-                        <a class="btn btn-sm" href="javascript:void(0);"
-                            onclick="addToCart('${product._id}', '${product.quantity}')">
-                            <button style="color: rgb(255, 255, 255);" class="button-79" style="width:40px;">
-                                Add to Cart <i class="fa fa-shopping-cart"></i>
-                            </button>
-                        </a>
-                        <a href="/wishlist/add-product/${product._id}">
-                            <button style="color: rgb(255, 255, 255);" class="button-79" style="width:40px;"> <i class="fa fa-heart"></i></button>
-                        </a>
-                </div>
-            </div>
-        </div>
-                    `;
-                    productContainer.insertAdjacentHTML('beforeend', productCard);
-                });
-
+                // Update the content of the element with id "header_cart" with the response data
+                document.getElementById("header_cart").innerText = JSON.stringify(data);
             })
             .catch(error => {
-                console.error('Error:', error);
+                // Handle any error that occurred during the fetch operation
+                console.error('Error adding to cart:', error);
+                Swal.fire({
+                    title: 'Error',
+                    text: 'Failed to add item to cart. Please try again later.',
+                    icon: 'error',
+                    confirmButtonColor: '#3085d6',
+                    confirmButtonText: 'OK'
+                });
             });
     }
-</script>
-<script>
-    async function sortDropdownFn() {
-        try {
-            console.log(sortDropdown.value)
-            if (sortDropdown.value == 'default') {
-                return window.location.href = '/shop'
-            }
-            const response = await fetch('/shop/sort/' + sortDropdown.value, { method: 'GET' })
-            const data = await response.json()
-            let sortDropdownElement = document.getElementById(`${sortDropdown.value}`)
-            sortDropdownElement.setAttribute('selected', true)
-            if (data.success) {
-                localStorage.setItem('selectedDropdownOption', sortDropdown.value)
-                window.location.href = '/shop'
-            }
-        } catch (error) {
-            console.error(error)
-        }
-    }
+}
+
 </script>
 
 <script>

@@ -3,7 +3,7 @@ const mongoose = require('mongoose')
 const router = express.Router()
 const users = require('../../models/user/usermodel')
 const nodemailer = require('nodemailer')
-const { doSignup, getLogin, postLogin, getSignup, otpSubmit, postSignup, resendOtp, getProductDetail, userLogout, getcategory, homePage, getForgot, getForgotOtp, forgotOtpVerify, changeForgotPassword, filter, search, searchProducts, getproduct, getMobile, getFilterCategory, categorySort } = require('../../controllers/user/userControllers')
+const { doSignup, getLogin, postLogin, getSignup, otpSubmit, postSignup, resendOtp, getProductDetail, userLogout, getcategory, homePage, getForgot, getForgotOtp, forgotOtpVerify, changeForgotPassword, filter, search, searchProducts, getproduct, getMobile, getFilterCategory, categorySort, cartCount, wishlistCount } = require('../../controllers/user/userControllers')
 const products = require('../../models/admin/productModel')
 const category = require('../../models/admin/categorymodel')
 const { verifyUser, blockMiddleware, } = require('../../middlewares/middleware')
@@ -66,5 +66,13 @@ router.post("/search",verifyUser,blockMiddleware,searchProducts)
 //*************************************product page***********************************
 
 router.get("/product",verifyUser ,blockMiddleware,getproduct)
+
+
+// ************************************header****************************
+// cart count
+router.get("/cart/count",verifyUser,blockMiddleware,cartCount)
+// wishlist count
+router.get("/wishlist/count",verifyUser,blockMiddleware,wishlistCount)
+
 
 module.exports = router;

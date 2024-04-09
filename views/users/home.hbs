@@ -30,7 +30,7 @@
 
         :root {
             /* //....... Color ........// */
-            --primary-color: #ff3c78;
+            --primary-color: #3f3cff;
             --light-black: rgba(0, 0, 0, 0.89);
             --black: #000;
             --white: #fff;
@@ -429,11 +429,13 @@
             height: 370px;
             /* border: 2px solid black; */
         }
- .seller .best-p1:hovor {
+
+        .seller .best-p1:hovor {
             width: 260px;
             height: 380px;
             /* border: 2px solid black; */
         }
+
         .seller .best-p1 img {
             height: 200px;
             width: 200px;
@@ -460,7 +462,7 @@
         }
 
         .seller a:hover {
-            color: #f05e8a;
+            color: #5e91f0;
         }
 
         .best-seller .buy-now button,
@@ -470,12 +472,12 @@
             font-size: 14px;
             cursor: pointer;
             text-transform: uppercase;
-            background-color: #f05e8a;
+            background-color: #5e91f0;
             color: var(--white);
             border: none;
             border-radius: 15px;
             font-weight: 500;
-            border: 1px solid #f05e8a;
+            border: 1px solid #5e96f0;
             transition: 0.5s;
         }
 
@@ -487,7 +489,7 @@
 
         .best-seller .buy-now button:hover a,
         .best-seller .add-cart button:hover a {
-            color: #f05e8a;
+            color: #5e8cf0;
         }
 
 
@@ -670,7 +672,7 @@
         .l-news1 .news1-conte .date-news1 a::after {
             content: "";
             position: absolute;
-            background: #ff3c78;
+            background: #3c56ff;
             height: 3px;
             width: 100%;
             left: 0;
@@ -711,7 +713,7 @@
         .l-news2 .news2-conte .date-news2 a::after {
             content: "";
             position: absolute;
-            background: #ff3c78;
+            background: #3c4cff;
             height: 3px;
             width: 100%;
             left: 0;
@@ -752,7 +754,7 @@
         .l-news3 .news3-conte .date-news3 a::after {
             content: "";
             position: absolute;
-            background: #ff3c78;
+            background: #3c63ff;
             height: 3px;
             width: 100%;
             left: 0;
@@ -1075,7 +1077,7 @@
                     <img src="/images/27430-40970-26343-37283-180606-AppleWatch-l-l.jpg" alt="img ">
                 </div>
                 <div class="home_txt ">
-                   
+
                     <button><a href="/user/product">SHOP NOW</a><i class='bx bx-right-arrow-alt'></i></button>
                     <div class="home_social_icons">
                         <a href="#"><i class='bx bxl-facebook'></i></a>
@@ -1106,9 +1108,10 @@
                 <h2>Top Sales</h2>
                 <div class="best-seller">
                     {{#each productdata}}
-                    <div class="best-p1">
+                    <div  style=" padding: 22px;box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.4);text-align: center;" class="best-p1">
 
-                        <img style="background-color:rgb(204, 200, 200);" src="/images/{{this.productImage1}}" alt="img">
+                        <img style="background-color:rgb(204, 200, 200);" src="/images/{{this.productImage1}}"
+                            alt="img">
                         <div class="best-p1-txt">
                             <div class="name-of-p">
                                 <p>{{this.product}}</p>
@@ -1121,10 +1124,10 @@
                                 <i class='bx bx-star'></i>
                             </div>
                             <div class="price">
-                                {{this.price}}
-                                <div class="colors">
-                                    <i class='bx bxs-circle red'></i>
-                                    <i class='bx bxs-circle blue'></i>
+                               
+                                <div style="margin-left: 30px;" class="colors">
+                                    <i class='bx bxs-circle red'>{{this.discount}} off</i>
+                                    <i class='bx bxs-circle blue'>Rs: {{this.price}}</i>
                                     <i class='bx bxs-circle white'></i>
                                 </div>
                             </div>
@@ -1142,11 +1145,12 @@
                 </div>
             </div>
             <div class="seller container">
-                <h2 >New Arrivals</h2>
+                <h2>New Arrivals</h2>
 
                 <div class="best-seller">
                     {{#each newdata}}
-                    <div class="best-p1">
+                    <div style=" padding: 22px;box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.4);text-align: center;"
+                        class="best-p1">
                         <img src="/images/{{this.productImage1}}" alt="img">
                         <div class="best-p1-txt">
                             <div class="name-of-p">
@@ -1159,25 +1163,27 @@
                                 <i class='bx bxs-star'></i>
                                 <i class='bx bxs-star'></i>
                             </div>
+
                             <div class="price">
-                                {{this.price}}
-                                <div class="colors">
-                                    <i class='bx bxs-circle blank'></i>
-                                    <i class='bx bxs-circle blue'></i>
-                                    <i class='bx bxs-circle brown'></i>
+
+                                <div style="justify-content: space-between;margin-left: 30px;" class="colors">
+                                    
+                                    <i class='bx bxs-circle blue'> Rs:{{this.price}}</i>
+                                    <i style="padding: 20px;" class='bx bxs-circle brown'> {{this.discount}}off</i>
                                 </div>
                             </div>
                             <div class="buy-now">
                                 <button><a href="/user/product">View more</a></button>
                             </div>
                         </div>
+                        <hr style="color: blue;">
                     </div>
                     {{/each}}
 
 
                 </div>
             </div>
-           
+
         </section>
         <section id="news">
             <div class="news-heading">
@@ -1193,8 +1199,7 @@
                         <div class="date-news1">
                             <p><i class='bx bxs-calendar'></i>Watch</p>
                             <h4>Your next great chapter starts here</h4>
-                            <a href="/user/product"
-                                target="_blank">view more</a>
+                            <a href="/user/product" target="_blank">view more</a>
                         </div>
                     </div>
                 </div>
@@ -1205,10 +1210,9 @@
                     <div class="news2-conte">
                         <div class="date-news2">
                             <p><i class='bx bxs-calendar'></i>Macbook</p>
-                            <h4  target="_blank">Thin. Light. And ready for anything.</h4>
-                             <a href="/user/product"
-                                target="_blank">view more</a>
-                              
+                            <h4 target="_blank">Thin. Light. And ready for anything.</h4>
+                            <a href="/user/product" target="_blank">view more</a>
+
                         </div>
                     </div>
                 </div>
@@ -1220,14 +1224,13 @@
                         <div class="date-news3">
                             <p><i class='bx bxs-calendar'></i>Mobile Phone</p>
                             <h4>Designed by Apple in California </h4>
-                            <a href="/user/product"
-                                target="_blank">view more</a>
+                            <a href="/user/product" target="_blank">view more</a>
                         </div>
                     </div>
                 </div>
             </div>
         </section>
-       
+
     </body>
 
 </body>

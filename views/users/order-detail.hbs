@@ -69,28 +69,32 @@
                                     {{else}}
                                     {{#if deliver}}
                                     <span>
-                                        <button
-                                                style="background-color: rgb(197, 91, 53);"
-                                                class="btn" onclick="confirmReturn('{{id}}')">Return</button>
+                                        <button style="background-color: rgb(197, 91, 53);" class="btn"
+                                            onclick="confirmReturn('{{id}}')">Return</button>
                                     </span>
-                                    {{else}}
-                                    {{#if Return}}
-                                    <span style="text-align: center;color: red;">{{this.Return}}</span>
-                                    {{else}}
                                     <span>
-                                        <button
-                                                  onclick="confirmCancel('{{id}}')" style="background-color: rgb(197, 91, 53);"
-                                                class="btn">Cancel</button>
-                                        <p style="text-align: center;color: red;">{{this.message }}</p>
-                                    </span>
-                                    {{/if}}
-                                    {{/if}}
-                                    {{/if}}
+
+                                        {{else}}
+                                        {{#if Return}}
+                                        <span style="text-align: center;color: red;">{{this.Return}}</span>
+                                        {{else}}
+                                        <span>
+                                            <button onclick="confirmCancel('{{id}}')"
+                                                style="background-color: rgb(197, 91, 53);" class="btn">Cancel</button>
+                                            <p style="text-align: center;color: red;">{{this.message }}</p>
+                                        </span>
+                                        {{/if}}
+                                        {{/if}}
+                                        {{/if}}
 
                                 </div>
                                 <div class="d-flex">
+                                    {{#if deliver}}
                                     <button class="btn btn-link p-0 me-3 d-none d-lg-block btn-icon-text"><i
-                                            class="bi bi-download"></i> <a href="/user-profile/invoice/{{id}}"><span class="text">Invoice</span></a></button>
+                                            class="bi bi-download"></i> <a href="/user-profile/invoice/{{id}}"><span
+                                                class="text">Invoice</span></a></button>
+     
+                                    {{/if}}
                                     <div class="dropdown">
                                         <button class="btn btn-link p-0 text-muted" type="button"
                                             data-bs-toggle="dropdown">
@@ -143,19 +147,19 @@
                                         <td colspan="2">Discount</td>
                                         <td class="text-danger text-end">{{discount}}</td>
                                     </tr>
-                                    {{#if categoryDiscount}}
+
                                     <tr>
                                         <td colspan="2">Category Discount</td>
                                         <td class="text-danger text-end">{{this.categoryDiscount}}</td>
                                     </tr>
-                                    {{/if}}
-                                    {{#if couponDiscount}}
+
+
                                     <tr>
                                         <td colspan="2">Coupon Discount</td>
-                                        <td class="text-danger text-end">{{discount}}</td>
+                                        <td class="text-danger text-end">{{this.coupondiscount}}</td>
                                     </tr>
-                                    {{/if}}
-                                   
+
+
                                     <tr class="fw-bold">
                                         <td colspan="2">TOTAL</td>
                                         <td class="text-end">{{totalprice}}</td>
@@ -170,12 +174,47 @@
                             <div class="row">
                                 <div class="col-lg-6">
                                     <h3 class="h6">Payment Method</h3>
+                                    <h6 style="color: green;">Payment: {{success}}</h6>
                                     <p>{{payment}} <br>
-                                        Total: {{totalprice}}<span class="badge bg-success rounded-pill">PAID</span></p>
+                                        Total: {{totalprice}}
+
+                                        {{!-- <span class="btn bg-success rounded-pill">{{success}}</span> --}}
+                                        {{#if failed}}
+
+
+                                    <form action="/checkout/create-order" method="post">
+                                        {{!-- action="/checkout/create-order" method="post"> --}}
+                                        <input type="number" value="{{total}}" name="subtotal" style="display: none;">
+                                        <input type="number" value="{{this.ship}}" name="ship_charge"
+                                            style="display: none;">
+                                        <input type="number" value="{{discount}}" name="total_discount"
+                                            style="display: none;">
+                                        <input type="number" value="{{this.categoryDiscount}}" name="category_off"
+                                            style="display: none;">
+                                        <input type="number" value="{{this.coupondiscount}}" name="coupon_dis"
+                                            style="display: none;">
+                                        <input type="number" value="{{totalprice}}" name="total_price"
+                                            style="display: none;">
+                                        <input type="text" value="{{payment}}" name="payment" style="display: none;">
+                                        <input type="text" value="{{addressdata._id}}" name="address"
+                                            style="display: none;">
+                                        <input type="text" value="{{id}}" name="id" style="display: none;">
+
+                                        <small style="color: red;">This order is expired.Do you have create another
+                                            order
+                                            in this product</small>
+                                        <button class="btn bg-primary rounded-pill">{{this.failed}}</button>
+                                    </form>
+
+                                    {{/if}}
+
+
+
                                 </div>
                                 <div class="col-lg-6">
                                     <h3 class="h6">Billing address</h3>
                                     <address>
+
                                         <strong>{{addressdata.fullname}}</strong><br>
                                         {{addressdata.address}}<br>
                                         {{addressdata.city}}, {{addressdata.state}}, {{addressdata.postalcode}}<br>
@@ -191,8 +230,9 @@
                     <div class="card mb-4">
                         <div class="card-body">
                             <h3 class="h6">Customer Notes</h3>
-                            <p>Sed enim, faucibus litora velit vestibulum habitasse. Cras lobortis cum sem aliquet
-                                mauris rutrum. Sollicitudin. Morbi, sem tellus vestibulum porttitor.</p>
+                            <p>cash on deliveris available,but the total Amount less than 10000. so cash on delivery is
+                                available in this product.and 7 days rturen policy and replacement policy are avialble
+                            </p>
                         </div>
                     </div>
                     <div class="card mb-4">
@@ -220,44 +260,44 @@
 
 </html>
 
-  
-        <script>
-  function confirmReturn(id) {
-    Swal.fire({
-        title: 'Are you sure?',
-        text: "Once returned, the product will be removed from your order history!",
-        icon: 'warning',
-        showCancelButton: true,
-        confirmButtonColor: '#3085d6',
-        cancelButtonColor: '#d33',
-        confirmButtonText: 'Yes, return it!'
-    }).then((result) => {
-        if (result.isConfirmed) {
-            // Redirect to return page
-            window.location.href = "/user-profile/order-return/" + id;
-        }
-    });
-}
+
+<script>
+    function confirmReturn(id) {
+        Swal.fire({
+            title: 'Are you sure?',
+            text: "Once returned, the product will be removed from your order history!",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Yes, return it!'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                // Redirect to return page
+                window.location.href = "/user-profile/order-return/" + id;
+            }
+        });
+    }
 
 
     function confirmCancel(id) {
-    Swal.fire({
-        title: 'Are you sure?',
-        text: "This action cannot be undone!",
-        icon: 'warning',
-        showCancelButton: true,
-        confirmButtonColor: '#3085d6',
-        cancelButtonColor: '#d33',
-        confirmButtonText: 'Yes, cancel it!'
-    }).then((result) => {
-        if (result.isConfirmed) {
-            // Redirect to cancel page
-            window.location.href = "/user-profile/order-cancel/" + id;
-        }
-    });
-}
-    </script>
-    <script>
+        Swal.fire({
+            title: 'Are you sure?',
+            text: "This action cannot be undone!",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Yes, cancel it!'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                // Redirect to cancel page
+                window.location.href = "/user-profile/order-cancel/" + id;
+            }
+        });
+    }
+</script>
+<script>
     // Create your invoice! Easy!
     var data = {
         apiKey: "free", // Please register to receive a production apiKey: https://app.budgetinvoice.com/register
@@ -279,4 +319,46 @@
         // Now this result can be used to save, download or render your invoice
         // Please review the documentation below on how to do this
     });
+</script>
+<script>
+    {
+        {
+            !-- async function reOrder() {
+                try {
+                    const confirmCreateOrder = await Swal.fire({
+                        title: 'Order Expired!',
+                        text: 'The order for this product is expired. Do you want to create another order?',
+                        icon: 'warning',
+                        showCancelButton: true,
+                        confirmButtonText: 'Create Another Order',
+                        cancelButtonText: 'Cancel',
+                    });
+
+                    if (confirmCreateOrder.isConfirmed) {
+                        const response = await fetch('/checkout/create-order', {
+                            method: 'POST',
+                            body: new FormData(document.getElementById('orderForm'))
+                        });
+
+                        if (response.ok) {
+                            // Order created successfully
+                            console.log('Order created successfully');
+                        } else {
+                            // Handle error response
+                            const responseData = await response.json();
+                            console.error('Error creating order:', responseData.error);
+                        }
+                    } else {
+                        // User cancelled, do nothing
+                    }
+                } catch (error) {
+                    console.error('Error creating order:', error);
+                }
+            }
+
+            // Call reOrder function after a delay when the page loads
+            window.onload = function () {
+                setTimeout(reOrder, 3000); // Adjust the delay time as needed (3000 milliseconds = 3 seconds)
+            }; --}
+    }
 </script>

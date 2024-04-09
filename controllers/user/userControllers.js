@@ -3,7 +3,7 @@ const User = require("../../models/user/usermodel")
 const products = require("../../models/admin/productModel")
 const category = require('../../models/admin/categorymodel')
 const nodemailer = require('nodemailer')
-
+const wishlist = require('../../models/user/wishlist-model')
 const cart = require("../../models/user/add-to-cart-model")
 const Users = require('../../models/user/usermodel')
 
@@ -441,7 +441,7 @@ const filter = async (req, res) => {
         let query = {};
 
         // Construct query based on filters
-       
+
         if (filters['sort-product'] === 'low-to-high') {
             var priceLowToHigh = "low-to-high"
             query.sort = { price: 1 }; // Sort by price ascending
@@ -479,7 +479,7 @@ const filter = async (req, res) => {
         const productdata = await products.find({ category: query.category }).sort(sort).lean();
         const categorydata = await category.find().lean()
         console.log("Product Data:", productdata); // Log the fetched product data
-       
+
         if (priceLowToHigh) {// Log the fetched product data
             res.render("users/product", {
                 productdata, categorydata, priceLowToHigh
@@ -547,6 +547,33 @@ const searchProducts = async (req, res) => {
         console.log("Error iin serach product route in user controlleer")
     }
 }
+// cart count in header
+
+const cartCount = async (req, res) => {
+    try {
+        const userId = req.session.user._id
+        const cartdata = await cart.find({userId:userId}).lean()
+        const data = cartdata.length
+        res.json(data)
+    }
+    catch (error) {
+        console.log("error in cartCount route in cart controller")
+    }
+}
+
+// wishlist count
+const wishlistCount = async (req, res) => {
+    try {
+        const userId = req.session.user._id
+        const wishlistdata = await wishlist.find({userId:userId}).lean()
+        const data = wishlistdata.length
+        res.json(data)
+    }
+    catch (error) {
+        console.log("error in cartCount route in cart controller")
+    }
+}
+
 module.exports = {
     getcategory, homePage, doSignup,
     getLogin, postLogin, getSignup,
@@ -554,5 +581,6 @@ module.exports = {
     getProductDetail, userLogout, getForgot,
     getForgotOtp, forgotOtpVerify, changeForgotPassword,
     filter, searchProducts, getproduct,
-    getFilterCategory, categorySort
+    getFilterCategory, categorySort,
+    cartCount,wishlistCount
 }

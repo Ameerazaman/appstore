@@ -18,6 +18,7 @@ const getOrder = async (req, res) => {
 const changeStatus=async(req,res)=>{
    
     try{
+        console.log(req.params.status,"change status")
      const data=await Order.findByIdAndUpdate({_id:req.params.id},{status:req.params.status})
      res.redirect("/order")
     }

@@ -39,15 +39,19 @@ const addToCart = async (req, res) => {
                                 $inc: { 'products.$.quantity': 1 }
                             }
                         );
-                        return res.redirect('/user/product');
+                        const newdata = await cart.find({ userId: userId })
+                        console.log("cart item", newdata.length)
+                        const data = newdata.length
+                        return res.json(data);
                     }// Redirect to the cart page after updating the cart
                 } else {
                     const addQuantity = 1;
                     await cart.create({ userId: userId, products: [{ proId: productId, quantity: addQuantity }] });
 
-
-
-                    res.redirect("/user/product");
+                    const newdata = await cart.find({ userId: userId })
+                    console.log("cart item", newdata.length)
+                    const data = newdata.length
+                    res.json(data);
                 }
             }
             else {
@@ -55,8 +59,12 @@ const addToCart = async (req, res) => {
                     userId, products:
                         [{ proId: productId, quantity: 1 }]
                 }
-                const newdata = await cart.create(cartData)
-                res.redirect("/user/product")
+                await cart.create(cartData)
+                const newdata = await cart.find({ userId: userId })
+                console.log("cart item", newdata.length)
+                const data = newdata.length
+                res.json(data);
+
             }
         }
         else {
@@ -207,7 +215,7 @@ const getCart = async (req, res) => {
 
             }
             else {
-                var shippingCharge = "free"
+                var shippingCharge = 0
             }
             // var shippingCharge = 0
             console.log("total", totalAmt)
@@ -215,8 +223,8 @@ const getCart = async (req, res) => {
 
             console.log("totalc", totalAmt)
             req.session.ship = shippingCharge
-            req.session.totalAmt = totalAmt
-           
+          
+
             res.render("users/cart", { cartcount, shippingCharge, data, totalAmt, result, coupondata, categoryOffer })
 
 
@@ -313,7 +321,7 @@ const incrementQuantity = async (req, res) => {
                     { userId, 'products.proId': productId },
                     { $inc: { 'products.$.quantity': 1 } }
                 );
-               
+
                 res.status(200).json(data)
 
             } else {

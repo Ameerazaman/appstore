@@ -1,7 +1,7 @@
 const mongoose = require('mongoose')
 const orderschema = mongoose.Schema({
-    userId:{
-        type:String
+    userId: {
+        type: String
     },
     address: {
         type: Object
@@ -35,19 +35,23 @@ const orderschema = mongoose.Schema({
     productsCount: {
         type: Number
     },
-    paymentstatus:{
-        type:String,
-        default:"Paid"
+    paymentstatus: {
+        type: String,
+        default: "Paid"
     },
-    coupondiscount:{
-        type:Number
+    coupondiscount: {
+        type: Number
     },
-    categoryDiscount:{
-        type:Number
+    categoryDiscount: {
+        type: Number
     },
-    
-    ship:{
-        type:String
+
+    ship: {
+        type: String
+    },
+    success: {
+        type: String,
+        default: "failed"
     }
 })
 const Order = mongoose.model("Order", orderschema)

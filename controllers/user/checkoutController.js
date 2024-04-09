@@ -130,8 +130,8 @@ const checkoutPage = async (req, res) => {
         console.log("checkout page 2")
         req.session.userdata = userdata
         req.session.resultadd = resultadd
-        var couponDiscount=0
-
+        var couponDiscount = 0
+        req.session.totalAmt = totalPrice
         console.log("ship", shippingCharge)
         const coupondata = await Coupon.find({ users: { $ne: userId } }).lean();
 
@@ -143,7 +143,7 @@ const checkoutPage = async (req, res) => {
             }
             else {
 
-                res.render("users/checkout", {couponDiscount,categoryOffer: req.session.categoryOffer, shippingCharge, coupondata, data, result, resultadd, userdata, totalPrice })
+                res.render("users/checkout", { couponDiscount, categoryOffer: req.session.categoryOffer, shippingCharge, coupondata, data, result, resultadd, userdata, totalPrice })
             }
         }
     }
@@ -302,15 +302,8 @@ const selectCoupon = async (req, res) => {
             User.findOne({ _id: userId }).lean()
         ]);
 
-        var result = req.session.result
-        if (req.session.ship) {
-            var ship = req.session.ship
-            var totalAmount = (result[0].totalPriceAfterDiscount - categoryOffer) + ship
-        }
-        else {
-            var totalAmount = (result[0].totalPriceAfterDiscount - categoryOffer)
-        }
-
+        var totalAmount = req.session.totalAmt
+        console.log("session", totalAmount)
 
         if (coupondata) {
             const total = req.session.result[0].totalPriceAfterDiscount;
@@ -353,18 +346,43 @@ const selectCoupon = async (req, res) => {
 const successOrder = async (req, res) => {
     try {
         console.log("order created")
-        console.log(req.body, "body")
+        console.log(req.body.id, "bodyid")
+
         const userId = req.session.user._id
         const productId = req.session.productId
         // referal offer
         console.log(req.body.payment)
         req.session.payment = req.body.payment
-        const data = req.session.data
-        const result = req.session.result
-        const usersId = req.session.user._id
-        const totalPrice = req.session.totalAmt
-        const resultadd = await address.find({ userId: userId }).lean()
-        const userdata = await User.findOne({ _id: usersId }).lean()
+        var data = req.session.data
+        var result = req.session.result
+        var usersId = req.session.user._id
+
+        var resultadd = await address.find({ userId: userId }).lean()
+        var userdata = await User.findOne({ _id: usersId }).lean()
+        const DeliveryAd = await address.findOne({ _id: req.body.address }).lean()
+
+        console.log("order")
+        var saveOrder = await Order.create(
+            {
+                userId: userId,
+                address: DeliveryAd,
+                payment: req.body.payment,
+                products: data,
+                total: req.body.subtotal,
+                discount: req.body.total_discount,
+                totalPrice: req.body.total_price,
+                ship: req.body.ship_charge,
+                coupondiscount: req.body.coupon_dis,
+                categoryDiscount: req.body.category_off,
+                success: "failed"
+            })
+        if (req.body.id) {
+            await Order.findByIdAndDelete({ _id: req.body.id })
+            console.log("deleted")
+
+        }
+        console.log(saveOrder, "saveOrder")
+        req.session.orderId = saveOrder._id
         if (req.body.payment) {
             for (let i = 0; i < data.length; i++) {
 
@@ -378,14 +396,9 @@ const successOrder = async (req, res) => {
                     })
                 }
                 else {
-                    const DeliveryAd = await address.findOne({ _id: req.body.address }).lean()
                     const total = result[0]
 
                     if (req.body.payment == "cash-on-delivery") {
-                        if (req.body.total_price > 10000) {
-                            const CODmessage = "Cash on delivery is not Available"
-                            res.render("users/checkout", { data, shippingCharge: req.session.ship, result, resultadd, userdata, totalPrice, CODmessage })
-                        }
                         if (req.session.couponId) {
                             const couponData = await Coupon.findOne({ _id: req.session.couponId })
                             console.log("coupondata", couponData)
@@ -395,22 +408,9 @@ const successOrder = async (req, res) => {
                                     { $push: { users: userId } },
                                     { new: true } // To return the updated document
                                 )
-                                var totalAmount=req.session.totalAmt-req.session.couponDiscount
-                                console.log(totalAmount, "totalAmount")
-                                const saveOrder = await Order.create(
-                                    {
-                                        userId: userId,
-                                        address: DeliveryAd,
-                                        payment: req.body.payment,
-                                        products: data,
-                                        total: total.totalPrice,
-                                        discount: total.totalDiscount,
-                                        totalPrice: totalAmount,
-                                        ship: req.session.ship,
-                                        coupondiscount: req.session.couponDiscount,
-                                        categoryDiscount:req.session.categoryOffer
-                                    })
-                                console.log(saveOrder, "saveOrder")
+
+                                const updateOrder = await Order.findByIdAndUpdate({ _id: saveOrder._id }, { success: "success" })
+
                                 const orderdata = await Order.find().sort({ _id: -1 }).lean()
                                 var orderProduct = orderdata[0].products
 
@@ -453,20 +453,9 @@ const successOrder = async (req, res) => {
                             }
                         }
                         else {
-                          var totalAmount=req.session.totalAmt
-                            const saveOrder = await Order.create(
-                                {
-                                    userId: userId,
-                                    address: DeliveryAd,
-                                    payment: req.body.payment,
-                                    products: data,
-                                    total: total.totalPrice,
-                                    discount: total.totalDiscount,
-                                    totalPrice: totalAmount,
-                                    ship: req.session.ship,
-                                    categoryDiscount:req.session.categoryOffer
-                                })
-                            console.log(saveOrder, "saveOrder")
+                            var totalAmount = req.session.totalAmt
+                            const updateOrder = await Order.findByIdAndUpdate({ _id: saveOrder._id }, { success: "success" })
+
                             const orderdata = await Order.find().sort({ _id: -1 }).lean()
                             var orderProduct = orderdata[0].products
 
@@ -492,6 +481,7 @@ const successOrder = async (req, res) => {
 
                     // online Paymenet
                     else if (req.body.payment == "online-payment") {
+                        console.log("online payment")
                         if (req.session.couponDiscount) {
                             const couponData = await Coupon.findOne({ _id: req.session.couponId })
                             console.log("coupondata", couponData)
@@ -515,7 +505,7 @@ const successOrder = async (req, res) => {
                             }
                             // req.session.razorid = razorpayOrder.id;
 
-                            var totalAmount = req.session.totalAmt - req.session.couponDiscount
+                            var totalAmount = req.body.total_price
 
                             console.log("totalAmoung", totalAmount)
                             // Example: ₹500.00 (amount in paisa)
@@ -524,11 +514,11 @@ const successOrder = async (req, res) => {
                                 .then(async (razorpayOrder) => {
                                     // Handle successful order creation
 
-                                    var totalPrice = req.session.totalAmt - req.session.couponDiscount
+                                    var totalPrice = req.body.total_price
 
 
                                     // referal offer
-                                    console.log("totalPrice",totalPrice)
+                                    console.log("totalPrice", totalPrice)
                                     if (req.session.referalofferdata) {
 
                                         const amount = req.session.referalofferdata
@@ -579,13 +569,13 @@ const successOrder = async (req, res) => {
                             console.log("error in with out coupon2")
                             // req.session.razorid = razorpayOrder.id;
 
-                            var totalAmount = req.session.totalAmt
+                            var totalAmount = saveOrder.totalPrice
                             // Example: ₹500.00 (amount in paisa)
 
                             createRazorpayOrder(totalAmount)
                                 .then(async (razorpayOrder) => {
                                     // Handle successful order creation
-                                    var totalPrice = req.session.totalAmt
+                                    var totalPrice = saveOrder.totalPrice
                                     // referal offer
                                     console.log("online payment")
 
@@ -605,21 +595,9 @@ const successOrder = async (req, res) => {
                                     { $push: { users: userId } },
                                     { new: true } // To return the updated document
                                 )
-                                var totalAmount = req.session.totalAmt-req.session.couponDiscount
-                                const saveOrder = await Order.create(
-                                    {
-                                        userId: userId,
-                                        address: DeliveryAd,
-                                        payment: req.body.payment,
-                                        products: data,
-                                        total: total.totalPrice,
-                                        discount: total.totalDiscount,
-                                        totalPrice: totalAmount,
-                                        ship: req.session.ship,
-                                        coupondiscount: req.session.couponDiscount,
-                                        categoryDiscount:req.session.categoryOffer
-                                    })
-                                console.log(saveOrder, "saveOrder")
+                                var totalAmount = req.body.total_price
+                                const updateOrder = await Order.findByIdAndUpdate({ _id: saveOrder._id }, { success: "success" })
+
                                 const orderdata = await Order.find().sort({ _id: -1 }).lean()
                                 var orderProduct = orderdata[0].products
 
@@ -686,21 +664,10 @@ const successOrder = async (req, res) => {
                             }
                         }
                         else {
-                            var totalAmount = req.session.totalAmt
-                            
-                            const saveOrder = await Order.create(
-                                {
-                                    userId: userId,
-                                    address: DeliveryAd,
-                                    payment: req.body.payment,
-                                    products: data,
-                                    total: total.totalPrice,
-                                    discount: total.totalDiscount,
-                                    totalPrice: totalAmount,
-                                    ship: req.session.ship,
-                                    categoryDiscount:req.session.categoryOffer
-                                })
-                            console.log(saveOrder, "saveOrder")
+                            var totalAmount = req.body.total_price
+
+                            const updateOrder = await Order.findByIdAndUpdate({ _id: saveOrder._id }, { success: "success" })
+
                             const orderdata = await Order.find().sort({ _id: -1 }).lean()
                             var orderProduct = orderdata[0].products
 
@@ -725,7 +692,7 @@ const successOrder = async (req, res) => {
                             const walletData = {
                                 userId: userId,
                                 orderId: id,
-                                totalPrice:totalAmount,
+                                totalPrice: totalAmount,
                                 transactiontype: "Debit",
                                 reasontype: "Purchase",
                                 price: totalAmount
@@ -785,6 +752,8 @@ const razorpayChecking = async (req, res) => {
 
         var userId = req.session.user._id
         var crypto = require('crypto')
+        var order = await Order.findOne({ _id: req.session.orderId })
+        var totalAmount = order.totalPrice
         var razorpaysecret = process.env.RAZORPAY_SECRET_KEY;
         var hmac = crypto.createHmac("sha256", razorpaysecret)
         hmac.update(req.session.razorid + "|" + req.body.razorpay_payment_id);
@@ -796,7 +765,7 @@ const razorpayChecking = async (req, res) => {
                 { $push: { users: userId } },
                 { new: true } // To return the updated document
             )
-            var totalAmount = req.session.totalAmt - req.session.couponDiscount
+
             console.log("razorpay1")
             if (hmac == req.body.razorpay_signature) {
 
@@ -806,29 +775,10 @@ const razorpayChecking = async (req, res) => {
                 const total = result[0]
 
                 console.log("razorpay1")
-                console.log(userId,
-                    DeliveryAd,
-                    req.session.payment,
-                    data,
-                    total.totalPrice,
-                    total.totalDiscount,
-                    req.session.totalAmt,
-                    req.session.couponDiscount,
-                    req.session.ship)
-                const saveOrder = await Order.create(
-                    {
-                        userId: userId,
-                        address: DeliveryAd,
-                        payment: req.session.payment,
-                        products: data,
-                        total: total.totalPrice,
-                        discount: total.totalDiscount,
-                        totalPrice: totalAmount,
-                        coupondiscount: req.session.couponDiscount,
-                        ship: req.session.ship,
-                        categoryDiscount:req.session.categoryOffer
-                    })
-                console.log("order creted", saveOrder)
+                const updateOrder = await Order.findByIdAndUpdate({ _id: order._id }, { success: "success" })
+
+
+
                 await cart.deleteMany({ userId: userId })
                 if (req.session.referalofferdata) {
 
@@ -838,7 +788,7 @@ const razorpayChecking = async (req, res) => {
 
                     const referalData = {
                         userId: userId,
-                        orderId: saveOrder._id,
+                        orderId: order._id,
                         amount: amount,
                         status: "pending"
 
@@ -847,7 +797,6 @@ const razorpayChecking = async (req, res) => {
 
 
                 }
-                console.log(saveOrder, "saveOrder")
                 const orderdata = await Order.find().sort({ _id: -1 }).lean()
                 var orderProduct = orderdata[0].products
 
@@ -877,28 +826,9 @@ const razorpayChecking = async (req, res) => {
                 const DeliveryAd = await deliveryAddress.findOne().lean()
                 const total = result[0]
 
-                console.log("razorpay1")
-                console.log("userid",userId,
-                    "deliveryAd",DeliveryAd,
-                    "payment",req.session.payment,
-                   "data", data,
-                    "totalPrice",total.totalPrice,
-                    "dicount",total.totalDiscount,
-                    "amount",req.session.totalAmt,
-                   "ship", req.session.ship)
-                const saveOrder = await Order.create(
-                    {
-                        userId: userId,
-                        address: DeliveryAd,
-                        payment: req.session.payment,
-                        products: data,
-                        total: total.totalPrice,
-                        discount: total.totalDiscount,
-                        totalPrice: req.session.totalAmt,
-                        ship: req.session.ship,
-                        categoryDiscount:req.session.categoryOffer
-                    })
-                console.log("order creted", saveOrder)
+
+                const updateOrder = await Order.findByIdAndUpdate({ _id: order._id }, { success: "success" })
+
                 await cart.deleteMany({ userId: userId })
                 if (req.session.referalofferdata) {
 
@@ -908,7 +838,7 @@ const razorpayChecking = async (req, res) => {
 
                     const referalData = {
                         userId: userId,
-                        orderId: saveOrder._id,
+                        orderId: order._id,
                         amount: amount,
                         status: "pending"
 
@@ -917,7 +847,7 @@ const razorpayChecking = async (req, res) => {
 
 
                 }
-                console.log(saveOrder, "saveOrder")
+
                 const orderdata = await Order.find().sort({ _id: -1 }).lean()
                 var orderProduct = orderdata[0].products
 
