@@ -206,7 +206,7 @@ const getCart = async (req, res) => {
             req.session.categoryOffer = categoryOffer
             var totalAmt = totalAmount - categoryOffer
             console.log("total", totalAmt)
-            if (totalAmt > 10000) {
+            if (totalAmt < 10000) {
                 console.log("hai")
                 var shippingCharge = 90
                 console.log("shipping", shippingCharge)

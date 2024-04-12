@@ -562,7 +562,7 @@
              console.log("checkoutprice", checkOutPrice)
             
            
-            if (checkOutPrice >= 3000) {
+            if (checkOutPrice <= 10000) {
               deliveryFee.innerHTML = "Rs.90"
               document.getElementById("total_cart_amt").innerHTML = (checkOutPrice + 90)
 
@@ -570,7 +570,7 @@
             }
             else {
               console.log("price is less")
-              deliveryFee.innerHTML = "Free"
+              deliveryFee.innerHTML = 0
               document.getElementById("total_cart_amt").innerHTML = checkOutPrice
             }
             console.log("price",checkOutPrice)

@@ -123,6 +123,35 @@ const getDashboard = async (req, res) => {
 // get sales based on dropdown
 const getSales = async (req, res) => {
     try {
+        const topSellingProducts = await Order.aggregate([
+            { $match: { status: "delivered" } },
+            { $unwind: "$products" },
+            {
+              $group: {
+                _id: "$products.product",
+                totalQuantity: { $sum: "$products.quantity" },
+              },
+            },
+            { $sort: { totalQuantity: -1 } },
+            { $limit: 10 },
+            {
+              $lookup: {
+                from: "products",
+                localField: "_id",
+                foreignField: "_id",
+                as: "productDetails",
+              },
+            },
+            {
+              $project: {
+                _id: 0,
+                name: { $arrayElemAt: ["$productDetails.name", 0] },
+                totalQuantity: 1,
+              },
+            },
+          ]);
+      
+      console.log(topSellingProducts,"top sales")
 
         const today = new Date().toDateString();
         const header = "Daily Sales"
@@ -209,7 +238,13 @@ const getSales = async (req, res) => {
                             category: "$_id", // Rename _id field as category
                             totalAmount: 1 // Include totalAmount field
                         }
+                    },
+                    {
+                        $sort: {
+                            totalAmount: -1 // Sort in descending order of totalAmount
+                        }
                     }
+
                 ]);
                 var pieChartLabels = [];
                 var pieChartData = [];
@@ -221,8 +256,37 @@ const getSales = async (req, res) => {
                 var chartLabels = JSON.stringify(pieChartLabels)
                 var chartData = JSON.stringify(pieChartData)
 
+                const topSellingProducts = await Order.aggregate([
+                    { $match: { status: "delivered" } },
+                    { $unwind: "$products" },
+                    {
+                      $group: {
+                        _id: "$products.product",
+                        totalQuantity: { $sum: "$products.quantity" },
+                      },
+                    },
+                    { $sort: { totalQuantity: -1 } },
+                    { $limit: 10 },
+                    {
+                      $lookup: {
+                        from: "products",
+                        localField: "_id",
+                        foreignField: "_id",
+                        as: "productDetails",
+                      },
+                    },
+                    {
+                      $project: {
+                        _id: 0,
+                        name: { $arrayElemAt: ["$productDetails.name", 0] },
+                        totalQuantity: 1,
+                      },
+                    },
+                  ]);
+              
+              console.log(topSellingProducts,"top sales")
 
-                res.render('admin/dashboard', { admin: true, header, chartData, chartLabels, totalUsers, sales, totalrevenue, totalSales, type, label });
+                res.render('admin/dashboard', {topSellingProducts, categoryWiseRevenue, admin: true, header, chartData, chartLabels, totalUsers, sales, totalrevenue, totalSales, type, label });
             }
         }
         //    monthly Sales
@@ -322,15 +386,16 @@ const getSales = async (req, res) => {
             const Today = new Date(); // Get the current date as a Date object
             const endDate = new Date(Today.getTime() - (30 * 24 * 60 * 60 * 1000)); // Subtract 30 days from the current date
             console.log("today", Today);
-            console.log("lastDate", lastDate);
+            console.log("endDate", endDate);
             var startDate = Today.toDateString()
             var lastDate = endDate.toDateString()
-
+            console.log(lastDate, "latsdate")
+            console.log("start", startDate, "end", lastDate, "today", today)
             const categoryWiseRevenue = await Order.aggregate([
                 {
                     $match: {
                         status: "delivered",
-                        orderedAt: { $gt: lastDate } // Match orders within the last 30 days
+                        orderedAt: { $lt: lastDate } // Match orders within the last 7 days
                     }
                 },
                 {
@@ -348,8 +413,14 @@ const getSales = async (req, res) => {
                         category: "$_id", // Rename _id field as category
                         totalAmount: 1 // Include totalAmount field
                     }
+                },
+                {
+                    $sort: {
+                        totalAmount: -1 // Sort in descending order of totalAmount
+                    }
                 }
             ]);
+
 
             var pieChartLabels = [];
             var pieChartData = [];
@@ -361,8 +432,37 @@ const getSales = async (req, res) => {
             var chartLabels = JSON.stringify(pieChartLabels)
             var chartData = JSON.stringify(pieChartData)
             console.log("monthly", chartData, chartLabels)
+            const topSellingProducts = await Order.aggregate([
+                { $match: { status: "delivered" } },
+                { $unwind: "$products" },
+                {
+                  $group: {
+                    _id: "$products.product",
+                    totalQuantity: { $sum: "$products.quantity" },
+                  },
+                },
+                { $sort: { totalQuantity: -1 } },
+                { $limit: 10 },
+                {
+                  $lookup: {
+                    from: "products",
+                    localField: "_id",
+                    foreignField: "_id",
+                    as: "productDetails",
+                  },
+                },
+                {
+                  $project: {
+                    _id: 1,
+                    name: { $arrayElemAt: ["$productDetails.name", 0] },
+                    totalQuantity: 1,
+                  },
+                },
+              ]);
+          
+          console.log(topSellingProducts,"top sales")
 
-            res.render('admin/dashboard', { admin: true, chartData, chartLabels, totalrevenue, header, totalUsers, totalSales, type, label });
+            res.render('admin/dashboard', {topSellingProducts, categoryWiseRevenue, admin: true, chartData, chartLabels, totalrevenue, header, totalUsers, totalSales, type, label });
 
         }
         else if (req.params.sale === "weekly") {
@@ -415,6 +515,11 @@ const getSales = async (req, res) => {
                         _id: 0, // Exclude _id field
                         category: "$_id", // Rename _id field as category
                         totalAmount: 1 // Include totalAmount field
+                    }
+                },
+                {
+                    $sort: {
+                        totalAmount: -1 // Sort in descending order of totalAmount
                     }
                 }
             ]);
@@ -484,7 +589,7 @@ const getSales = async (req, res) => {
             // users
 
             const totalUsers = await Users.countDocuments({})
-          
+
             const productCountInDeliveredOrders = await Order.aggregate([
                 {
                     $match: {
@@ -508,8 +613,8 @@ const getSales = async (req, res) => {
                     }
                 }
             ]);
-            console.log("productcount",productCountInDeliveredOrders)
-            res.render("admin/dashboard", { admin: true, chartLabels, chartData, sales, totalrevenue, type, header, totalSales, label })
+            console.log("productcount", productCountInDeliveredOrders)
+            res.render("admin/dashboard", {topSellingProducts,categoryWiseRevenue, admin: true, chartLabels, chartData, sales, totalrevenue, type, header, totalSales, label })
 
         }
         if (req.params.sale === "total") {
@@ -593,6 +698,11 @@ const getSales = async (req, res) => {
                         category: "$_id", // Rename _id field as category
                         totalAmount: 1 // Include totalAmount field
                     }
+                },
+                 {
+                    $sort: {
+                        totalAmount: -1 // Sort in descending order of totalAmount
+                    }
                 }
             ]);
 
@@ -607,7 +717,7 @@ const getSales = async (req, res) => {
             var chartLabels = JSON.stringify(pieChartLabels)
             var chartData = JSON.stringify(pieChartData)
 
-            res.render('admin/dashboard', { admin: true, header, chartData, chartLabels, totalrevenue, totalUsers, sales, totalSales, type, label });
+            res.render('admin/dashboard', {topSellingProducts,categoryWiseRevenue, admin: true, header, chartData, chartLabels, totalrevenue, totalUsers, sales, totalSales, type, label });
 
         }
     }
@@ -705,6 +815,11 @@ const customDate = async (req, res) => {
                         category: "$_id", // Rename _id field as category
                         totalAmount: 1 // Include totalAmount field
                     }
+                },
+                {
+                    $sort: {
+                        totalAmount: -1 // Sort in descending order of totalAmount
+                    }
                 }
             ]);
             var pieChartLabels = [];
@@ -717,7 +832,7 @@ const customDate = async (req, res) => {
             var chartLabels = JSON.stringify(pieChartLabels)
             var chartData = JSON.stringify(pieChartData)
 
-            res.render('admin/dashboard', { chartData, chartLabels, admin: true, header, totalUsers, sales, totalrevenue, totalSales, type, label });
+            res.render('admin/dashboard', {categoryWiseRevenue, chartData, chartLabels, admin: true, header, totalUsers, sales, totalrevenue, totalSales, type, label });
         }
         else {
             const header = "Custom Date Sales"

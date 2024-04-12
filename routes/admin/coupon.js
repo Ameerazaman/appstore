@@ -12,7 +12,7 @@ router.get("/add-coupon",verifyAdmin,getaddCoupon)
 // create coupon
 router.post("/add-coupon",verifyAdmin,addCoupon)
 // delete coupon
-router.get("/delete/:id",verifyAdmin,deleteCoupon)
+router.delete("/delete/:id",verifyAdmin,deleteCoupon)
 
 
 module.exports = router;

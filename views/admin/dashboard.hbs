@@ -73,7 +73,8 @@
     h4,
     h3,
     h2,
-    h1,h6 {
+    h1,
+    h6 {
       font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
 
     }
@@ -87,7 +88,7 @@
 <body>
   <div class="main-container">
     <div class="navcontainer">
-     <nav class="nav">
+      <nav class="nav">
         <div>
           <div style="background-color: rgb(47, 47, 189);" class="option1 nav-option">
             <img src="/images/download.png" class="nav-img" alt="dashboard">
@@ -131,7 +132,8 @@
 
           <div class="nav-option option6">
             <img src="/images/coupon.png" class="nav-img" alt="settings">
-              <a href="/referaloffer"><h6> Offer</h6>
+            <a href="/referaloffer">
+              <h6> Offer</h6>
             </a>
           </div>
           <div class="nav-option option6">
@@ -140,7 +142,7 @@
               <h6>Customers</h6>
             </a>
           </div>
-          
+
           <div class="nav-option logout">
             <img src="/images/logout.png" class="nav-img" alt="logout">
             <a href="/admin/logout">
@@ -172,7 +174,7 @@
 
           <img src="https://media.geeksforgeeks.org/wp-content/uploads/20221210185030/14.png" alt="likes">
         </div>
-        
+
         <div class="box box3">
           <div class="text">
             <h2 class="topic-heading">Revenue</h2>
@@ -182,13 +184,13 @@
 
         </div>
 
-          </a>
+        </a>
         <div class="box box4">
           <div class="text">
             <h2 class="topic-heading">Sales</h2>
             <h2 class="topic">{{this.sales}}</h2>
           </div>
-         
+
           </a>
           <img src="https://media.geeksforgeeks.org/wp-content/uploads/20221210185029/13.png" alt="published">
         </div>
@@ -223,7 +225,7 @@
           </form>
 
           <button class="view"><a style="color: white;" href="/admin/dash/sales-reports">Sales Report
-          </a></button>
+            </a></button>
 
         </div>
 
@@ -233,28 +235,80 @@
 
         <br><br>
         {{#if Message}}
-        <h4 style="text-align: center;text-decoration: underline;">{{this.header}}</h4><br>  
-       
-        <h4 style="text-align: center;color: red;">{{this.Message}}</h4><br> 
-       {{else}}
-       <div style="width: 40%; display: flex; justify-content: space-between; margin-left: 10%;">
-    <div >
-        <!-- Bar chart canvas -->
-        <h5>Bar Chart({{this.header}})</h5>
-       
-        <canvas id="myChart" width="400" height="400"></canvas>
+        <h4 style="text-align: center;text-decoration: underline;">{{this.header}}</h4><br>
+
+        <h4 style="text-align: center;color: red;">{{this.Message}}</h4><br>
+        {{else}}
+        <div style="width: 40%; display: flex; justify-content: space-between; margin-left: 10%;">
+          <div>
+            <!-- Bar chart canvas -->
+            <h5>Bar Chart({{this.header}})</h5>
+
+            <canvas id="myChart" width="400" height="400"></canvas>
+
+          </div>
+          <div style="margin-left: 20%;">
+            <!-- Pie chart canvas -->
+            <h5>Pie Chart (category Sales)</h5>
+            <canvas style="padding: 30px;" id="myPieChart"></canvas>
+
+          </div>
+        </div>
+        {{/if}}
         
-    </div>
-    <div style="margin-left: 20%;">
-        <!-- Pie chart canvas -->
-        <h5>Pie Chart (category Sales)</h5>
-        <canvas style="padding: 30px;" id="myPieChart"></canvas>
+        <br>
+        <div style="display: flex;">
+           <h5>Top Categories</h5> 
+           <h5>Top products</h5></div>
+        <div  style="display: flex;padding: 20px;margin: 100px;">  
+      
+          <table style="width: auto; box-shadow: 0px 0px 20px 0px rgba(0, 0, 0, 0.5);" class="table table-bordered table-hover">
+            <thead class="thead-dark">
+              <tr>
+                <th scope="col">No</th>
+                <th scope="col">Category</th>
+
+              </tr>
+            </thead>
+            <tbody id="productBody">
+              {{#each categoryWiseRevenue}}
+              <tr>
+                <th id="row" scope="row">{{@index}}</th>
+                <td>{{this.category}}</td>
+
+
+              </tr>
+
+
+              {{/each}}
+            </tbody>
+          </table>
         
-    </div>
-    {{/if}}
-</div>
+          <table style="width: auto;margin-left: 100px;" class="table table-bordered table-hover">
+            <thead class="thead-dark">
+              <tr>
+                <th scope="col">No</th>
+                <th scope="col">Category</th>
+
+              </tr>
+            </thead>
+            <tbody id="productBody">
+              {{#each categoryWiseRevenue}}
+              <tr>
+                <th id="row" scope="row">{{@index}}</th>
+                <td>{{this.category}}</td>
+
+
+              </tr>
+
+
+              {{/each}}
+            </tbody>
+          </table>
+        </div>
       </div>
     </div>
+  </div>
   </div>
 
   <!-- Bootstrap JavaScript files -->
@@ -311,65 +365,79 @@
   });
   </script>
 
-  {{!-- <script>
-        // JavaScript code to create the pie chart
-        // Get the canvas element
-        var ctx = document.getElementById('myPieChart').getContext('2d');
-        
-        // Define data for the chart
-        var data = {
-            labels: ['Red', 'Blue', 'Yellow', 'Green', 'Purple', 'Orange'],
-            datasets: [{
-                label: 'My First Dataset',
-                data: [12, 19, 3, 5, 2, 3],
-                backgroundColor: [
-                    'red',
-                    'blue',
-                    'yellow',
-                    'green',
-                    'purple',
-                    'orange'
-                ],
-                hoverOffset: 4
+  {{!--
+  <script>
+    // JavaScript code to create the pie chart
+    // Get the canvas element
+    var ctx = document.getElementById('myPieChart').getContext('2d');
+
+    // Define data for the chart
+    var data = {
+      labels: ['Red', 'Blue', 'Yellow', 'Green', 'Purple', 'Orange'],
+      datasets: [{
+        label: 'My First Dataset',
+        data: [12, 19, 3, 5, 2, 3],
+        backgroundColor: [
+          'red',
+          'blue',
+          'yellow',
+          'green',
+          'purple',
+          'orange'
+        ],
+        hoverOffset: 4
+      }]
+    };
+
+    // Create a new pie chart
+    var myPieChart = new Chart(ctx, {
+      type: 'pie',
+      data: data,
+    });
+  </script> --}}
+
+  <script>
+    // JavaScript code to create the pie chart
+    // Get the canvas element
+    var ctx = document.getElementById('myPieChart').getContext('2d');
+
+    // Define data for the chart
+    var data = {
+      labels: {{{ chartLabels }}},
+    datasets: [{
+      label: 'My First Dataset',
+      data: {{{ chartData }}},
+      backgroundColor: [
+      'red',
+      'purple',
+      'blue',
+      'yellow',
+      'green',
+      'orange'
+    ],
+      hoverOffset: 4
             }]
         };
-        
-        // Create a new pie chart
-        var myPieChart = new Chart(ctx, {
-            type: 'pie',
-            data: data,
-        });
-    </script> --}}
-    
-<script>
-        // JavaScript code to create the pie chart
-        // Get the canvas element
-        var ctx = document.getElementById('myPieChart').getContext('2d');
-        
-        // Define data for the chart
-        var data = {
-            labels: {{{chartLabels}}},
-            datasets: [{
-                label: 'My First Dataset',
-                data: {{{chartData}}},
-                backgroundColor: [
-                    'red',
-                    'purple',
-                    'blue',
-                    'yellow',
-                    'green',
-                    'orange'
-                ],
-                hoverOffset: 4
-            }]
-        };
-        
-        // Create a new pie chart
-        var myPieChart = new Chart(ctx, {
-            type: 'pie',
-            data: data,
-        });
-    </script> 
+
+    // Create a new pie chart
+    var myPieChart = new Chart(ctx, {
+      type: 'pie',
+      data: data,
+    });
+  </script>
+
+  <script>
+    // Loop through each data item and update the corresponding table row number
+    document.addEventListener('DOMContentLoaded', function () {
+      const dataRows = document.querySelectorAll('#productBody tr');
+      dataRows.forEach((row, index) => {
+        const rowNumberCell = row.querySelector('th[scope="row"]');
+        if (rowNumberCell) {
+          rowNumberCell.textContent = index + 1;
+        }
+      });
+    });
+  </script>
 
 </body>
 
