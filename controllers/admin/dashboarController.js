@@ -144,7 +144,7 @@ const getSales = async (req, res) => {
             },
             {
               $project: {
-                _id: 0,
+                _id: 1,
                 name: { $arrayElemAt: ["$productDetails.name", 0] },
                 totalQuantity: 1,
               },

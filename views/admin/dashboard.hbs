@@ -257,16 +257,18 @@
         {{/if}}
         
         <br>
-        <div style="display: flex;">
-           <h5>Top Categories</h5> 
-           <h5>Top products</h5></div>
-        <div  style="display: flex;padding: 20px;margin: 100px;">  
+        <div style=" box-shadow: 0px 0px 20px 0px rgba(0, 0, 0, 0.5);margin: 10px;padding: 20px;">
+       <div style="display: flex;">
+           <h5  style="margin-left: 20%;">Top Categories</h5> 
+        <h5 style="margin-left: 40%;">Top products</h5></div>
+        <div  style="display: flex;padding: 20px;">  
       
-          <table style="width: auto; box-shadow: 0px 0px 20px 0px rgba(0, 0, 0, 0.5);" class="table table-bordered table-hover">
+          <table class="table table-bordered table-hover" style="margin: 10px;">
             <thead class="thead-dark">
               <tr>
                 <th scope="col">No</th>
                 <th scope="col">Category</th>
+                <th scope="col">TotalAmount</th>
 
               </tr>
             </thead>
@@ -275,6 +277,7 @@
               <tr>
                 <th id="row" scope="row">{{@index}}</th>
                 <td>{{this.category}}</td>
+                <td>{{this.totalAmount}}</td>
 
 
               </tr>
@@ -284,19 +287,23 @@
             </tbody>
           </table>
         
-          <table style="width: auto;margin-left: 100px;" class="table table-bordered table-hover">
+         
+          <table style="margin: 10px;"  class="table table-bordered table-hover">
             <thead class="thead-dark">
               <tr>
                 <th scope="col">No</th>
-                <th scope="col">Category</th>
+                <th scope="col">product</th>
+                <th scope="col">quntity</th>
 
               </tr>
             </thead>
-            <tbody id="productBody">
-              {{#each categoryWiseRevenue}}
+            <tbody id="productBodys">
+              {{#each topSellingProducts }}
               <tr>
                 <th id="row" scope="row">{{@index}}</th>
-                <td>{{this.category}}</td>
+                
+                 <td>{{this._id.product}}</td>
+                 <td>{{this.totalQuantity}}</td>
 
 
               </tr>
@@ -305,6 +312,7 @@
               {{/each}}
             </tbody>
           </table>
+        </div>
         </div>
       </div>
     </div>
@@ -430,6 +438,18 @@
     // Loop through each data item and update the corresponding table row number
     document.addEventListener('DOMContentLoaded', function () {
       const dataRows = document.querySelectorAll('#productBody tr');
+      dataRows.forEach((row, index) => {
+        const rowNumberCell = row.querySelector('th[scope="row"]');
+        if (rowNumberCell) {
+          rowNumberCell.textContent = index + 1;
+        }
+      });
+    });
+  </script>
+   <script>
+    // Loop through each data item and update the corresponding table row number
+    document.addEventListener('DOMContentLoaded', function () {
+      const dataRows = document.querySelectorAll('#productBodys tr');
       dataRows.forEach((row, index) => {
         const rowNumberCell = row.querySelector('th[scope="row"]');
         if (rowNumberCell) {
