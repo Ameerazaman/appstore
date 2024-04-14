@@ -3,9 +3,10 @@ const User = require("../../models/user/usermodel")
 const products = require("../../models/admin/productModel")
 
 // *************************Admin Page******************************//
-const myusername = 'Ameera'
-const mypassword = '123456'
-
+// const myusername = 'Ameera'
+// const mypassword = '123456'
+const myusername = process.env.myusername;
+const mypassword = process.env.mypassword;
 
 
 const doLogin = async (req, res) => {

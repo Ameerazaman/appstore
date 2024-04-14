@@ -81,6 +81,13 @@
 
     button {
       color: #5500cb;
+
+
+
+      
+    }
+    td,th{
+      font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
     }
   </style>
 </head>
@@ -254,10 +261,11 @@
 
           </div>
         </div>
-        {{/if}}
+
+        
         
         <br>
-        <div style=" box-shadow: 0px 0px 20px 0px rgba(0, 0, 0, 0.5);margin: 10px;padding: 20px;">
+        <div style=" box-shadow: 0px 0px 20px 0px rgba(0, 0, 0, 0.2);margin: 10px;padding: 20px;">
        <div style="display: flex;">
            <h5  style="margin-left: 20%;">Top Categories</h5> 
         <h5 style="margin-left: 40%;">Top products</h5></div>
@@ -272,6 +280,7 @@
 
               </tr>
             </thead>
+          
             <tbody id="productBody">
               {{#each categoryWiseRevenue}}
               <tr>
@@ -310,6 +319,7 @@
 
 
               {{/each}}
+              {{/if}}
             </tbody>
           </table>
         </div>

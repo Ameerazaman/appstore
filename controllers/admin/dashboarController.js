@@ -92,6 +92,11 @@ const getDashboard = async (req, res) => {
                         category: "$_id", // Rename _id field as category
                         totalAmount: 1 // Include totalAmount field
                     }
+                },
+                {
+                    $sort: {
+                        totalAmount: -1 // Sort in descending order of totalAmount
+                    }
                 }
             ]);
 
@@ -105,8 +110,37 @@ const getDashboard = async (req, res) => {
             });
             var chartLabels = JSON.stringify(pieChartLabels)
             var chartData = JSON.stringify(pieChartData)
-
-            res.render('admin/dashboard', { admin: true, header, chartData, chartLabels, totalrevenue, totalUsers, sales, totalSales, type, label });
+            const topSellingProducts = await Order.aggregate([
+                { $match: { status: "delivered" } },
+                { $unwind: "$products" },
+                {
+                  $group: {
+                    _id: "$products.product",
+                    totalQuantity: { $sum: "$products.quantity" },
+                  },
+                },
+                { $sort: { totalQuantity: -1 } },
+                { $limit: 10 },
+                {
+                  $lookup: {
+                    from: "products",
+                    localField: "_id",
+                    foreignField: "_id",
+                    as: "productDetails",
+                  },
+                },
+                {
+                  $project: {
+                    _id: 1,
+                    name: { $arrayElemAt: ["$productDetails.name", 0] },
+                    totalQuantity: 1,
+                  },
+                },
+              ]);
+          
+          console.log(topSellingProducts,"top sales")
+    
+            res.render('admin/dashboard', {topSellingProducts,categoryWiseRevenue, admin: true, header, chartData, chartLabels, totalrevenue, totalUsers, sales, totalSales, type, label });
 
         }
         else {
@@ -395,7 +429,7 @@ const getSales = async (req, res) => {
                 {
                     $match: {
                         status: "delivered",
-                        orderedAt: { $lt: lastDate } // Match orders within the last 7 days
+                        orderedAt: { $gt: lastDate } // Match orders within the last 7 days
                     }
                 },
                 {

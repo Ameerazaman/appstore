@@ -149,8 +149,10 @@ const postSignup = async (req, res) => {
                     const transport = nodemailer.createTransport({
                         service: 'gmail',
                         auth: {
-                            user: 'fathimathameeraap@gmail.com',
-                            pass: 'eply owri jdtq pgse',
+                            // user: 'fathimathameeraap@gmail.com',
+                            // pass: 'eply owri jdtq pgse',
+                            user: process.env.user,
+                            pass: process.env.pass
                         }
                     })
                     const info = await transport.sendMail({
@@ -552,7 +554,7 @@ const searchProducts = async (req, res) => {
 const cartCount = async (req, res) => {
     try {
         const userId = req.session.user._id
-        const cartdata = await cart.find({userId:userId}).lean()
+        const cartdata = await cart.find({ userId: userId }).lean()
         const data = cartdata.length
         res.json(data)
     }
@@ -565,7 +567,7 @@ const cartCount = async (req, res) => {
 const wishlistCount = async (req, res) => {
     try {
         const userId = req.session.user._id
-        const wishlistdata = await wishlist.find({userId:userId}).lean()
+        const wishlistdata = await wishlist.find({ userId: userId }).lean()
         const data = wishlistdata.length
         res.json(data)
     }
@@ -582,5 +584,5 @@ module.exports = {
     getForgotOtp, forgotOtpVerify, changeForgotPassword,
     filter, searchProducts, getproduct,
     getFilterCategory, categorySort,
-    cartCount,wishlistCount
+    cartCount, wishlistCount
 }
