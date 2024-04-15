@@ -455,10 +455,8 @@ const successOrder = async (req, res) => {
                         else {
                             var totalAmount = req.session.totalAmt
                             const updateOrder = await Order.findByIdAndUpdate({ _id: saveOrder._id }, { success: "success" })
-
                             const orderdata = await Order.find().sort({ _id: -1 }).lean()
                             var orderProduct = orderdata[0].products
-
                             for (let i = 0; i < orderProduct.length; i++) {
 
                                 var productdata = await products.findById({ _id: orderProduct[i].product._id })
@@ -538,14 +536,8 @@ const successOrder = async (req, res) => {
                                         console.log("not use referal code")
                                     }
                                     // coupon saved
-
-
-
                                     res.render("users/razorpay", { DeliveryAd, data, result, razorpayOrder, keyId: process.env.RAZORPAY_KEY_ID, totalPrice })
-
-
                                 })
-
                         }
                         else {
                             console.log("error in with out coupon")
