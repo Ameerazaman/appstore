@@ -151,8 +151,6 @@ const postSignup = async (req, res) => {
                     const transport = nodemailer.createTransport({
                         service: 'gmail',
                         auth: {
-                            // user: 'fathimathameeraap@gmail.com',
-                            // pass: 'eply owri jdtq pgse',
                             user: process.env.user,
                             pass: process.env.pass
                         }
@@ -206,8 +204,8 @@ const resendOtp = function (req, res) {
         const transport = nodemailer.createTransport({
             service: 'gmail',
             auth: {
-                user: 'fathimathameeraap@gmail.com',
-                pass: 'eply owri jdtq pgse',
+               user: process.env.user,
+               pass: process.env.pass
             }
         })
         const info = await transport.sendMail({
