@@ -137,8 +137,10 @@ const postSignup = async (req, res) => {
             doSignup(req.body).then((result) => {
 
                 req.session.loggedin = true
+                var email=req.body.email
                 req.session.username = req.body.username
-                // req.session.email=req.body.email
+                req.session.email=req.body.email
+                
                 // req.session.password=req.body.password
                 console.log(result)
                 req.session.user = result
@@ -157,7 +159,7 @@ const postSignup = async (req, res) => {
                     })
                     const info = await transport.sendMail({
                         from: 'fathimathameeraap@gmail.com',
-                        to: 'fathimathameeraap@gmail.com',
+                        to: email,
                         // req.session.email,
                         subject: 'OTP Verification',
                         text: `Your resend OTP for signup: ${req.session.otp}`
@@ -199,6 +201,7 @@ const otpSubmit = async (req, res) => {
 //Ressend otp//
 const resendOtp = function (req, res) {
     req.session.otp = generateOTP(6)
+    var email=req.session.email
     async function main() {
         const transport = nodemailer.createTransport({
             service: 'gmail',
@@ -209,7 +212,7 @@ const resendOtp = function (req, res) {
         })
         const info = await transport.sendMail({
             from: 'fathimathameeraap@gmail.com',
-            to: 'fathimathameeraap@gmail.com',
+            to: email,
             // req.session.email,
             subject: 'OTP Verification',
             text: `Your resend OTP for signup: ${req.session.otp}`
