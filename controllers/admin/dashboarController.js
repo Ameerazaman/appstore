@@ -12,141 +12,149 @@ const exceljs = require("exceljs");
 const getDashboard = async (req, res) => {
     try {
         if (session) {
-            // *************Find total revenue and total price***************
-            const nonCanceledOrders = await Order.find({ status: { $eq: 'delivered' } });
-            console.log(nonCanceledOrders, "revenue dsh")
-            // Calculate total price
-            let total = 0;
-            nonCanceledOrders.forEach(order => {
-                total += order.totalPrice;
-            });
-            const totalrevenue = ((total * 30) / 100)
-            console.log(totalrevenue, "totalRevenue")
-            ////////////////////////////////////
-            // *************************find total sales****************
+            const checkorder = await Order.findOne({ status: 'delivered' })
+            console.log(checkorder, "checkorder")
+            if (checkorder) {
+                // *************Find total revenue and total price***************
+                const nonCanceledOrders = await Order.find({ status: { $eq: 'delivered' } });
+                console.log(nonCanceledOrders, "revenue dsh")
+                // Calculate total price
+                let total = 0;
+                nonCanceledOrders.forEach(order => {
+                    total += order.totalPrice;
+                });
+                const totalrevenue = ((total * 30) / 100)
+                console.log(totalrevenue, "totalRevenue")
+                ////////////////////////////////////
+                // *************************find total sales****************
 
-            const totalProductsCount = await Order.aggregate([
-                {
-                    $match: { status: { $eq: "delivered" } } // Match orders with status not equal to "Canceled"
-                },
-                {
-                    $project: {
-                        productsCount: {
-                            $size: {
-                                $filter: {
-                                    input: "$products",
-                                    as: "product",
-                                    cond: { $ne: ["$$product.status", "delivered"] } // Exclude products with status "Canceled"
+                const totalProductsCount = await Order.aggregate([
+                    {
+                        $match: { status: { $eq: "delivered" } } // Match orders with status not equal to "Canceled"
+                    },
+                    {
+                        $project: {
+                            productsCount: {
+                                $size: {
+                                    $filter: {
+                                        input: "$products",
+                                        as: "product",
+                                        cond: { $ne: ["$$product.status", "delivered"] } // Exclude products with status "Canceled"
+                                    }
                                 }
                             }
                         }
+                    },
+                    {
+                        $group: {
+                            _id: null,
+                            totalProductsCount: { $sum: "$productsCount" } // Sum up the products count for all orders
+                        }
+                    },
+                    {
+                        $project: {
+                            totalProductsCount: 1
+                        }
                     }
-                },
-                {
-                    $group: {
-                        _id: null,
-                        totalProductsCount: { $sum: "$productsCount" } // Sum up the products count for all orders
+                ]);
+
+                // total category result         
+
+                const sales = totalProductsCount[0].totalProductsCount
+                const totalSales = JSON.stringify([totalrevenue])
+                const label = JSON.stringify(["totalrevenue"])
+                console.log("label", label, "totalsales", totalSales)
+                const type = "Total"
+
+                // totalProductsCount.length > 0 ? totalProductsCount[0].totalProductsCount : 0;
+
+                // *******************count Total users**************
+                const totalUsers = await Users.countDocuments({});
+
+
+                req.session.Users = totalUsers
+                req.session.sales = sales
+                req.session.totalSales = totalSales
+                const header = "Total Sales"
+                const categoryWiseRevenue = await Order.aggregate([
+                    {
+                        $match: { status: { $eq: "delivered" } } // Match orders with status "delivered"
+                    },
+                    {
+                        $unwind: "$products" // Unwind the products array
+                    },
+                    {
+                        $group: {
+                            _id: "$products.product.category", // Group by product category
+                            totalAmount: { $sum: "$totalPrice" } // Calculate total amount for each category
+                        }
+                    },
+                    {
+                        $project: {
+                            _id: 0, // Exclude _id field
+                            category: "$_id", // Rename _id field as category
+                            totalAmount: 1 // Include totalAmount field
+                        }
+                    },
+                    {
+                        $sort: {
+                            totalAmount: -1 // Sort in descending order of totalAmount
+                        }
                     }
-                },
-                {
-                    $project: {
-                        totalProductsCount: 1
-                    }
-                }
-            ]);
+                ]);
 
-            // total category result         
+                var pieChartLabels = [];
+                var pieChartData = [];
 
-            const sales = totalProductsCount[0].totalProductsCount
-            const totalSales = JSON.stringify([totalrevenue])
-            const label = JSON.stringify(["totalrevenue"])
-            console.log("label", label, "totalsales", totalSales)
-            const type = "Total"
+                // Iterate over the revenue data to extract labels and data
+                categoryWiseRevenue.forEach(item => {
+                    pieChartLabels.push(item.category);
+                    pieChartData.push(item.totalAmount);
+                });
+                var chartLabels = JSON.stringify(pieChartLabels)
+                var chartData = JSON.stringify(pieChartData)
+                const topSellingProducts = await Order.aggregate([
+                    { $match: { status: "delivered" } },
+                    { $unwind: "$products" },
+                    {
+                        $group: {
+                            _id: "$products.product",
+                            totalQuantity: { $sum: "$products.quantity" },
+                        },
+                    },
+                    { $sort: { totalQuantity: -1 } },
+                    { $limit: 10 },
+                    {
+                        $lookup: {
+                            from: "products",
+                            localField: "_id",
+                            foreignField: "_id",
+                            as: "productDetails",
+                        },
+                    },
+                    {
+                        $project: {
+                            _id: 1,
+                            name: { $arrayElemAt: ["$productDetails.name", 0] },
+                            totalQuantity: 1,
+                        },
+                    },
+                ]);
 
-            // totalProductsCount.length > 0 ? totalProductsCount[0].totalProductsCount : 0;
+                console.log(topSellingProducts, "top sales")
 
-            // *******************count Total users**************
-            const totalUsers = await Users.countDocuments({});
-
-
-            req.session.Users = totalUsers
-            req.session.sales = sales
-            req.session.totalSales = totalSales
-            const header = "Total Sales"
-            const categoryWiseRevenue = await Order.aggregate([
-                {
-                    $match: { status: { $eq: "delivered" } } // Match orders with status "delivered"
-                },
-                {
-                    $unwind: "$products" // Unwind the products array
-                },
-                {
-                    $group: {
-                        _id: "$products.product.category", // Group by product category
-                        totalAmount: { $sum: "$totalPrice" } // Calculate total amount for each category
-                    }
-                },
-                {
-                    $project: {
-                        _id: 0, // Exclude _id field
-                        category: "$_id", // Rename _id field as category
-                        totalAmount: 1 // Include totalAmount field
-                    }
-                },
-                {
-                    $sort: {
-                        totalAmount: -1 // Sort in descending order of totalAmount
-                    }
-                }
-            ]);
-
-            var pieChartLabels = [];
-            var pieChartData = [];
-
-            // Iterate over the revenue data to extract labels and data
-            categoryWiseRevenue.forEach(item => {
-                pieChartLabels.push(item.category);
-                pieChartData.push(item.totalAmount);
-            });
-            var chartLabels = JSON.stringify(pieChartLabels)
-            var chartData = JSON.stringify(pieChartData)
-            const topSellingProducts = await Order.aggregate([
-                { $match: { status: "delivered" } },
-                { $unwind: "$products" },
-                {
-                  $group: {
-                    _id: "$products.product",
-                    totalQuantity: { $sum: "$products.quantity" },
-                  },
-                },
-                { $sort: { totalQuantity: -1 } },
-                { $limit: 10 },
-                {
-                  $lookup: {
-                    from: "products",
-                    localField: "_id",
-                    foreignField: "_id",
-                    as: "productDetails",
-                  },
-                },
-                {
-                  $project: {
-                    _id: 1,
-                    name: { $arrayElemAt: ["$productDetails.name", 0] },
-                    totalQuantity: 1,
-                  },
-                },
-              ]);
-          
-          console.log(topSellingProducts,"top sales")
-    
-            res.render('admin/dashboard', {topSellingProducts,categoryWiseRevenue, admin: true, header, chartData, chartLabels, totalrevenue, totalUsers, sales, totalSales, type, label });
-
+                res.render('admin/dashboard', { topSellingProducts, categoryWiseRevenue, admin: true, header, chartData, chartLabels, totalrevenue, totalUsers, sales, totalSales, type, label });
+            }
+            else {
+                const Error = "Orders are not exist"
+                res.render("admin/dashboard", { admin: true, Error })
+            }
         }
         else {
             res.redirect("/admin")
         }
     }
+
 
     catch (error) {
         console.error('Error calculating total price:', error);
@@ -161,31 +169,31 @@ const getSales = async (req, res) => {
             { $match: { status: "delivered" } },
             { $unwind: "$products" },
             {
-              $group: {
-                _id: "$products.product",
-                totalQuantity: { $sum: "$products.quantity" },
-              },
+                $group: {
+                    _id: "$products.product",
+                    totalQuantity: { $sum: "$products.quantity" },
+                },
             },
             { $sort: { totalQuantity: -1 } },
             { $limit: 10 },
             {
-              $lookup: {
-                from: "products",
-                localField: "_id",
-                foreignField: "_id",
-                as: "productDetails",
-              },
+                $lookup: {
+                    from: "products",
+                    localField: "_id",
+                    foreignField: "_id",
+                    as: "productDetails",
+                },
             },
             {
-              $project: {
-                _id: 1,
-                name: { $arrayElemAt: ["$productDetails.name", 0] },
-                totalQuantity: 1,
-              },
+                $project: {
+                    _id: 1,
+                    name: { $arrayElemAt: ["$productDetails.name", 0] },
+                    totalQuantity: 1,
+                },
             },
-          ]);
-      
-      console.log(topSellingProducts,"top sales")
+        ]);
+
+        console.log(topSellingProducts, "top sales")
 
         const today = new Date().toDateString();
         const header = "Daily Sales"
@@ -294,33 +302,33 @@ const getSales = async (req, res) => {
                     { $match: { status: "delivered" } },
                     { $unwind: "$products" },
                     {
-                      $group: {
-                        _id: "$products.product",
-                        totalQuantity: { $sum: "$products.quantity" },
-                      },
+                        $group: {
+                            _id: "$products.product",
+                            totalQuantity: { $sum: "$products.quantity" },
+                        },
                     },
                     { $sort: { totalQuantity: -1 } },
                     { $limit: 10 },
                     {
-                      $lookup: {
-                        from: "products",
-                        localField: "_id",
-                        foreignField: "_id",
-                        as: "productDetails",
-                      },
+                        $lookup: {
+                            from: "products",
+                            localField: "_id",
+                            foreignField: "_id",
+                            as: "productDetails",
+                        },
                     },
                     {
-                      $project: {
-                        _id: 0,
-                        name: { $arrayElemAt: ["$productDetails.name", 0] },
-                        totalQuantity: 1,
-                      },
+                        $project: {
+                            _id: 0,
+                            name: { $arrayElemAt: ["$productDetails.name", 0] },
+                            totalQuantity: 1,
+                        },
                     },
-                  ]);
-              
-              console.log(topSellingProducts,"top sales")
+                ]);
 
-                res.render('admin/dashboard', {topSellingProducts, categoryWiseRevenue, admin: true, header, chartData, chartLabels, totalUsers, sales, totalrevenue, totalSales, type, label });
+                console.log(topSellingProducts, "top sales")
+
+                res.render('admin/dashboard', { topSellingProducts, categoryWiseRevenue, admin: true, header, chartData, chartLabels, totalUsers, sales, totalrevenue, totalSales, type, label });
             }
         }
         //    monthly Sales
@@ -470,33 +478,33 @@ const getSales = async (req, res) => {
                 { $match: { status: "delivered" } },
                 { $unwind: "$products" },
                 {
-                  $group: {
-                    _id: "$products.product",
-                    totalQuantity: { $sum: "$products.quantity" },
-                  },
+                    $group: {
+                        _id: "$products.product",
+                        totalQuantity: { $sum: "$products.quantity" },
+                    },
                 },
                 { $sort: { totalQuantity: -1 } },
                 { $limit: 10 },
                 {
-                  $lookup: {
-                    from: "products",
-                    localField: "_id",
-                    foreignField: "_id",
-                    as: "productDetails",
-                  },
+                    $lookup: {
+                        from: "products",
+                        localField: "_id",
+                        foreignField: "_id",
+                        as: "productDetails",
+                    },
                 },
                 {
-                  $project: {
-                    _id: 1,
-                    name: { $arrayElemAt: ["$productDetails.name", 0] },
-                    totalQuantity: 1,
-                  },
+                    $project: {
+                        _id: 1,
+                        name: { $arrayElemAt: ["$productDetails.name", 0] },
+                        totalQuantity: 1,
+                    },
                 },
-              ]);
-          
-          console.log(topSellingProducts,"top sales")
+            ]);
 
-            res.render('admin/dashboard', {topSellingProducts, categoryWiseRevenue, admin: true, chartData, chartLabels, totalrevenue, header, totalUsers, totalSales, type, label });
+            console.log(topSellingProducts, "top sales")
+
+            res.render('admin/dashboard', { topSellingProducts, categoryWiseRevenue, admin: true, chartData, chartLabels, totalrevenue, header, totalUsers, totalSales, type, label });
 
         }
         else if (req.params.sale === "weekly") {
@@ -648,7 +656,7 @@ const getSales = async (req, res) => {
                 }
             ]);
             console.log("productcount", productCountInDeliveredOrders)
-            res.render("admin/dashboard", {topSellingProducts,categoryWiseRevenue, admin: true, chartLabels, chartData, sales, totalrevenue, type, header, totalSales, label })
+            res.render("admin/dashboard", { topSellingProducts, categoryWiseRevenue, admin: true, chartLabels, chartData, sales, totalrevenue, type, header, totalSales, label })
 
         }
         if (req.params.sale === "total") {
@@ -733,7 +741,7 @@ const getSales = async (req, res) => {
                         totalAmount: 1 // Include totalAmount field
                     }
                 },
-                 {
+                {
                     $sort: {
                         totalAmount: -1 // Sort in descending order of totalAmount
                     }
@@ -751,7 +759,7 @@ const getSales = async (req, res) => {
             var chartLabels = JSON.stringify(pieChartLabels)
             var chartData = JSON.stringify(pieChartData)
 
-            res.render('admin/dashboard', {topSellingProducts,categoryWiseRevenue, admin: true, header, chartData, chartLabels, totalrevenue, totalUsers, sales, totalSales, type, label });
+            res.render('admin/dashboard', { topSellingProducts, categoryWiseRevenue, admin: true, header, chartData, chartLabels, totalrevenue, totalUsers, sales, totalSales, type, label });
 
         }
     }
@@ -866,7 +874,7 @@ const customDate = async (req, res) => {
             var chartLabels = JSON.stringify(pieChartLabels)
             var chartData = JSON.stringify(pieChartData)
 
-            res.render('admin/dashboard', {categoryWiseRevenue, chartData, chartLabels, admin: true, header, totalUsers, sales, totalrevenue, totalSales, type, label });
+            res.render('admin/dashboard', { categoryWiseRevenue, chartData, chartLabels, admin: true, header, totalUsers, sales, totalrevenue, totalSales, type, label });
         }
         else {
             const header = "Custom Date Sales"

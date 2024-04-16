@@ -84,9 +84,11 @@
 
 
 
-      
+
     }
-    td,th{
+
+    td,
+    th {
       font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
     }
   </style>
@@ -238,7 +240,9 @@
 
         <!-- Canvas element for the chart -->
 
-
+        {{#if Error}}
+        <span style="color: red; text-align: center;">{{this.Error}}</span>
+        {{else}}
 
         <br><br>
         {{#if Message}}
@@ -262,68 +266,71 @@
           </div>
         </div>
 
-        
-        
+
+
         <br>
+
         <div style=" box-shadow: 0px 0px 20px 0px rgba(0, 0, 0, 0.2);margin: 10px;padding: 20px;">
-       <div style="display: flex;">
-           <h5  style="margin-left: 20%;">Top Categories</h5> 
-        <h5 style="margin-left: 40%;">Top products</h5></div>
-        <div  style="display: flex;padding: 20px;">  
-      
-          <table class="table table-bordered table-hover" style="margin: 10px;">
-            <thead class="thead-dark">
-              <tr>
-                <th scope="col">No</th>
-                <th scope="col">Category</th>
-                <th scope="col">TotalAmount</th>
+          <div style="display: flex;">
+            <h5 style="margin-left: 20%;">Top Categories</h5>
+            <h5 style="margin-left: 40%;">Top products</h5>
+          </div>
+          <div style="display: flex;padding: 20px;">
 
-              </tr>
-            </thead>
-          
-            <tbody id="productBody">
-              {{#each categoryWiseRevenue}}
-              <tr>
-                <th id="row" scope="row">{{@index}}</th>
-                <td>{{this.category}}</td>
-                <td>{{this.totalAmount}}</td>
+            <table class="table table-bordered table-hover" style="margin: 10px;">
+              <thead class="thead-dark">
+                <tr>
+                  <th scope="col">No</th>
+                  <th scope="col">Category</th>
+                  <th scope="col">TotalAmount</th>
 
+                </tr>
+              </thead>
 
-              </tr>
+              <tbody id="productBody">
+                {{#each categoryWiseRevenue}}
+                <tr>
+                  <th id="row" scope="row">{{@index}}</th>
+                  <td>{{this.category}}</td>
+                  <td>{{this.totalAmount}}</td>
 
 
-              {{/each}}
-            </tbody>
-          </table>
-        
-         
-          <table style="margin: 10px;"  class="table table-bordered table-hover">
-            <thead class="thead-dark">
-              <tr>
-                <th scope="col">No</th>
-                <th scope="col">product</th>
-                <th scope="col">quntity</th>
-
-              </tr>
-            </thead>
-            <tbody id="productBodys">
-              {{#each topSellingProducts }}
-              <tr>
-                <th id="row" scope="row">{{@index}}</th>
-                
-                 <td>{{this._id.product}}</td>
-                 <td>{{this.totalQuantity}}</td>
+                </tr>
 
 
-              </tr>
+                {{/each}}
+              </tbody>
+            </table>
 
 
-              {{/each}}
-              {{/if}}
-            </tbody>
-          </table>
+            <table style="margin: 10px;" class="table table-bordered table-hover">
+              <thead class="thead-dark">
+                <tr>
+                  <th scope="col">No</th>
+                  <th scope="col">product</th>
+                  <th scope="col">quntity</th>
+
+                </tr>
+              </thead>
+              <tbody id="productBodys">
+                {{#each topSellingProducts }}
+                <tr>
+                  <th id="row" scope="row">{{@index}}</th>
+
+                  <td>{{this._id.product}}</td>
+                  <td>{{this.totalQuantity}}</td>
+
+
+                </tr>
+
+
+                {{/each}}
+                {{/if}}
+              </tbody>
+            </table>
+          </div>
         </div>
-        </div>
+        {{/if}}
       </div>
     </div>
   </div>
@@ -456,7 +463,7 @@
       });
     });
   </script>
-   <script>
+  <script>
     // Loop through each data item and update the corresponding table row number
     document.addEventListener('DOMContentLoaded', function () {
       const dataRows = document.querySelectorAll('#productBodys tr');

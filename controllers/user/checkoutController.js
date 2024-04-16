@@ -741,7 +741,6 @@ const successOrder = async (req, res) => {
 const razorpayChecking = async (req, res) => {
     try {
         var result = req.session.result
-
         var userId = req.session.user._id
         var crypto = require('crypto')
         var order = await Order.findOne({ _id: req.session.orderId })

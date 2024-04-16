@@ -6,8 +6,13 @@ const referaloffer = require('../../models/admin/referalofferModel')
 const getOffer = async (req, res) => {
     try {
         const data=await referaloffer.findOne().lean()
-        console.log(data.referalDiscount)
+        
+        if(data){
         res.render("admin/offer",{admin:true,data})
+        }
+        else{
+            res.render("admin/offer",{admin:true})
+        }
     }
     catch (error) {
         console.log("Error in get offer route in referal offer controller")
